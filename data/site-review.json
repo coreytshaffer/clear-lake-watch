@@ -1,0 +1,275 @@
+{
+    "generatedAt":  "2026-04-22T21:28:38.5652936-07:00",
+    "sourceFiles":  {
+                        "sites":  ".\\data\\sites.json",
+                        "live":  ".\\data\\live.json"
+                    },
+    "summary":  {
+                    "registrySites":  10,
+                    "reviewedRegistrySites":  2,
+                    "needsReviewRegistrySites":  8,
+                    "currentMapMarkers":  8,
+                    "reviewedCurrentMapMarkers":  0,
+                    "needsReviewCurrentMapMarkers":  8,
+                    "matchedButUnreviewedCurrentMapMarkers":  8,
+                    "highPriorityReviewItems":  1,
+                    "mediumPriorityReviewItems":  3,
+                    "lowPriorityReviewItems":  4
+                },
+    "reviewQueue":  [
+                        {
+                            "siteId":  "fhabs-jago-bay",
+                            "siteName":  "Jago Bay",
+                            "landmark":  "Jones bay",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "high",
+                            "reviewReason":  "Marker matched by coordinate proximity rather than a reviewed alias.",
+                            "matchMethod":  "proximity",
+                            "matchDistanceKm":  0.03,
+                            "reportDate":  "September 4, 2025",
+                            "latitude":  38.94865,
+                            "longitude":  -122.66005,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.94865\u0026mlon=-122.66005#map=15/38.94865/-122.66005",
+                            "registryLatitude":  38.948856,
+                            "registryLongitude":  -122.66023,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.948856\u0026mlon=-122.66023#map=15/38.948856/-122.66023",
+                            "recommendedReviewAction":  "Confirm whether this landmark should be added as an alias for the matched site."
+                        },
+                        {
+                            "siteId":  "fhabs-clearlake-keys",
+                            "siteName":  "Clear Lake Keys",
+                            "landmark":  "Clear Lake Keys near Ketch Court",
+                            "arm":  "Oaks Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "medium",
+                            "reviewReason":  "Alias matched, but the source coordinate is offset from the registry point.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  1.12,
+                            "reportDate":  "June 26, 2025",
+                            "latitude":  39.017986,
+                            "longitude":  -122.66123,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=39.017986\u0026mlon=-122.66123#map=15/39.017986/-122.66123",
+                            "registryLatitude":  39.0239133,
+                            "registryLongitude":  -122.67175,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=39.023913\u0026mlon=-122.67175#map=15/39.023913/-122.67175",
+                            "recommendedReviewAction":  "Confirm the source coordinate, landmark, arm assignment, and match radius."
+                        },
+                        {
+                            "siteId":  "fhabs-jago-bay",
+                            "siteName":  "Jago Bay",
+                            "landmark":  "Jago Bay",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "medium",
+                            "reviewReason":  "Alias matched, but the source coordinate is offset from the registry point.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0.7,
+                            "reportDate":  "July 31, 2025",
+                            "latitude":  38.946382,
+                            "longitude":  -122.66766,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.946382\u0026mlon=-122.66766#map=15/38.946382/-122.66766",
+                            "registryLatitude":  38.948856,
+                            "registryLongitude":  -122.66023,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.948856\u0026mlon=-122.66023#map=15/38.948856/-122.66023",
+                            "recommendedReviewAction":  "Confirm the source coordinate, landmark, arm assignment, and match radius."
+                        },
+                        {
+                            "siteId":  "fhabs-soda-bay",
+                            "siteName":  "Soda Bay",
+                            "landmark":  "Soda Bay",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "medium",
+                            "reviewReason":  "Alias matched, but the source coordinate is offset from the registry point.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  1.14,
+                            "reportDate":  "September 7, 2025",
+                            "latitude":  39.01056,
+                            "longitude":  -122.80624,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=39.01056\u0026mlon=-122.80624#map=15/39.01056/-122.80624",
+                            "registryLatitude":  39.0028,
+                            "registryLongitude":  -122.7977,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=39.0028\u0026mlon=-122.7977#map=15/39.0028/-122.7977",
+                            "recommendedReviewAction":  "Confirm the source coordinate, landmark, arm assignment, and match radius."
+                        },
+                        {
+                            "siteId":  "fhabs-clearlake-oaks",
+                            "siteName":  "Clearlake Oaks",
+                            "landmark":  "Clearlake Oaks west of Blue Heron Ct.",
+                            "arm":  "Oaks Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "low",
+                            "reviewReason":  "Alias and coordinates are close, but local review has not certified the assignment.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0,
+                            "reportDate":  "June 15, 2025",
+                            "latitude":  39.021693,
+                            "longitude":  -122.67152,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=39.021693\u0026mlon=-122.67152#map=15/39.021693/-122.67152",
+                            "registryLatitude":  39.021693,
+                            "registryLongitude":  -122.67152,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=39.021693\u0026mlon=-122.67152#map=15/39.021693/-122.67152",
+                            "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
+                        },
+                        {
+                            "siteId":  "fhabs-henderson-point",
+                            "siteName":  "Henderson Point / Riviera Point Launch",
+                            "landmark":  "Riveria Point Launch at Henderson Point in Soda Bay",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "low",
+                            "reviewReason":  "Alias and coordinates are close, but local review has not certified the assignment.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0,
+                            "reportDate":  "June 10, 2025",
+                            "latitude":  39.0110072,
+                            "longitude":  -122.77665,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=39.011007\u0026mlon=-122.77665#map=15/39.011007/-122.77665",
+                            "registryLatitude":  39.0110072,
+                            "registryLongitude":  -122.7766572,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=39.011007\u0026mlon=-122.776657#map=15/39.011007/-122.776657",
+                            "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
+                        },
+                        {
+                            "siteId":  "fhabs-konocti-shores",
+                            "siteName":  "Konocti Shores",
+                            "landmark":  "Konocti Shores",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "low",
+                            "reviewReason":  "Alias and coordinates are close, but local review has not certified the assignment.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0,
+                            "reportDate":  "June 14, 2025",
+                            "latitude":  38.975761,
+                            "longitude":  -122.74123,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.975761\u0026mlon=-122.74123#map=15/38.975761/-122.74123",
+                            "registryLatitude":  38.975761,
+                            "registryLongitude":  -122.74123,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.975761\u0026mlon=-122.74123#map=15/38.975761/-122.74123",
+                            "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
+                        },
+                        {
+                            "siteId":  "fhabs-wheeler-point",
+                            "siteName":  "Wheeler Point",
+                            "landmark":  "Wheeler Point, Kelseyville",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "low",
+                            "reviewReason":  "Alias and coordinates are close, but local review has not certified the assignment.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0,
+                            "reportDate":  "July 24, 2025",
+                            "latitude":  38.967479,
+                            "longitude":  -122.71152,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.967479\u0026mlon=-122.71152#map=15/38.967479/-122.71152",
+                            "registryLatitude":  38.967479,
+                            "registryLongitude":  -122.71152,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.967479\u0026mlon=-122.71152#map=15/38.967479/-122.71152",
+                            "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
+                        }
+                    ],
+    "markersBySite":  [
+                          {
+                              "siteId":  "fhabs-jago-bay",
+                              "siteName":  "Jago Bay",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  2,
+                              "latestReportDate":  "September 4, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1",
+                                                   "proximity: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Jones bay",
+                                                "Jago Bay"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-wheeler-point",
+                              "siteName":  "Wheeler Point",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "July 24, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Wheeler Point, Kelseyville"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-soda-bay",
+                              "siteName":  "Soda Bay",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "September 7, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Soda Bay"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-konocti-shores",
+                              "siteName":  "Konocti Shores",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "June 14, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Konocti Shores"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-clearlake-oaks",
+                              "siteName":  "Clearlake Oaks",
+                              "arm":  "Oaks Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "June 15, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Clearlake Oaks west of Blue Heron Ct."
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-clearlake-keys",
+                              "siteName":  "Clear Lake Keys",
+                              "arm":  "Oaks Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "June 26, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Clear Lake Keys near Ketch Court"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-henderson-point",
+                              "siteName":  "Henderson Point / Riviera Point Launch",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "June 10, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Riveria Point Launch at Henderson Point in Soda Bay"
+                                            ]
+                          }
+                      ]
+}

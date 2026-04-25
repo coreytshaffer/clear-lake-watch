@@ -1,0 +1,6 @@
+server.pid
+server.out.log
+server.err.log
+var/
+data/site-review-decisions*.json
+!data/site-review-decisions.example.json
