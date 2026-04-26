@@ -1,7 +1,7 @@
 {
-    "generatedAt":  "2026-04-23T02:40:48.9696003-07:00",
+    "generatedAt":  "2026-04-25T22:19:45.8999683-07:00",
     "schemaVersion":  1,
-    "recordCount":  10,
+    "recordCount":  11,
     "sites":  [
                   {
                       "siteId":  "fhabs-clearlake-keys",
@@ -70,6 +70,22 @@
                       "arm":  "Lower Arm",
                       "assignmentStatus":  "needs-local-review",
                       "matchRadiusKm":  3
+                  },
+                  {
+                      "siteId":  "fhabs-jones-bay",
+                      "name":  "Jones Bay",
+                      "source":  "FHABS",
+                      "sourceId":  null,
+                      "siteType":  "report landmark",
+                      "aliases":  [
+                                      "Jones Bay",
+                                      "Jones bay"
+                                  ],
+                      "latitude":  38.9479537,
+                      "longitude":  -122.6613745,
+                      "arm":  "Lower Arm",
+                      "assignmentStatus":  "needs-local-review",
+                      "matchRadiusKm":  1
                   },
                   {
                       "siteId":  "fhabs-konocti-shores",

@@ -194,8 +194,13 @@ try {
     "methodology.html",
     "styles.css",
     "app.js",
+    "manifest.webmanifest",
+    "sw.js",
     "README.md",
     "assets\clear-lake-watch.ico",
+    "assets\apple-touch-icon.png",
+    "assets\clear-lake-watch-icon-192.png",
+    "assets\clear-lake-watch-icon-512.png",
     "data\sources.json",
     "data\sites.json",
     "data\live.json",
@@ -242,6 +247,7 @@ try {
   }
 
   $sources = Read-JsonFile "data\sources.json"
+  $webManifest = Read-JsonFile "manifest.webmanifest"
   $sites = Read-JsonFile "data\sites.json"
   $live = Read-JsonFile "data\live.json"
   $reports = Read-JsonFile "data\reports.json"
@@ -263,14 +269,35 @@ try {
     Assert-NonEmptyCollection $sources.guardrails "sources.json must include guardrails."
   }
 
+  if ($webManifest) {
+    Assert-True -Condition ($webManifest.name -eq "Clear Lake Watch") -Message "manifest.webmanifest must use the Clear Lake Watch app name."
+    Assert-True -Condition (-not [string]::IsNullOrWhiteSpace($webManifest.short_name)) -Message "manifest.webmanifest must include short_name."
+    Assert-True -Condition ($webManifest.display -eq "standalone") -Message "manifest.webmanifest must use standalone display."
+    Assert-True -Condition (-not [string]::IsNullOrWhiteSpace($webManifest.start_url)) -Message "manifest.webmanifest must include start_url."
+    Assert-NonEmptyCollection $webManifest.icons "manifest.webmanifest must include app icons."
+  }
+
   if ($sites) {
     Assert-NonEmptyCollection $sites.sites "sites.json must include at least one site."
     $hendersonPointSite = @($sites.sites | Where-Object { $_.siteId -eq "fhabs-henderson-point" }) | Select-Object -First 1
+    $jagoBaySite = @($sites.sites | Where-Object { $_.siteId -eq "fhabs-jago-bay" }) | Select-Object -First 1
+    $jonesBaySite = @($sites.sites | Where-Object { $_.siteId -eq "fhabs-jones-bay" }) | Select-Object -First 1
     Assert-True -Condition ($null -ne $hendersonPointSite) -Message "sites.json must include the unresolved Henderson Point / Riviera Point candidate site."
+    Assert-True -Condition ($null -ne $jagoBaySite) -Message "sites.json must include the Jago Bay registry site."
+    Assert-True -Condition ($null -ne $jonesBaySite) -Message "sites.json must include the distinct Jones Bay starter registry site."
     if ($hendersonPointSite) {
       Assert-True -Condition ($hendersonPointSite.assignmentStatus -eq "needs-local-review") -Message "Henderson Point / Riviera Point must remain needs-local-review until locally certified."
       Assert-True -Condition (@($hendersonPointSite.aliases) -contains "Riveria Point Launch at Henderson Point in Soda Bay") -Message "Henderson Point / Riviera Point must preserve the FHABS source spelling as an alias."
       Assert-True -Condition (@($hendersonPointSite.aliases) -contains "Riviera Point Launch at Henderson Point in Soda Bay") -Message "Henderson Point / Riviera Point must include the likely corrected Riviera spelling as an alias."
+    }
+    if ($jagoBaySite) {
+      Assert-True -Condition ($jagoBaySite.assignmentStatus -eq "needs-local-review") -Message "Jago Bay must remain needs-local-review until locally certified."
+      Assert-True -Condition (-not (@($jagoBaySite.aliases) -contains "Jones bay")) -Message "Jago Bay aliases must not collapse Jones bay into Jago Bay without review evidence."
+    }
+    if ($jonesBaySite) {
+      Assert-True -Condition ($jonesBaySite.name -eq "Jones Bay") -Message "Jones Bay starter site must preserve the distinct bay name."
+      Assert-True -Condition ($jonesBaySite.arm -eq "Lower Arm") -Message "Jones Bay starter site must remain assigned to Lower Arm pending local review."
+      Assert-True -Condition ($jonesBaySite.assignmentStatus -eq "needs-local-review") -Message "Jones Bay starter site must remain needs-local-review until locally certified."
     }
   }
 
@@ -284,8 +311,15 @@ try {
     Assert-True -Condition ($null -ne $lakeLevelCard) -Message "live.json must include the Lakeport lake-level card."
     if ($lakeLevelCard) {
       Assert-True -Condition ($lakeLevelCard.value -match "ft Rumsey") -Message "Lakeport lake-level card must label the value as feet Rumsey."
+      Assert-True -Condition ($lakeLevelCard.value -match "above sea level") -Message "Lakeport lake-level card must also show the standard elevation in plain language."
       Assert-True -Condition ($lakeLevelCard.note -match "Zero Rumsey = 1318\.256 ft") -Message "Lakeport lake-level card must include the Zero Rumsey elevation context."
-      Assert-True -Condition ($lakeLevelCard.note -match "water-surface elevation") -Message "Lakeport lake-level card must include the approximate water-surface elevation."
+    }
+    $jonesBayMarker = @($live.mapMarkers | Where-Object { $_.landmark -eq "Jones bay" }) | Select-Object -First 1
+    Assert-True -Condition ($null -ne $jonesBayMarker) -Message "live.json must keep the Jones bay marker visible."
+    if ($jonesBayMarker) {
+      Assert-True -Condition ($jonesBayMarker.siteId -eq "fhabs-jones-bay") -Message "Jones bay must match the distinct Jones Bay starter site."
+      Assert-True -Condition ($jonesBayMarker.matchMethod -eq "alias") -Message "Jones bay should no longer rely on proximity matching."
+      Assert-True -Condition ($jonesBayMarker.assignmentStatus -eq "needs-local-review") -Message "Jones bay must remain needs-local-review until locally certified."
     }
     $hendersonPointMarker = @($live.mapMarkers | Where-Object { $_.landmark -eq "Riveria Point Launch at Henderson Point in Soda Bay" }) | Select-Object -First 1
     Assert-True -Condition ($null -ne $hendersonPointMarker) -Message "live.json must keep the Henderson Point / Riviera Point FHABS marker visible."
@@ -425,6 +459,15 @@ try {
   Assert-True -Condition ($index.Contains('rel="icon"')) -Message "index.html must include the favicon link."
   Assert-True -Condition ($project.Contains('rel="icon"')) -Message "project.html must include the favicon link."
   Assert-True -Condition ($methodology.Contains('rel="icon"')) -Message "methodology.html must include the favicon link."
+  Assert-True -Condition ($index.Contains('rel="manifest"')) -Message "index.html must include the web app manifest link."
+  Assert-True -Condition ($project.Contains('rel="manifest"')) -Message "project.html must include the web app manifest link."
+  Assert-True -Condition ($methodology.Contains('rel="manifest"')) -Message "methodology.html must include the web app manifest link."
+  Assert-True -Condition ($index.Contains('apple-touch-icon')) -Message "index.html must include the Apple touch icon."
+  Assert-True -Condition ($project.Contains('apple-touch-icon')) -Message "project.html must include the Apple touch icon."
+  Assert-True -Condition ($methodology.Contains('apple-touch-icon')) -Message "methodology.html must include the Apple touch icon."
+  Assert-True -Condition ($index.Contains('name="theme-color"')) -Message "index.html must include a theme-color meta tag."
+  Assert-True -Condition ($project.Contains('name="theme-color"')) -Message "project.html must include a theme-color meta tag."
+  Assert-True -Condition ($methodology.Contains('name="theme-color"')) -Message "methodology.html must include a theme-color meta tag."
   Assert-True -Condition ($index.Contains("./project.html")) -Message "index.html must link to the project page."
   Assert-True -Condition ($methodology.Contains("./project.html")) -Message "methodology.html must link to the project page."
   Assert-True -Condition ($project.Contains('aria-current="page"')) -Message "project.html must mark its active navigation item."
@@ -469,6 +512,9 @@ try {
   Assert-True -Condition ($app.Contains("manifestNotesElement")) -Message "app.js must render manifest notes."
   Assert-True -Condition ($app.Contains("renderWeatherContext")) -Message "app.js must render optional weather-context data."
   Assert-True -Condition ($app.Contains("weather-context.json")) -Message "app.js must attempt to load the optional weather-context export."
+  Assert-True -Condition ($app.Contains("serviceWorker")) -Message "app.js must register the service worker when supported."
+  Assert-True -Condition ($app.Contains('meta[name="theme-color"]')) -Message "app.js must update theme-color metadata for mobile browser chrome."
+  Assert-TextContains -Text $styles -Needle "white-space: pre-line" -Message "styles.css must preserve multi-line stat values for mobile readability."
   Assert-True -Condition ($refreshScript.Contains("Get-FhabsPackage")) -Message "refresh-live-data.ps1 must resolve FHABS package metadata dynamically."
   Assert-True -Condition ($refreshScript.Contains("manifestOutputPath")) -Message "refresh-live-data.ps1 must write a source manifest."
   Assert-True -Condition ($refreshScript.Contains("Assert-FhabsResourceFreshness")) -Message "refresh-live-data.ps1 must freshness-check FHABS resource filenames."
@@ -482,20 +528,26 @@ try {
   Assert-TextContains -Text $conversationLog -Needle "Git was not available" -Message "docs/conversation-log.md must preserve the local Git availability caveat."
   Assert-TextContains -Text $conversationLog -Needle "Local Git Availability Check" -Message "docs/conversation-log.md must preserve the local Git availability check."
   Assert-TextContains -Text $conversationLog -Needle "Forecast Boundary Contract" -Message "docs/conversation-log.md must preserve the forecast boundary update."
+  Assert-TextContains -Text $conversationLog -Needle "Jones Bay Registry Split" -Message "docs/conversation-log.md must preserve the Jones Bay registry split rationale."
   Assert-TextContains -Text $sourceAudit -Needle "Shared Backbone Weather Context Export" -Message "docs/source-audit.md must document the weather context export as a context source."
   Assert-TextContains -Text $sourceAudit -Needle "resolves FHABS resources dynamically" -Message "docs/source-audit.md must document dynamic FHABS resource resolution."
+  Assert-TextContains -Text $sourceAudit -Needle "Jones Bay / Jago Bay split" -Message "docs/source-audit.md must document the Jones Bay / Jago Bay naming cross-check."
   Assert-TextContains -Text $forecastBoundaryDoc -Needle "Experimental forecast only. Not official public-health guidance." -Message "docs/forecast-boundary.md must include the required forecast disclaimer."
   Assert-TextContains -Text $forecastBoundaryDoc -Needle "trainingWindow" -Message "docs/forecast-boundary.md must require a training window."
   Assert-TextContains -Text $forecastBoundaryDoc -Needle "uncertainty" -Message "docs/forecast-boundary.md must require uncertainty language."
   Assert-TextContains -Text $siteReviewDecisionWorkflowDoc -Needle "Review decisions should be recorded before registry edits are made." -Message "docs/site-registry-decision-workflow.md must preserve review-before-write guidance."
   Assert-TextContains -Text $siteReviewDecisionWorkflowDoc -Needle "preview-site-review-decisions.ps1" -Message "docs/site-registry-decision-workflow.md must document the preview command."
   Assert-TextContains -Text $siteReviewDecisionWorkflowDoc -Needle "promote-reviewed-local" -Message "docs/site-registry-decision-workflow.md must document reviewed-local promotion rules."
+  Assert-TextContains -Text $siteReviewDecisionWorkflowDoc -Needle "fhabs-jones-bay" -Message "docs/site-registry-decision-workflow.md must document the Jones Bay starter-site split."
   Assert-TextContains -Text $siteReviewDoc -Needle "Evidence note" -Message "docs/site-registry-review.md must include evidence notes."
   Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "High-Priority Site Registry Review" -Message "docs/site-registry-high-priority.md must include the high-priority review packet."
   Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "Review Decision Rules" -Message "docs/site-registry-high-priority.md must include review decision rules."
-  Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "Decision:" -Message "docs/site-registry-high-priority.md must include a decision checklist."
-  Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "Jones bay" -Message "docs/site-registry-high-priority.md must include the current Jones bay review item."
-  Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "openstreetmap.org" -Message "docs/site-registry-high-priority.md must include map links for review."
+  if ($siteReview.summary.highPriorityReviewItems -gt 0) {
+    Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "Decision:" -Message "docs/site-registry-high-priority.md must include a decision checklist when high-priority items exist."
+    Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "openstreetmap.org" -Message "docs/site-registry-high-priority.md must include map links for review when high-priority items exist."
+  } else {
+    Assert-TextContains -Text $highPrioritySiteReviewDoc -Needle "No high-priority current marker checks were generated." -Message "docs/site-registry-high-priority.md must clearly state when no high-priority items remain."
+  }
   Assert-TextContains -Text $decisionPreviewScript -Needle "No files were modified" -Message "preview-site-review-decisions.ps1 must make its dry-run behavior explicit."
   Assert-TextContains -Text $decisionPreviewScript -Needle "permissionToPublish" -Message "preview-site-review-decisions.ps1 must validate publication permission boundaries."
   Assert-TextContains -Text $gitDiscoveryScript -Needle "GitHubDesktop" -Message "find-local-git.ps1 must check GitHub Desktop's bundled Git."
@@ -510,8 +562,13 @@ try {
     if ($LASTEXITCODE -ne 0) {
       Add-Failure "app.js failed JavaScript syntax validation."
     }
+
+    & $nodeExecutable --check (Resolve-ProjectPath "sw.js") | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+      Add-Failure "sw.js failed JavaScript syntax validation."
+    }
   } else {
-    Add-Warning "Node.js was not found; skipped app.js syntax validation."
+    Add-Warning "Node.js was not found; skipped app.js and sw.js syntax validation."
   }
 
   if (-not $SkipHttp) {

@@ -112,8 +112,15 @@ Each decision should include:
 
 ## Current First Review Targets
 
-Start with the high-priority packet:
+The previous `Jones bay` proximity issue should now be handled as its own unresolved `fhabs-jones-bay` starter site rather than folded into `fhabs-jago-bay`.
 
-1. `Jones bay`
+That split is intentionally conservative:
 
-`Riveria Point Launch at Henderson Point in Soda Bay` has been split from generic Soda Bay into the unresolved `fhabs-henderson-point` registry entry. It should still be locally reviewed for spelling, landmark naming, and arm assignment before promotion, but it should no longer be treated as a large-offset Soda Bay match.
+- `fhabs-jones-bay` remains `needs-local-review`
+- `fhabs-jago-bay` remains `needs-local-review`
+- local review is still required before either site is promoted to `reviewed-local`
+
+After the split is regenerated through the public snapshot pipeline, continue the next manual pass with:
+
+1. `Riveria Point Launch at Henderson Point in Soda Bay`
+2. medium-priority offset checks such as `Jago Bay` and `Clear Lake Keys near Ketch Court`

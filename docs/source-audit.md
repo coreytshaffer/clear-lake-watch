@@ -70,6 +70,17 @@ This note captures the first pass on public data sources for the Clear Lake dash
   - The dashboard caches the relation into `data/lake-shoreline.json` using `scripts/refresh-osm-shoreline.ps1`.
   - Attribution and ODbL license links should remain visible wherever the OSM-derived shoreline is displayed.
 
+### Public Gazetteer / Topo Cross-Checks For Site Registry Review
+
+- Example references used during review:
+  - `https://california.hometownlocator.com/maps/feature-map,ftc,1,fid,226330,n,jones%20bay.cfm`
+  - `https://california.hometownlocator.com/maps/feature-map,ftc,1,fid,226113,n,jago%20bay.cfm`
+- Role: Public geographic naming context for site-registry review only
+- Notes:
+  - Public gazetteer/topo references can help distinguish whether two FHABS landmark names appear to refer to separate named bays.
+  - These references are useful for conservative registry maintenance, not for water-quality interpretation or public-health messaging.
+  - The Jones Bay / Jago Bay split should remain `needs-local-review` until local evidence confirms the maintained registry coordinates and match radii.
+
 ### Lake County Public GIS Shoreline Candidate
 
 - Local source: Lake County public GIS `waterfeatures/lakes` layer

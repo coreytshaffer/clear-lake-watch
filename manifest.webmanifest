@@ -1,0 +1,25 @@
+{
+  "name": "Clear Lake Watch",
+  "short_name": "Lake Watch",
+  "description": "Public-facing dashboard prototype for Clear Lake environmental conditions, monitoring context, and reviewed public snapshot files.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3efe2",
+  "theme_color": "#f3efe2",
+  "categories": ["education", "science", "weather", "utilities"],
+  "icons": [
+    {
+      "src": "./assets/clear-lake-watch-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/clear-lake-watch-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

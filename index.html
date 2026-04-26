@@ -2,13 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f3efe2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Clear Lake Watch">
     <title>Clear Lake Watch Prototype</title>
     <meta
       name="description"
       content="Prototype dashboard plan for publicly monitoring Clear Lake environmental health and cyanobacterial bloom risk."
     >
     <link rel="icon" href="./assets/clear-lake-watch.ico">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
@@ -58,11 +63,81 @@
       </header>
 
       <main id="main-content" tabindex="-1">
-        <section class="section" id="live">
+        <section
+          class="section"
+          id="live"
+          role="region"
+          aria-labelledby="live-heading"
+          aria-describedby="live-sr-summary"
+        >
           <div class="section-heading">
             <p class="eyebrow">Latest Public Snapshot</p>
-            <h2>What The Current Feeds Are Showing</h2>
+            <h2 id="live-heading">What The Current Feeds Are Showing</h2>
             <div class="freshness-row" id="freshness-row" aria-live="polite"></div>
+            <div class="notification-panel" id="notification-panel" aria-live="polite">
+              <div>
+                <p class="eyebrow">Local Snapshot Alerts</p>
+                <p id="notification-status">
+                  Local alerts are off. Enable alerts to receive snapshot change alerts while this app is open.
+                </p>
+                <p class="notification-last-tested">
+                  These are not background emergency alerts or official public-health notifications.
+                </p>
+                <div class="notification-rule-grid" id="notification-rule-grid">
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-stale">
+                        <span>Stale snapshot alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-stale"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-stale" type="button">
+                      Test
+                    </button>
+                  </div>
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-sources">
+                        <span>Source status alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-sources"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-sources" type="button">
+                      Test
+                    </button>
+                  </div>
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-caution">
+                        <span>Caution increase alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-caution"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-caution" type="button">
+                      Test
+                    </button>
+                  </div>
+                </div>
+                <ul class="notification-history" id="notification-history"></ul>
+              </div>
+              <div class="notification-actions">
+                <button class="button button-secondary" id="notification-toggle" type="button">
+                  Enable Alerts
+                </button>
+                <button class="button button-secondary" id="notification-clear-history" type="button">
+                  Clear History
+                </button>
+                <button class="button button-secondary" id="notification-reset-settings" type="button">
+                  Reset Settings
+                </button>
+              </div>
+            </div>
+            <p class="sr-only" id="live-sr-summary" aria-live="polite">
+              Snapshot summary loading.
+            </p>
             <p id="live-summary">
               This section is populated from local snapshot files generated from official public sources.
             </p>
@@ -102,16 +177,25 @@
           </div>
         </section>
 
-        <section class="section" id="map">
+        <section
+          class="section"
+          id="map"
+          role="region"
+          aria-labelledby="map-heading"
+          aria-describedby="map-sr-summary"
+        >
           <div class="section-heading">
             <p class="eyebrow">Map Layer</p>
-            <h2>Recent Public Reports With Coordinates</h2>
+            <h2 id="map-heading">Recent Public Reports With Coordinates</h2>
             <p>
               Markers are pulled from FHABS report coordinates, matched to the
               starter site registry when possible, and grouped to arms with
               reviewed assignments or documented fallbacks.
             </p>
             <p id="registry-summary"></p>
+            <p class="sr-only" id="map-sr-summary" aria-live="polite">
+              Map summary loading.
+            </p>
           </div>
           <div class="site-review-panel" aria-live="polite">
             <div>
@@ -163,13 +247,22 @@
           <div class="marker-list" id="marker-list"></div>
         </section>
 
-        <section class="section" id="data-products">
+        <section
+          class="section"
+          id="data-products"
+          role="region"
+          aria-labelledby="data-products-heading"
+          aria-describedby="data-products-sr-summary"
+        >
           <div class="section-heading">
             <p class="eyebrow">Data Products</p>
-            <h2>Normalized Public Exports</h2>
+            <h2 id="data-products-heading">Normalized Public Exports</h2>
             <p>
               These generated files are designed to support the dashboard, public
               downloads, charting, and future machine-learning feature tables.
+            </p>
+            <p class="sr-only" id="data-products-sr-summary" aria-live="polite">
+              Data products summary loading.
             </p>
           </div>
           <div class="source-status-panel" aria-live="polite">
@@ -194,10 +287,10 @@
           <div class="product-grid" id="product-grid"></div>
         </section>
 
-        <section class="section" id="weather-context">
+        <section class="section" id="weather-context" role="region" aria-labelledby="weather-context-heading">
           <div class="section-heading">
             <p class="eyebrow">Weather Context</p>
-            <h2>Shared Backbone Context Layer</h2>
+            <h2 id="weather-context-heading">Shared Backbone Context Layer</h2>
             <p>
               Weather context is designed as a separate public-safe export from
               the environmental monitoring backbone. It can provide rainfall,
@@ -211,14 +304,23 @@
           </div>
         </section>
 
-        <section class="section" id="analytics">
+        <section
+          class="section"
+          id="analytics"
+          role="region"
+          aria-labelledby="analytics-heading"
+          aria-describedby="analytics-sr-summary"
+        >
           <div class="section-heading">
             <p class="eyebrow">Reporting Activity</p>
-            <h2>Monitoring And Reporting Patterns</h2>
+            <h2 id="analytics-heading">Monitoring And Reporting Patterns</h2>
             <p>
               These charts summarize public reporting activity and normalized
               observation coverage. They are not direct bloom-severity estimates
               and should not be read as public-health guidance.
+            </p>
+            <p class="sr-only" id="analytics-sr-summary" aria-live="polite">
+              Analytics summary loading.
             </p>
           </div>
           <div class="split-section live-detail-section">

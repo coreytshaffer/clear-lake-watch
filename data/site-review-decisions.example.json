@@ -5,15 +5,15 @@
   "decisions": [
     {
       "decisionId": "example-jones-bay-2026-04-22",
-      "siteId": "fhabs-jago-bay",
+      "siteId": "fhabs-jones-bay",
       "landmark": "Jones bay",
-      "action": "add-alias",
-      "proposedAlias": "Jones bay",
+      "action": "keep-needs-review",
+      "proposedAlias": null,
       "proposedAssignmentStatus": "needs-local-review",
       "reviewer": "local-reviewer-name",
       "reviewedAt": "2026-04-22T00:00:00-07:00",
-      "evidenceNote": "Replace with local evidence explaining whether Jones bay is the same maintained site as Jago Bay.",
-      "publicNote": "Alias remains locally unreviewed until evidence is sufficient to promote the assignment.",
+      "evidenceNote": "Replace with local evidence confirming the distinct Jones Bay landmark and whether the starter registry coordinate and match radius are appropriate.",
+      "publicNote": "Jones Bay remains a distinct but locally unreviewed registry site until evidence is sufficient to promote the assignment.",
       "permissionToPublish": false
     },
     {

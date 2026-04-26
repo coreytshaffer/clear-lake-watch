@@ -1,15 +1,15 @@
 {
-    "generatedAt":  "2026-04-23T02:40:57.3663557-07:00",
+    "generatedAt":  "2026-04-25T22:19:55.2199811-07:00",
     "liveCards":  [
                       {
                           "label":  "Lake level at Lakeport",
-                          "value":  "7.62 ft Rumsey",
-                          "note":  "USGS station 11450000 on April 21, 2026; approx. water-surface elevation 1,325.88 ft using Zero Rumsey = 1318.256 ft. 30-day trend nearly flat (-0.01 ft)."
+                          "value":  "7.64 ft Rumsey\n1,325.90 ft above sea level",
+                          "note":  "USGS station 11450000 on April 24, 2026; elevation shown using Zero Rumsey = 1318.256 ft. 30-day trend nearly flat (0.02 ft)."
                       },
                       {
                           "label":  "Cole Creek discharge",
-                          "value":  "5.49 cfs",
-                          "note":  "USGS station 11449820 on April 21, 2026; 30-day peak was 10.5 cfs."
+                          "value":  "2.09 cfs",
+                          "note":  "USGS station 11449820 on April 24, 2026; 30-day peak was 10.5 cfs."
                       },
                       {
                           "label":  "Latest Clear Lake FHABS report",
@@ -24,7 +24,7 @@
                       {
                           "label":  "Registry coverage",
                           "value":  "8 / 8",
-                          "note":  "Recent coordinate markers matched to the site registry. Unmatched: 0. Methods: alias: 7; proximity: 1."
+                          "note":  "Recent coordinate markers matched to the site registry. Unmatched: 0. Methods: alias: 8."
                       }
                   ],
     "hydrologySeries":  [
@@ -33,14 +33,6 @@
                                 "station":  "CLEAR LK A LAKEPORT CA / USGS 11450000",
                                 "unit":  "ft",
                                 "points":  [
-                                               {
-                                                   "date":  "2026-03-24",
-                                                   "value":  7.63
-                                               },
-                                               {
-                                                   "date":  "2026-03-25",
-                                                   "value":  7.61
-                                               },
                                                {
                                                    "date":  "2026-03-26",
                                                    "value":  7.62
@@ -148,6 +140,18 @@
                                                {
                                                    "date":  "2026-04-21",
                                                    "value":  7.62
+                                               },
+                                               {
+                                                   "date":  "2026-04-22",
+                                                   "value":  7.65
+                                               },
+                                               {
+                                                   "date":  "2026-04-23",
+                                                   "value":  7.64
+                                               },
+                                               {
+                                                   "date":  "2026-04-24",
+                                                   "value":  7.64
                                                }
                                            ]
                             },
@@ -156,14 +160,6 @@
                                 "station":  "COLE C A KELSEYVILLE CA / USGS 11449820",
                                 "unit":  "ft3/s",
                                 "points":  [
-                                               {
-                                                   "date":  "2026-03-24",
-                                                   "value":  1.46
-                                               },
-                                               {
-                                                   "date":  "2026-03-25",
-                                                   "value":  1.41
-                                               },
                                                {
                                                    "date":  "2026-03-26",
                                                    "value":  1.34
@@ -271,6 +267,18 @@
                                                {
                                                    "date":  "2026-04-21",
                                                    "value":  5.49
+                                               },
+                                               {
+                                                   "date":  "2026-04-22",
+                                                   "value":  4.4
+                                               },
+                                               {
+                                                   "date":  "2026-04-23",
+                                                   "value":  2.99
+                                               },
+                                               {
+                                                   "date":  "2026-04-24",
+                                                   "value":  2.09
                                                }
                                            ]
                             }
@@ -372,11 +380,11 @@
                        },
                        {
                            "id":  "4997",
-                           "siteId":  "fhabs-jago-bay",
-                           "siteName":  "Jago Bay",
-                           "matchMethod":  "proximity",
+                           "siteId":  "fhabs-jones-bay",
+                           "siteName":  "Jones Bay",
+                           "matchMethod":  "alias",
                            "assignmentStatus":  "needs-local-review",
-                           "matchDistanceKm":  0.03,
+                           "matchDistanceKm":  0.14,
                            "landmark":  "Jones bay",
                            "date":  "September 4, 2025",
                            "isoDate":  "2025-09-04",
@@ -436,7 +444,7 @@
                        }
                    ],
     "analytics":  {
-                      "generatedAt":  "2026-04-23T02:40:57.3210057-07:00",
+                      "generatedAt":  "2026-04-25T22:19:55.1934950-07:00",
                       "schemaVersion":  1,
                       "reportTrendByYear":  [
                                                 {
@@ -643,9 +651,9 @@
                                                       "arm":  "Lower Arm",
                                                       "parameterName":  "Discharge",
                                                       "unit":  "ft3/s",
-                                                      "count":  29,
-                                                      "firstObservedDate":  "2026-03-24",
-                                                      "lastObservedDate":  "2026-04-21"
+                                                      "count":  30,
+                                                      "firstObservedDate":  "2026-03-26",
+                                                      "lastObservedDate":  "2026-04-24"
                                                   },
                                                   {
                                                       "source":  "USGS",
@@ -654,9 +662,9 @@
                                                       "arm":  "Upper Arm",
                                                       "parameterName":  "Gage height",
                                                       "unit":  "ft",
-                                                      "count":  29,
-                                                      "firstObservedDate":  "2026-03-24",
-                                                      "lastObservedDate":  "2026-04-21"
+                                                      "count":  30,
+                                                      "firstObservedDate":  "2026-03-26",
+                                                      "lastObservedDate":  "2026-04-24"
                                                   },
                                                   {
                                                       "source":  "FHABS",
@@ -714,13 +722,13 @@
                          {
                              "name":  "Normalized observations",
                              "file":  "data/observations.json",
-                             "recordCount":  62,
+                             "recordCount":  64,
                              "description":  "USGS daily hydrology observations plus FHABS result records normalized into one observation-shaped table."
                          },
                          {
                              "name":  "Normalized sites",
                              "file":  "data/sites-normalized.json",
-                             "recordCount":  10,
+                             "recordCount":  11,
                              "description":  "Reviewed starter site registry exported with stable IDs, aliases, coordinates, arms, and assignment status."
                          },
                          {

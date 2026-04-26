@@ -1,41 +1,22 @@
 {
-    "generatedAt":  "2026-04-22T21:28:38.5652936-07:00",
+    "generatedAt":  "2026-04-25T21:27:49.1605765-07:00",
     "sourceFiles":  {
                         "sites":  ".\\data\\sites.json",
                         "live":  ".\\data\\live.json"
                     },
     "summary":  {
-                    "registrySites":  10,
+                    "registrySites":  11,
                     "reviewedRegistrySites":  2,
-                    "needsReviewRegistrySites":  8,
+                    "needsReviewRegistrySites":  9,
                     "currentMapMarkers":  8,
                     "reviewedCurrentMapMarkers":  0,
                     "needsReviewCurrentMapMarkers":  8,
                     "matchedButUnreviewedCurrentMapMarkers":  8,
-                    "highPriorityReviewItems":  1,
+                    "highPriorityReviewItems":  0,
                     "mediumPriorityReviewItems":  3,
-                    "lowPriorityReviewItems":  4
+                    "lowPriorityReviewItems":  5
                 },
     "reviewQueue":  [
-                        {
-                            "siteId":  "fhabs-jago-bay",
-                            "siteName":  "Jago Bay",
-                            "landmark":  "Jones bay",
-                            "arm":  "Lower Arm",
-                            "assignmentStatus":  "needs-local-review",
-                            "reviewPriority":  "high",
-                            "reviewReason":  "Marker matched by coordinate proximity rather than a reviewed alias.",
-                            "matchMethod":  "proximity",
-                            "matchDistanceKm":  0.03,
-                            "reportDate":  "September 4, 2025",
-                            "latitude":  38.94865,
-                            "longitude":  -122.66005,
-                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.94865\u0026mlon=-122.66005#map=15/38.94865/-122.66005",
-                            "registryLatitude":  38.948856,
-                            "registryLongitude":  -122.66023,
-                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.948856\u0026mlon=-122.66023#map=15/38.948856/-122.66023",
-                            "recommendedReviewAction":  "Confirm whether this landmark should be added as an alias for the matched site."
-                        },
                         {
                             "siteId":  "fhabs-clearlake-keys",
                             "siteName":  "Clear Lake Keys",
@@ -132,6 +113,25 @@
                             "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
                         },
                         {
+                            "siteId":  "fhabs-jones-bay",
+                            "siteName":  "Jones Bay",
+                            "landmark":  "Jones bay",
+                            "arm":  "Lower Arm",
+                            "assignmentStatus":  "needs-local-review",
+                            "reviewPriority":  "low",
+                            "reviewReason":  "Alias and coordinates are close, but local review has not certified the assignment.",
+                            "matchMethod":  "alias",
+                            "matchDistanceKm":  0.14,
+                            "reportDate":  "September 4, 2025",
+                            "latitude":  38.94865,
+                            "longitude":  -122.66005,
+                            "sourceMapUrl":  "https://www.openstreetmap.org/?mlat=38.94865\u0026mlon=-122.66005#map=15/38.94865/-122.66005",
+                            "registryLatitude":  38.9479537,
+                            "registryLongitude":  -122.6613745,
+                            "registryMapUrl":  "https://www.openstreetmap.org/?mlat=38.947954\u0026mlon=-122.661375#map=15/38.947954/-122.661375",
+                            "recommendedReviewAction":  "Confirm local landmark and arm assignment, then promote only if locally reviewed."
+                        },
+                        {
                             "siteId":  "fhabs-konocti-shores",
                             "siteName":  "Konocti Shores",
                             "landmark":  "Konocti Shores",
@@ -172,18 +172,44 @@
                     ],
     "markersBySite":  [
                           {
+                              "siteId":  "fhabs-soda-bay",
+                              "siteName":  "Soda Bay",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "September 7, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Soda Bay"
+                                            ]
+                          },
+                          {
+                              "siteId":  "fhabs-jones-bay",
+                              "siteName":  "Jones Bay",
+                              "arm":  "Lower Arm",
+                              "assignmentStatus":  "needs-local-review",
+                              "reportCount":  1,
+                              "latestReportDate":  "September 4, 2025",
+                              "matchMethods":  [
+                                                   "alias: 1"
+                                               ],
+                              "landmarks":  [
+                                                "Jones bay"
+                                            ]
+                          },
+                          {
                               "siteId":  "fhabs-jago-bay",
                               "siteName":  "Jago Bay",
                               "arm":  "Lower Arm",
                               "assignmentStatus":  "needs-local-review",
-                              "reportCount":  2,
-                              "latestReportDate":  "September 4, 2025",
+                              "reportCount":  1,
+                              "latestReportDate":  "July 31, 2025",
                               "matchMethods":  [
-                                                   "alias: 1",
-                                                   "proximity: 1"
+                                                   "alias: 1"
                                                ],
                               "landmarks":  [
-                                                "Jones bay",
                                                 "Jago Bay"
                                             ]
                           },
@@ -202,31 +228,17 @@
                                             ]
                           },
                           {
-                              "siteId":  "fhabs-soda-bay",
-                              "siteName":  "Soda Bay",
-                              "arm":  "Lower Arm",
+                              "siteId":  "fhabs-clearlake-keys",
+                              "siteName":  "Clear Lake Keys",
+                              "arm":  "Oaks Arm",
                               "assignmentStatus":  "needs-local-review",
                               "reportCount":  1,
-                              "latestReportDate":  "September 7, 2025",
+                              "latestReportDate":  "June 26, 2025",
                               "matchMethods":  [
                                                    "alias: 1"
                                                ],
                               "landmarks":  [
-                                                "Soda Bay"
-                                            ]
-                          },
-                          {
-                              "siteId":  "fhabs-konocti-shores",
-                              "siteName":  "Konocti Shores",
-                              "arm":  "Lower Arm",
-                              "assignmentStatus":  "needs-local-review",
-                              "reportCount":  1,
-                              "latestReportDate":  "June 14, 2025",
-                              "matchMethods":  [
-                                                   "alias: 1"
-                                               ],
-                              "landmarks":  [
-                                                "Konocti Shores"
+                                                "Clear Lake Keys near Ketch Court"
                                             ]
                           },
                           {
@@ -244,17 +256,17 @@
                                             ]
                           },
                           {
-                              "siteId":  "fhabs-clearlake-keys",
-                              "siteName":  "Clear Lake Keys",
-                              "arm":  "Oaks Arm",
+                              "siteId":  "fhabs-konocti-shores",
+                              "siteName":  "Konocti Shores",
+                              "arm":  "Lower Arm",
                               "assignmentStatus":  "needs-local-review",
                               "reportCount":  1,
-                              "latestReportDate":  "June 26, 2025",
+                              "latestReportDate":  "June 14, 2025",
                               "matchMethods":  [
                                                    "alias: 1"
                                                ],
                               "landmarks":  [
-                                                "Clear Lake Keys near Ketch Court"
+                                                "Konocti Shores"
                                             ]
                           },
                           {

@@ -82,6 +82,21 @@
       "matchRadiusKm": 3
     },
     {
+      "siteId": "fhabs-jones-bay",
+      "name": "Jones Bay",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Jones Bay",
+        "Jones bay"
+      ],
+      "latitude": 38.9479537,
+      "longitude": -122.6613745,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 1
+    },
+    {
       "siteId": "fhabs-clearlake-keys",
       "name": "Clear Lake Keys",
       "source": "FHABS",

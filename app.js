@@ -33,7 +33,27 @@ const mlGridElement = document.querySelector("#ml-grid");
 const generatedLabelElement = document.querySelector("#generated-label");
 const generatedOnElement = document.querySelector("#generated-on");
 const freshnessRowElement = document.querySelector("#freshness-row");
+const notificationPanelElement = document.querySelector("#notification-panel");
+const notificationStatusElement = document.querySelector("#notification-status");
+const notificationToggleElement = document.querySelector("#notification-toggle");
+const notificationHistoryElement = document.querySelector("#notification-history");
+const notificationClearHistoryElement = document.querySelector("#notification-clear-history");
+const notificationResetSettingsElement = document.querySelector("#notification-reset-settings");
+const notificationRuleStaleElement = document.querySelector("#notification-rule-stale");
+const notificationRuleSourcesElement = document.querySelector("#notification-rule-sources");
+const notificationRuleCautionElement = document.querySelector("#notification-rule-caution");
+const notificationTestStaleElement = document.querySelector("#notification-test-stale");
+const notificationTestSourcesElement = document.querySelector("#notification-test-sources");
+const notificationTestCautionElement = document.querySelector("#notification-test-caution");
+const notificationLastTestedStaleElement = document.querySelector("#notification-last-tested-stale");
+const notificationLastTestedSourcesElement = document.querySelector("#notification-last-tested-sources");
+const notificationLastTestedCautionElement = document.querySelector("#notification-last-tested-caution");
+const liveSrSummaryElement = document.querySelector("#live-sr-summary");
+const mapSrSummaryElement = document.querySelector("#map-sr-summary");
+const dataProductsSrSummaryElement = document.querySelector("#data-products-sr-summary");
+const analyticsSrSummaryElement = document.querySelector("#analytics-sr-summary");
 const themeToggleElement = document.querySelector("#theme-toggle");
+const themeColorMetaElement = document.querySelector('meta[name="theme-color"]');
 const navSectionLinks = Array.from(document.querySelectorAll("[data-section-link]"));
 
 const templates = {
@@ -60,6 +80,17 @@ let currentMapMarkers = [];
 let currentMapShoreline = null;
 
 const staleAfterDays = 7;
+const notificationSettingsKey = "clearLakeNotificationsEnabled";
+const notificationRuleSettingsKey = "clearLakeNotificationRules";
+const notificationLastTestedKey = "clearLakeNotificationLastTested";
+const notificationEventStateKey = "clearLakeNotificationEventState";
+const cautionCountStateKey = "clearLakeLastCautionCount";
+const notificationHistoryKey = "clearLakeNotificationHistory";
+const maxNotificationHistoryItems = 5;
+const themeColors = {
+  light: "#f3efe2",
+  dark: "#071817",
+};
 
 const formatDate = (value) =>
   new Intl.DateTimeFormat("en-US", {
@@ -87,6 +118,447 @@ const daysSince = (value) => {
   return Math.floor((Date.now() - then) / 86400000);
 };
 
+const getStoredBoolean = (key, fallback = false) => {
+  try {
+    const value = localStorage.getItem(key);
+    if (value === null) {
+      return fallback;
+    }
+
+    return value === "true";
+  } catch (error) {
+    console.warn(error);
+    return fallback;
+  }
+};
+
+const setStoredBoolean = (key, value) => {
+  try {
+    localStorage.setItem(key, `${value}`);
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+const getStoredJson = (key, fallback = null) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (error) {
+    console.warn(error);
+    return fallback;
+  }
+};
+
+const setStoredJson = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+const notificationsSupported = () => "Notification" in window;
+
+const notificationsEnabled = () =>
+  getStoredBoolean(notificationSettingsKey, false) && Notification.permission === "granted";
+
+const defaultNotificationRules = {
+  stale: true,
+  sources: true,
+  caution: true,
+};
+
+const getNotificationRules = () => {
+  const storedRules = getStoredJson(notificationRuleSettingsKey, null);
+  return { ...defaultNotificationRules, ...(storedRules ?? {}) };
+};
+
+const setNotificationRules = (rules) => {
+  setStoredJson(notificationRuleSettingsKey, { ...defaultNotificationRules, ...rules });
+};
+
+const getNotificationLastTested = () => getStoredJson(notificationLastTestedKey, {});
+
+const setNotificationLastTested = (value) => {
+  setStoredJson(notificationLastTestedKey, value);
+};
+
+const getNotificationHistory = () => getStoredJson(notificationHistoryKey, []);
+
+const setNotificationHistory = (historyItems) => {
+  setStoredJson(notificationHistoryKey, historyItems.slice(0, maxNotificationHistoryItems));
+};
+
+const renderNotificationHistory = () => {
+  if (!notificationHistoryElement) {
+    return;
+  }
+
+  notificationHistoryElement.replaceChildren();
+  const history = getNotificationHistory();
+
+  if (!history.length) {
+    const emptyItem = document.createElement("li");
+    emptyItem.textContent = "No recent alerts yet.";
+    notificationHistoryElement.append(emptyItem);
+    return;
+  }
+
+  history.forEach((item) => {
+    const entry = document.createElement("li");
+    entry.textContent = `${item.timeLabel}: ${item.title}`;
+    notificationHistoryElement.append(entry);
+  });
+};
+
+const pushNotificationHistory = (title) => {
+  const timestamp = new Date();
+  const timeLabel = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(timestamp);
+  const existing = getNotificationHistory();
+  const updated = [{ title, timeLabel, at: timestamp.toISOString() }, ...existing];
+  setNotificationHistory(updated);
+  renderNotificationHistory();
+};
+
+const updateNotificationPanel = () => {
+  if (!notificationPanelElement || !notificationStatusElement || !notificationToggleElement) {
+    return;
+  }
+
+  renderNotificationHistory();
+  const rules = getNotificationRules();
+  const lastTested = getNotificationLastTested();
+  if (notificationRuleStaleElement) {
+    notificationRuleStaleElement.checked = !!rules.stale;
+  }
+  if (notificationRuleSourcesElement) {
+    notificationRuleSourcesElement.checked = !!rules.sources;
+  }
+  if (notificationRuleCautionElement) {
+    notificationRuleCautionElement.checked = !!rules.caution;
+  }
+  const toDisplayTime = (value) =>
+    value
+      ? new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        }).format(new Date(value))
+      : "Never tested";
+  if (notificationLastTestedStaleElement) {
+    notificationLastTestedStaleElement.textContent = `Last tested: ${toDisplayTime(lastTested.stale)}`;
+  }
+  if (notificationLastTestedSourcesElement) {
+    notificationLastTestedSourcesElement.textContent = `Last tested: ${toDisplayTime(lastTested.sources)}`;
+  }
+  if (notificationLastTestedCautionElement) {
+    notificationLastTestedCautionElement.textContent = `Last tested: ${toDisplayTime(lastTested.caution)}`;
+  }
+
+  if (!notificationsSupported()) {
+    notificationPanelElement.hidden = false;
+    notificationStatusElement.textContent =
+      "This browser does not support notifications for this dashboard.";
+    notificationToggleElement.disabled = true;
+    notificationToggleElement.textContent = "Not Supported";
+    if (notificationClearHistoryElement) {
+      notificationClearHistoryElement.disabled = true;
+    }
+    if (notificationResetSettingsElement) {
+      notificationResetSettingsElement.disabled = true;
+    }
+    if (notificationRuleStaleElement) {
+      notificationRuleStaleElement.disabled = true;
+    }
+    if (notificationRuleSourcesElement) {
+      notificationRuleSourcesElement.disabled = true;
+    }
+    if (notificationRuleCautionElement) {
+      notificationRuleCautionElement.disabled = true;
+    }
+    if (notificationTestStaleElement) {
+      notificationTestStaleElement.disabled = true;
+    }
+    if (notificationTestSourcesElement) {
+      notificationTestSourcesElement.disabled = true;
+    }
+    if (notificationTestCautionElement) {
+      notificationTestCautionElement.disabled = true;
+    }
+    return;
+  }
+
+  const optedIn = getStoredBoolean(notificationSettingsKey, false);
+  const permission = Notification.permission;
+  notificationPanelElement.hidden = false;
+
+  if (permission === "denied") {
+    notificationStatusElement.textContent =
+      "Notifications are blocked in browser settings. Enable them in site settings, then reload.";
+    notificationToggleElement.disabled = true;
+    notificationToggleElement.textContent = "Blocked";
+    if (notificationClearHistoryElement) {
+      notificationClearHistoryElement.disabled = false;
+    }
+    if (notificationResetSettingsElement) {
+      notificationResetSettingsElement.disabled = false;
+    }
+    if (notificationRuleStaleElement) {
+      notificationRuleStaleElement.disabled = false;
+    }
+    if (notificationRuleSourcesElement) {
+      notificationRuleSourcesElement.disabled = false;
+    }
+    if (notificationRuleCautionElement) {
+      notificationRuleCautionElement.disabled = false;
+    }
+    if (notificationTestStaleElement) {
+      notificationTestStaleElement.disabled = false;
+    }
+    if (notificationTestSourcesElement) {
+      notificationTestSourcesElement.disabled = false;
+    }
+    if (notificationTestCautionElement) {
+      notificationTestCautionElement.disabled = false;
+    }
+    return;
+  }
+
+  notificationToggleElement.disabled = false;
+  if (notificationClearHistoryElement) {
+    notificationClearHistoryElement.disabled = false;
+  }
+  if (notificationResetSettingsElement) {
+    notificationResetSettingsElement.disabled = false;
+  }
+  if (notificationRuleStaleElement) {
+    notificationRuleStaleElement.disabled = false;
+  }
+  if (notificationRuleSourcesElement) {
+    notificationRuleSourcesElement.disabled = false;
+  }
+  if (notificationRuleCautionElement) {
+    notificationRuleCautionElement.disabled = false;
+  }
+  if (notificationTestStaleElement) {
+    notificationTestStaleElement.disabled = false;
+  }
+  if (notificationTestSourcesElement) {
+    notificationTestSourcesElement.disabled = false;
+  }
+  if (notificationTestCautionElement) {
+    notificationTestCautionElement.disabled = false;
+  }
+
+  if (optedIn && permission === "granted") {
+    notificationStatusElement.textContent =
+      "Local alerts are on. You can receive alerts while this app is open for stale data, source issues, and caution-report increases.";
+    notificationToggleElement.textContent = "Disable Alerts";
+    return;
+  }
+
+  notificationStatusElement.textContent =
+    "Local alerts are off. Enable alerts to receive snapshot change alerts while this app is open.";
+  notificationToggleElement.textContent = permission === "granted" ? "Enable Alerts" : "Allow Alerts";
+};
+
+const notify = ({ title, body, tag }) => {
+  if (!notificationsEnabled()) {
+    return false;
+  }
+
+  try {
+    new Notification(title, {
+      body,
+      tag,
+      renotify: false,
+      silent: false,
+      icon: "./assets/clear-lake-watch-icon-192.png",
+      badge: "./assets/clear-lake-watch-icon-192.png",
+    });
+    pushNotificationHistory(title);
+    return true;
+  } catch (error) {
+    console.warn(error);
+    return false;
+  }
+};
+
+const evaluateSnapshotNotifications = (liveData, manifestData) => {
+  if (!notificationsEnabled() || !liveData) {
+    return;
+  }
+
+  const rules = getNotificationRules();
+  const generatedAt = liveData.generatedAt ?? "unknown";
+  const events = getStoredJson(notificationEventStateKey, {});
+  const ageDays = daysSince(liveData.generatedAt);
+  const staleEventId = `stale-${generatedAt}`;
+
+  if (rules.stale && ageDays !== null && ageDays > staleAfterDays && !events[staleEventId]) {
+    notify({
+      title: "Clear Lake Watch: Snapshot Stale",
+      body: `The current snapshot is ${ageDays} days old.`,
+      tag: "snapshot-stale",
+    });
+    events[staleEventId] = true;
+  }
+
+  const sourceIssues = manifestData?.sources?.filter((source) => source.status !== "ok") ?? [];
+  const sourceIssueEventId = `sources-${generatedAt}-${sourceIssues.length}`;
+  if (rules.sources && sourceIssues.length > 0 && !events[sourceIssueEventId]) {
+    notify({
+      title: "Clear Lake Watch: Source Attention Needed",
+      body: `${sourceIssues.length} source feed${sourceIssues.length === 1 ? "" : "s"} need attention in the latest manifest.`,
+      tag: "source-attention",
+    });
+    events[sourceIssueEventId] = true;
+  }
+
+  const cautionEntry = (liveData.advisoryMix ?? []).find((item) =>
+    `${item.label ?? ""}`.toLowerCase().includes("caution"),
+  );
+  const cautionCount = Number.isFinite(cautionEntry?.count) ? cautionEntry.count : 0;
+  const previousCautionCount = getStoredJson(cautionCountStateKey, null);
+  if (
+    rules.caution &&
+    Number.isFinite(previousCautionCount) &&
+    cautionCount > previousCautionCount &&
+    !events[`caution-${generatedAt}`]
+  ) {
+    notify({
+      title: "Clear Lake Watch: Caution Reports Increased",
+      body: `Caution-labeled reports increased from ${previousCautionCount} to ${cautionCount}.`,
+      tag: "caution-increase",
+    });
+    events[`caution-${generatedAt}`] = true;
+  }
+
+  setStoredJson(notificationEventStateKey, events);
+  setStoredJson(cautionCountStateKey, cautionCount);
+};
+
+const setupNotificationControls = () => {
+  if (!notificationToggleElement) {
+    return;
+  }
+
+  updateNotificationPanel();
+
+  notificationToggleElement.addEventListener("click", async () => {
+    if (!notificationsSupported()) {
+      return;
+    }
+
+    const currentlyEnabled = notificationsEnabled();
+    if (currentlyEnabled) {
+      setStoredBoolean(notificationSettingsKey, false);
+      updateNotificationPanel();
+      return;
+    }
+
+    if (Notification.permission === "default") {
+      try {
+        await Notification.requestPermission();
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+
+    if (Notification.permission === "granted") {
+      setStoredBoolean(notificationSettingsKey, true);
+      notify({
+        title: "Clear Lake Watch Open-App Alerts Enabled",
+        body: "You can now receive local snapshot alerts while this app is open.",
+        tag: "alerts-enabled",
+      });
+    }
+
+    updateNotificationPanel();
+  });
+
+  notificationClearHistoryElement?.addEventListener("click", () => {
+    setNotificationHistory([]);
+    renderNotificationHistory();
+  });
+
+  notificationResetSettingsElement?.addEventListener("click", () => {
+    setStoredBoolean(notificationSettingsKey, false);
+    setNotificationRules(defaultNotificationRules);
+    setNotificationHistory([]);
+    setNotificationLastTested({});
+    setStoredJson(notificationEventStateKey, {});
+    setStoredJson(cautionCountStateKey, null);
+    notificationStatusElement.textContent =
+      "Notification settings reset. Alerts are off until you enable them again.";
+    updateNotificationPanel();
+  });
+
+  const updateRulesFromInputs = () => {
+    setNotificationRules({
+      stale: notificationRuleStaleElement?.checked ?? true,
+      sources: notificationRuleSourcesElement?.checked ?? true,
+      caution: notificationRuleCautionElement?.checked ?? true,
+    });
+    updateNotificationPanel();
+  };
+
+  notificationRuleStaleElement?.addEventListener("change", updateRulesFromInputs);
+  notificationRuleSourcesElement?.addEventListener("change", updateRulesFromInputs);
+  notificationRuleCautionElement?.addEventListener("change", updateRulesFromInputs);
+
+  const runTestAlert = (ruleKey) => {
+    const rules = getNotificationRules();
+    const messages = {
+      stale: {
+        title: "Clear Lake Watch: Test Stale Snapshot Alert",
+        body: "Test only: this simulates a stale snapshot notification.",
+        tag: "test-stale",
+      },
+      sources: {
+        title: "Clear Lake Watch: Test Source Alert",
+        body: "Test only: this simulates a source-status attention notification.",
+        tag: "test-sources",
+      },
+      caution: {
+        title: "Clear Lake Watch: Test Caution Alert",
+        body: "Test only: this simulates a caution-report increase notification.",
+        tag: "test-caution",
+      },
+    };
+
+    if (!rules[ruleKey]) {
+      notificationStatusElement.textContent =
+        "Enable this alert rule first, then test again.";
+      return;
+    }
+
+    if (!notificationsEnabled()) {
+      notificationStatusElement.textContent =
+        "Enable alerts and grant notification permission before sending test alerts.";
+      return;
+    }
+
+    const sent = notify(messages[ruleKey]);
+    if (sent) {
+      const current = getNotificationLastTested();
+      setNotificationLastTested({ ...current, [ruleKey]: new Date().toISOString() });
+    }
+    updateNotificationPanel();
+  };
+
+  notificationTestStaleElement?.addEventListener("click", () => runTestAlert("stale"));
+  notificationTestSourcesElement?.addEventListener("click", () => runTestAlert("sources"));
+  notificationTestCautionElement?.addEventListener("click", () => runTestAlert("caution"));
+};
+
 const setSnapshotHeader = (liveData) => {
   if (!generatedLabelElement || !generatedOnElement) {
     return;
@@ -104,6 +576,42 @@ const setSnapshotHeader = (liveData) => {
   generatedLabelElement.textContent = "Snapshot Status";
   generatedOnElement.textContent = "Live snapshot unavailable";
   generatedOnElement.classList.add("snapshot-unavailable");
+};
+
+const renderScreenReaderSummaries = (liveData, manifestData, siteReviewData) => {
+  if (liveSrSummaryElement) {
+    const ageDays = daysSince(liveData?.generatedAt);
+    const cards = liveData?.liveCards?.length ?? 0;
+    liveSrSummaryElement.textContent = liveData
+      ? `Live snapshot loaded with ${cards} summary cards. Snapshot age is ${
+          ageDays === null ? "unknown" : `${ageDays} day${ageDays === 1 ? "" : "s"}`
+        }.`
+      : "Live snapshot is unavailable. Current-condition cards are not shown.";
+  }
+
+  if (mapSrSummaryElement) {
+    const markerCount = liveData?.mapMarkers?.length ?? 0;
+    const reviewedCount =
+      liveData?.mapMarkers?.filter((marker) =>
+        marker.assignmentStatus?.includes("reviewed"),
+      ).length ?? 0;
+    const queueCount = siteReviewData?.summary?.needsReviewCurrentMapMarkers ?? 0;
+    mapSrSummaryElement.textContent = `Map section includes ${markerCount} markers. ${reviewedCount} markers are reviewed and ${queueCount} markers need local review.`;
+  }
+
+  if (dataProductsSrSummaryElement) {
+    const sourceCount = manifestData?.sources?.length ?? 0;
+    const sourceAttentionCount =
+      manifestData?.sources?.filter((source) => source.status !== "ok").length ?? 0;
+    const outputCount = manifestData?.outputs?.length ?? 0;
+    dataProductsSrSummaryElement.textContent = `Data products section includes ${sourceCount} tracked sources and ${outputCount} generated outputs. ${sourceAttentionCount} sources currently need attention.`;
+  }
+
+  if (analyticsSrSummaryElement) {
+    const reportYears = liveData?.analytics?.reportTrendByYear?.length ?? 0;
+    const coverageSeries = liveData?.analytics?.observationCoverage?.length ?? 0;
+    analyticsSrSummaryElement.textContent = `Analytics section shows ${reportYears} annual reporting trend rows and ${coverageSeries} observation coverage series summaries.`;
+  }
 };
 
 const fetchJson = async (url, { optional = false } = {}) => {
@@ -1456,6 +1964,7 @@ const renderMlCards = (mlRoadmap) => {
 const setTheme = (theme) => {
   document.documentElement.dataset.theme = theme;
   themeToggleElement?.setAttribute("aria-pressed", `${theme === "dark"}`);
+  themeColorMetaElement?.setAttribute("content", themeColors[theme] ?? themeColors.light);
 
   if (themeToggleElement) {
     themeToggleElement.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
@@ -1536,10 +2045,24 @@ const setupActiveNavigation = () => {
   });
 };
 
+const registerServiceWorker = () => {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch((error) => {
+      console.warn(error);
+    });
+  });
+};
+
 const boot = async () => {
   setupThemeToggle();
   setupActiveNavigation();
   setupMapReviewFilter();
+  setupNotificationControls();
+  registerServiceWorker();
 
   const [
     data,
@@ -1564,6 +2087,9 @@ const boot = async () => {
   renderSiteRegistrySummary(sitesData);
   renderLiveSnapshot(liveData, shorelineData, siteReviewData);
   renderSourceStatus(manifestData);
+  evaluateSnapshotNotifications(liveData, manifestData);
+  updateNotificationPanel();
+  renderScreenReaderSummaries(liveData, manifestData, siteReviewData);
   renderWeatherContext(weatherContextData);
   renderStats(data);
   renderArms(data.arms);
@@ -1586,5 +2112,6 @@ boot().catch((error) => {
     "The prototype data file could not be loaded. Check app.js and data/sources.json.";
   fallback.className = "error-message";
   summaryElement?.append(fallback);
+  renderScreenReaderSummaries(null, null, null);
   console.error(error);
 });

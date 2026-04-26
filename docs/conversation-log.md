@@ -419,3 +419,24 @@ Trust boundary:
 - Forecasting remains experimental and not live.
 - Forecast output must not be mixed into current observed conditions or official/advisory records.
 - Unreviewed field observations, private reviewer notes, unresolved site assignments, and unpublished microscopy records must not be used as labels or public forecast inputs.
+
+## April 25, 2026 Jones Bay Registry Split
+
+The remaining high-priority `Jones bay` proximity match was re-evaluated before changing the public registry.
+
+Reason for change:
+
+- Public gazetteer/topographic references indicate that `Jones Bay` and `Jago Bay` both exist as named bays in the same general Clear Lake area.
+- Because those names may refer to distinct landmarks, treating `Jones bay` as a simple alias of `Jago Bay` was no longer the safest default.
+
+What changed:
+
+- Added a distinct starter registry site `fhabs-jones-bay`.
+- Kept both `fhabs-jones-bay` and `fhabs-jago-bay` at `needs-local-review`.
+- Updated the example review-decision file so `Jones bay` is no longer modeled as an alias-add decision.
+- Regenerated the public snapshot and site-review artifacts so `Jones bay` can match a distinct stable site ID instead of falling back to a proximity match against `fhabs-jago-bay`.
+
+Trust boundary preserved:
+
+- This split improves public naming hygiene without claiming local certification.
+- The new site remains review-needed until local evidence confirms the maintained coordinate, arm assignment, and match radius.

@@ -1069,8 +1069,8 @@ $payload = [ordered]@{
   liveCards   = @(
     [ordered]@{
       label = "Lake level at Lakeport"
-      value = ("{0:N2} ft Rumsey" -f $lakeRumseyFeet)
-      note  = "USGS station 11450000 on $($lakeLast.dateTime.ToString('MMMM d, yyyy')); approx. water-surface elevation $("{0:N2}" -f $lakeElevationFeet) ft using Zero Rumsey = $rumseyZeroElevationFt ft. 30-day trend $lakeTrend ($lakeDelta ft)."
+      value = ("{0:N2} ft Rumsey`n{1:N2} ft above sea level" -f $lakeRumseyFeet, $lakeElevationFeet)
+      note  = "USGS station 11450000 on $($lakeLast.dateTime.ToString('MMMM d, yyyy')); elevation shown using Zero Rumsey = $rumseyZeroElevationFt ft. 30-day trend $lakeTrend ($lakeDelta ft)."
     },
     [ordered]@{
       label = "Cole Creek discharge"

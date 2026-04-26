@@ -23,7 +23,7 @@ Acceptance criteria:
 
 Priority: P0
 
-Status: In progress; prioritized review queue implemented
+Status: In progress; prioritized review queue implemented and Jones Bay split from Jago Bay in the starter registry
 
 Why it matters:
 
@@ -33,6 +33,7 @@ Acceptance criteria:
 
 - Every high-visibility FHABS landmark has reviewed arm membership or explicit unresolved status.
 - `needs-local-review` entries are either resolved or documented with a review reason.
+- Distinct public bay names such as `Jones Bay` and `Jago Bay` are not collapsed into one registry site without review evidence.
 - Registry records preserve stable IDs, aliases, coordinates, arm, assignment status, and match radius.
 - Map/list UI clearly surfaces unresolved or heuristic assignments.
 - The review queue now includes `reviewPriority`, `reviewReason`, and targeted review actions for current mapped FHABS markers.

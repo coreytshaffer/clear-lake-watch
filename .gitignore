@@ -1,6 +1,8 @@
-server.pid
-server.out.log
-server.err.log
-var/
-data/site-review-decisions*.json
-!data/site-review-decisions.example.json
+﻿data/site-review-decisions.local.json
+data/*.local.json
+docs/private/
+data/private/
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
