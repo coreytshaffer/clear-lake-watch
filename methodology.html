@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3efe2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Clear Lake Watch">
+    <title>Methodology | Clear Lake Watch</title>
+    <meta
+      name="description"
+      content="Methodology, source notes, and public-health disclaimers for the Clear Lake Watch dashboard prototype."
+    >
+    <link rel="icon" href="./assets/clear-lake-watch.ico">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to methodology content</a>
+    <div class="page-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand-link" href="./index.html">Clear Lake Watch</a>
+        <div class="nav-links">
+          <a href="./index.html#live">Snapshot</a>
+          <a href="./index.html#map">Map</a>
+          <a href="./index.html#analytics">Analytics</a>
+          <a href="./index.html#data-products">Data</a>
+          <a href="./project.html">Project</a>
+          <a href="./methodology.html" aria-current="page">Methodology</a>
+        </div>
+      </nav>
+
+      <header class="hero methodology-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Public Methodology</p>
+          <h1>How To Read This Dashboard</h1>
+          <p class="hero-text">
+            Clear Lake Watch combines public environmental datasets into a transparent
+            dashboard prototype. It is designed for situational awareness, source
+            discovery, and research planning, not official public-health direction.
+          </p>
+          <div class="hero-actions">
+            <a href="./index.html" class="button button-primary">Back To Dashboard</a>
+            <a href="#disclaimer" class="button button-secondary">Read Disclaimer</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <p class="panel-label">Interpretation Rule</p>
+          <ul class="hero-list">
+            <li>Observation dates matter more than dashboard refresh dates.</li>
+            <li>Reports, lab results, advisories, and forecasts are different signal types.</li>
+            <li>Official agencies remain the source for public-health decisions.</li>
+          </ul>
+        </aside>
+      </header>
+
+      <main id="main-content" tabindex="-1">
+        <section class="section callout-section" id="disclaimer">
+          <div class="section-heading">
+            <p class="eyebrow">Important Disclaimer</p>
+            <h2>Not Official Public-Health Guidance</h2>
+            <p>
+              This project is an independent public-data dashboard prototype. It does
+              not issue advisories, replace local or state agency guidance, certify
+              water safety, or determine whether recreation is safe. For health and
+              recreation decisions, use current guidance from Lake County, California
+              Water Boards, Tribal monitoring programs, and other responsible agencies.
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Signal Types</p>
+            <h2>What The Dashboard Combines</h2>
+            <p>
+              Each source answers a different question. The dashboard keeps those
+              source types distinct so users can see what is observed, reported,
+              summarized, or estimated.
+            </p>
+          </div>
+          <div class="method-grid">
+            <article class="method-card">
+              <p class="simple-title">Public Reports</p>
+              <p>
+                FHABS bloom reports are voluntary or agency/partner reports of
+                possible bloom events. They help show locations, dates, and advisory
+                context, but reporting frequency can reflect public attention and
+                program activity as well as environmental conditions.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Observed Hydrology</p>
+              <p>
+                USGS lake-level and streamflow values are pulled from public water
+                services. These records are useful environmental drivers, and many
+                recent values are provisional and subject to revision.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Lab And Field Results</p>
+              <p>
+                FHABS results records may include field observations or laboratory
+                analysis. The current public results file appears to lag the report
+                stream, so the dashboard displays both report and result freshness.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Arm Assignment</p>
+              <p>
+                Records are assigned to Upper, Lower, or Oaks Arm using the site
+                registry first, then text and coordinate heuristics when needed.
+                Locations marked `needs-local-review` should be reviewed before
+                authoritative use.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Shoreline Geometry</p>
+              <p>
+                The dashboard map uses a cached OpenStreetMap multipolygon for
+                the Clear Lake shoreline. This geographic context is separate from
+                water-quality observations and should not be interpreted as a
+                monitoring source.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Data Pipeline</p>
+            <h2>Refresh And Normalization Flow</h2>
+            <p>
+              The current pipeline is intentionally simple and transparent: fetch
+              public source files, normalize records, match sites, generate dashboard
+              files, and render everything statically.
+            </p>
+          </div>
+          <div class="timeline">
+            <article class="timeline-item">
+              <span>1</span>
+              <div>
+                <strong>Fetch public data</strong>
+                <p>USGS daily values and California FHABS CSV resources are pulled by `scripts/refresh-live-data.ps1`.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span>2</span>
+              <div>
+                <strong>Normalize records</strong>
+                <p>Reports, observations, sites, and analytics are written as JSON files under `data/`.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span>3</span>
+              <div>
+                <strong>Match sites</strong>
+                <p>The registry uses source IDs, aliases, and proximity radii before falling back to heuristics.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span>4</span>
+              <div>
+                <strong>Render dashboard</strong>
+                <p>The public page loads static JSON files and renders maps, charts, cards, and download links.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Known Limitations</p>
+            <h2>What Still Needs Review</h2>
+          </div>
+          <div class="method-grid">
+            <article class="method-card">
+              <p class="simple-title">Site Registry Review</p>
+              <p>
+                Several FHABS landmarks are intentionally marked as needing local
+                review. Final arm assignments should be reviewed against local
+                knowledge and authoritative site coordinates.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Report Bias</p>
+              <p>
+                Public report counts are not the same as bloom severity. More reports
+                may reflect more monitoring or more public attention.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Source Freshness</p>
+              <p>
+                Different source files update at different cadences. Every display
+                should be interpreted using observation dates and source metadata.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Forecasting Status</p>
+              <p>
+                Forecasting is a future research feature. Any future model output
+                should be labeled experimental and kept separate from observed data
+                and official advisories.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Future Field Data</p>
+              <p>
+                Lakeside observations and light-microscope phytoplankton
+                identifications should enter through a reviewed intake workflow.
+                Field or NOAA-associated records should document sample custody,
+                location precision, taxonomic confidence, reviewer status, and
+                permission to publish before they appear as public dashboard data.
+              </p>
+            </article>
+            <article class="method-card">
+              <p class="simple-title">Experimental Edge AI</p>
+              <p>
+                A future stretch goal is to test a conversational edge-monitoring
+                layer on Raspberry Pi or Jetson-class devices using a local or
+                local-first LLM wrapper. This would remain an experimental research
+                layer for local diagnostics and reviewed field workflows, not an
+                official advisory source and not a replacement for the core
+                public-data dashboard pipeline.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Source Links</p>
+            <h2>Primary Public Sources</h2>
+          </div>
+          <div class="source-link-list">
+            <a href="https://lakecountyca.gov/1504/Clear-Lake-Water-Quality" target="_blank" rel="noreferrer">Lake County Clear Lake Water Quality</a>
+            <a href="https://lab.data.ca.gov/dataset/surface-water-freshwater-harmful-algal-blooms" target="_blank" rel="noreferrer">California FHABS Open Data</a>
+            <a href="https://mywaterquality.ca.gov/habs/resources/reports-map/" target="_blank" rel="noreferrer">California HAB Reports Map</a>
+            <a href="https://waterservices.usgs.gov/" target="_blank" rel="noreferrer">USGS Water Services</a>
+            <a href="https://www.bvrancheria.com/clearlakecyanotoxins" target="_blank" rel="noreferrer">Big Valley Cyanotoxin Monitoring</a>
+            <a href="https://www.openstreetmap.org/relation/4046481" target="_blank" rel="noreferrer">OpenStreetMap Clear Lake Geometry</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
