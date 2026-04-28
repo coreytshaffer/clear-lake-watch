@@ -1,8 +1,47 @@
 # Clear Lake Watch
 
+[![Status: Late Prototype / Early MVP](https://img.shields.io/badge/status-late%20prototype%20%2F%20early%20MVP-2f6f5f)](https://github.com/coreytshaffer/clear-lake-watch)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1f2937)](./LICENSE)
+[![Live Dashboard](https://img.shields.io/badge/live%20dashboard-GitHub%20Pages-0b7285)](https://coreytshaffer.github.io/clear-lake-watch/)
+
 This folder contains a late-prototype / early-MVP public Clear Lake environmental dashboard.
 
 Clear Lake Watch is intended to become a lake-focused publication product on top of a broader local-first environmental monitoring backbone. The public dashboard should remain static, reviewed, and publication-safe, while private intake, QA, field observations, and future weather/soil telemetry stay behind reviewed export boundaries.
+
+**Live public mirror:** [coreytshaffer.github.io/clear-lake-watch](https://coreytshaffer.github.io/clear-lake-watch/)
+
+![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
+
+## Who this is for
+
+Clear Lake Watch is being built for people who need lake conditions explained clearly without flattening uncertainty: local residents, environmental researchers, watershed and resilience collaborators, community monitoring partners, and agencies or organizations working around Clear Lake such as CLERC, CLAMP, Big Valley monitoring efforts, and Tribal environmental programs.
+
+## Why this repo is public
+
+The public repository is meant to show a real environmental data product in progress, not just a concept. It demonstrates:
+
+- public environmental data integration across FHABS, USGS, and OpenStreetMap
+- site-registry QA and explicit reviewed versus heuristic boundaries
+- local-first, no-build deployment design for resilient public publishing
+- methodology and interpretation guardrails for a sensitive environmental topic
+
+## Known limitations at a glance
+
+- This dashboard is not official public-health guidance and does not issue advisories.
+- Some FHABS landmarks still require local review before arm assignments should be treated as authoritative.
+- Weather context is intentionally marked unavailable until reviewed public-safe telemetry exists.
+- Field and microscopy workflows are still planned as private reviewed intake, not public submission.
+
+## Collaboration
+
+If you work on Clear Lake monitoring, environmental data, watershed resilience, or community-facing lake communication, collaboration is welcome. The safest first contact path is to [open an issue](https://github.com/coreytshaffer/clear-lake-watch/issues) so project scope, data boundaries, and publication intent stay documented.
+
+## Project brief
+
+For a short shareable overview, see:
+
+- [Project brief (Markdown)](docs/project-brief.md)
+- [Project brief (PDF)](docs/Clear-Lake-Watch-Project-Brief.pdf)
 
 ## What is here
 
