@@ -4,6 +4,13 @@ This folder contains a late-prototype / early-MVP public Clear Lake environmenta
 
 Clear Lake Watch is intended to become a lake-focused publication product on top of a broader local-first environmental monitoring backbone. The public dashboard should remain static, reviewed, and publication-safe, while private intake, QA, field observations, and future weather/soil telemetry stay behind reviewed export boundaries.
 
+## Project brief
+
+For a short shareable overview, see:
+
+- [Project brief (Markdown)](docs/project-brief.md)
+- [Project brief (PDF)](docs/Clear-Lake-Watch-Project-Brief.pdf)
+
 ## What is here
 
 - `index.html`: Single-page dashboard prototype
