@@ -368,6 +368,7 @@ try {
     "docs\backlog.md",
     "docs\career-services-call-notes.md",
     "docs\career-services-day-of-checklist.md",
+    "docs\career-services-follow-up-tracker.md",
     "docs\career-services-share-packet.md",
     "docs\cross-platform-typography-audit.md",
     "docs\field-microscopy-intake-contract.md",
@@ -679,6 +680,7 @@ try {
   $conversationLog = Get-Content (Resolve-ProjectPath "docs\conversation-log.md") -Raw
   $careerServicesCallNotesDoc = Get-Content (Resolve-ProjectPath "docs\career-services-call-notes.md") -Raw
   $careerServicesDayOfChecklistDoc = Get-Content (Resolve-ProjectPath "docs\career-services-day-of-checklist.md") -Raw
+  $careerServicesFollowUpTrackerDoc = Get-Content (Resolve-ProjectPath "docs\career-services-follow-up-tracker.md") -Raw
   $careerServicesSharePacketDoc = Get-Content (Resolve-ProjectPath "docs\career-services-share-packet.md") -Raw
   $crossPlatformTypographyAuditDoc = Get-Content (Resolve-ProjectPath "docs\cross-platform-typography-audit.md") -Raw
   $sourceAudit = Get-Content (Resolve-ProjectPath "docs\source-audit.md") -Raw
@@ -866,9 +868,17 @@ try {
   Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Main Ask" -Message "docs/career-services-day-of-checklist.md must include the main ask."
   Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Three Questions To Prioritize" -Message "docs/career-services-day-of-checklist.md must include prioritized questions."
   Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Notes To Capture During The Call" -Message "docs/career-services-day-of-checklist.md must include call notes fields."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "docs/career-services-follow-up-tracker.md" -Message "docs/career-services-day-of-checklist.md must link to the follow-up tracker."
   Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Avoid:" -Message "docs/career-services-day-of-checklist.md must include avoid-language guidance."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Career Services Follow-Up Tracker" -Message "docs/career-services-follow-up-tracker.md must define the follow-up tracker."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Recommended Role Titles" -Message "docs/career-services-follow-up-tracker.md must track recommended role titles."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Recommended Search Keywords" -Message "docs/career-services-follow-up-tracker.md must track recommended search keywords."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Organizations Or Contacts" -Message "docs/career-services-follow-up-tracker.md must track organizations or contacts."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Application Leads" -Message "docs/career-services-follow-up-tracker.md must track application leads."
+  Assert-TextContains -Text $careerServicesFollowUpTrackerDoc -Needle "Boundary Check" -Message "docs/career-services-follow-up-tracker.md must include a boundary check."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Career Services Share Packet" -Message "docs/career-services-share-packet.md must define the packet index."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "docs/career-services-day-of-checklist.md" -Message "docs/career-services-share-packet.md must link to the day-of checklist."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "docs/career-services-follow-up-tracker.md" -Message "docs/career-services-share-packet.md must link to the follow-up tracker."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Five-Minute Review" -Message "docs/career-services-share-packet.md must include a short review path."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "docs/resume-linkedin-snippets.md" -Message "docs/career-services-share-packet.md must link to resume and LinkedIn snippets."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Fifteen-Minute Review" -Message "docs/career-services-share-packet.md must include a medium review path."

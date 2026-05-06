@@ -757,3 +757,18 @@ Use:
 - Open the checklist before the call.
 - Use the prepared pitch, main ask, and three prioritized questions.
 - Capture recommended role titles, search keywords, resume language, lead artifact, wording concerns, and follow-up actions.
+
+## May 6, 2026 Career Services Follow-Up Tracker
+
+The career-services call workflow was extended past the call itself.
+
+Implemented:
+
+- Added `docs\career-services-follow-up-tracker.md`.
+- Linked it from the day-of checklist, packet index, README, and backlog.
+
+Use:
+
+- Move call notes into structured follow-up tables after the call.
+- Track recommended role titles, search keywords, organizations, contacts, profile updates, application leads, and follow-up messages.
+- Keep application wording inside the same conservative project boundary.

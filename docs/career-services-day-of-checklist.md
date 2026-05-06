@@ -72,3 +72,7 @@ Avoid:
 ## Follow-Up Message
 
 Use the template in `docs/career-services-call-notes.md` and include the live dashboard plus the packet index.
+
+## After The Call
+
+Move notes and action items into `docs/career-services-follow-up-tracker.md` so role titles, contacts, application leads, and wording advice do not get lost.
