@@ -834,7 +834,7 @@ try {
   Assert-TextContains -Text $localGitWorkflowDoc -Needle "Git availability is not a publication decision" -Message "docs/local-git-workflow.md must separate Git availability from publication."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Portfolio Release Branch Handoff" -Message "docs/portfolio-release-branch-handoff.md must define the branch handoff note."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "codex/portfolio-safe-release-prep" -Message "docs/portfolio-release-branch-handoff.md must document the current branch."
-  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "77f7bec Add career services follow-up tracker" -Message "docs/portfolio-release-branch-handoff.md must document the latest local commit."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "9ff94e3 Add portfolio release branch handoff" -Message "docs/portfolio-release-branch-handoff.md must document the latest local commit."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "has not been pushed" -Message "docs/portfolio-release-branch-handoff.md must document that the branch is local/unpushed."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Intentionally Uncommitted" -Message "docs/portfolio-release-branch-handoff.md must document intentionally uncommitted files."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "docs/Project_Brief_DRAFT_1.docx" -Message "docs/portfolio-release-branch-handoff.md must document the uncommitted docx artifact."

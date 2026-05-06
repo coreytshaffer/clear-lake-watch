@@ -17,7 +17,7 @@ codex/portfolio-safe-release-prep
 Latest local commit:
 
 ```text
-77f7bec Add career services follow-up tracker
+9ff94e3 Add portfolio release branch handoff
 ```
 
 The branch has not been pushed.
@@ -25,6 +25,7 @@ The branch has not been pushed.
 ## Local Commit Stack
 
 ```text
+9ff94e3 Add portfolio release branch handoff
 77f7bec Add career services follow-up tracker
 d91e22c Add career services day-of checklist
 be8a26f Add resume and LinkedIn snippets
