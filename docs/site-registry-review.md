@@ -1,6 +1,6 @@
 # Site Registry Review
 
-Generated: 2026-04-25T21:27:49.1605765-07:00
+Generated: 2026-05-05T01:45:02.4806075-07:00
 
 This file is a review queue for stable site IDs and arm assignments. It does not certify locations as authoritative; it identifies what still needs local review.
 

@@ -440,3 +440,260 @@ Trust boundary preserved:
 
 - This split improves public naming hygiene without claiming local certification.
 - The new site remains review-needed until local evidence confirms the maintained coordinate, arm assignment, and match radius.
+
+## May 5, 2026 Flagship Maturity And Static Snapshot Decision
+
+Clear Lake Watch was advanced as a flagship systems-integration portfolio artifact while preserving the boundary that it is not a finished public monitoring authority.
+
+Implemented:
+
+- Added `docs\flagship-maturity-plan.md`.
+- Linked the maturity plan from `README.md`.
+- Replaced the prominent aspirational forecast-horizon summary card with an implemented automated-feed count.
+- Added public verification notes for the medium-priority site-registry offset checks in `docs\site-registry-location-verification.md`.
+- Added selected-marker source links for FHABS source context, coordinate review, and the generated site-review queue.
+- Added stale snapshot validation to `scripts\validate-dashboard.ps1`.
+
+Static snapshot decision:
+
+- The current generated snapshot is intentionally preserved for now because this is not an immediate publication pass.
+- Normal publish validation should fail when the snapshot is older than the configured freshness window.
+- Static portfolio/review validation should use `-AllowStaleSnapshot` until the next publication pass.
+
+Next publication decision:
+
+- Refresh `data\live.json` and related generated outputs before a fresh public publish, or write a clear release note explaining why an older static snapshot is intentionally being preserved.
+
+## May 5, 2026 Local Private Field/Microscopy Surface
+
+The private surface work started with a local JSON review-file workflow rather than an authenticated web portal.
+
+Implemented:
+
+- Added `docs\private-surface.md` to document the private/public boundary.
+- Added `data\reviewed-field-observations.json` as a public-safe reviewed export placeholder.
+- Added `scripts\new-field-microscopy-intake.ps1` to create an ignored local intake file under `data\private\`.
+- Added `scripts\validate-field-microscopy-intake.ps1` to validate required private intake fields and publication rules.
+- Added `scripts\export-reviewed-field-observations.ps1` to export only `approved-public` records with `permissionToPublish: true`.
+- Added `scripts\check-field-microscopy-review-cycle.ps1` to run a synthetic review-cycle smoke check and confirm private fields do not leak into the public export.
+
+Validation:
+
+- The current ignored local draft intake validates with expected warnings because no records are approved for public export yet.
+- The synthetic review-cycle check exports one approved-public test record and verifies private field exclusion.
+- Static dashboard validation still passes with `-AllowStaleSnapshot`.
+
+SQLite decision:
+
+- The private-surface workflow moved straight to SQLite because review workflows are likely to become common across more than one project.
+- Added `docs\private-sqlite-surface.md`.
+- Added `scripts\field_microscopy_db.py` with `init`, `import-json`, `validate`, `export-public`, and `smoke-cycle` commands.
+- Split the reusable schema package into its own local sibling repository at `..\environmental-monitoring-schemas\`.
+- Created the initial local commit in the sibling schema repository: `e9a8c6a Initial environmental monitoring schemas package`.
+- Decision: keep the sibling schema repository private for now rather than publishing it immediately.
+- Added `docs\reusable-schema-package.md`.
+- Refactored the SQLite tool so field/microscopy validation and public-export rules are imported from the schema package.
+- Initialized the ignored local SQLite database at `data\private\field-microscopy.local.sqlite`.
+- Imported the current ignored draft intake record into SQLite.
+- Confirmed the SQLite export keeps `data\reviewed-field-observations.json` empty while no records are approved-public and permissioned.
+- Confirmed the SQLite smoke cycle exports one synthetic approved-public record without leaking private fields.
+- Re-ran the field/microscopy SQLite path after the site-review work: imported the current ignored local draft, validated one private-only record, exported zero public records, and confirmed the smoke cycle still excludes private fields.
+
+Next private-surface decision:
+
+- Keep using the command-line SQLite workflow plus ignored JSON files until editing private review records becomes too cumbersome. After one real or representative SQLite review cycle in another project, revisit whether the sibling schema repository should be published.
+
+## May 5, 2026 Public Site-Review Aggregate
+
+The site-registry QA surface was split so the public dashboard consumes an aggregate review summary instead of the detailed review queue.
+
+Implemented:
+
+- Added `data\site-review-summary.json`.
+- Updated `scripts\build-site-review-report.ps1` to generate the public aggregate summary alongside the detailed review artifacts.
+- Updated `app.js` so the public dashboard fetches `data\site-review-summary.json` instead of `data\site-review.json`.
+- Added `docs\private-site-review-surface.md` to document the boundary.
+- Updated validation so the public summary cannot contain detailed review queue records.
+
+Boundary:
+
+- Public pages may show aggregate review counts and caveats.
+- Detailed review queues remain local-only review artifacts prior to review and should move behind a private surface before reviewer notes, unpublished decisions, or private field observations are added.
+
+SQLite follow-up:
+
+- Added `scripts\site_review_db.py` for detailed site-review records.
+- Initialized the ignored local SQLite store at `data\private\site-review.local.sqlite`.
+- Imported the current detailed `data\site-review.json` records into SQLite.
+- Validated the stored queue counts and priority counts.
+- Exported the public aggregate `data\site-review-summary.json` from SQLite.
+- Added a reusable `review_decisions` table for subject-based human review decisions, including decision status, reviewer fields, evidence notes, public notes, and permission-to-publish.
+- Added `site_review_db.py import-decisions` so the existing site-review decision JSON shape can load into SQLite using `subject_type = site-registry-review` and `subject_id = siteId::landmark`.
+
+Next decision:
+
+- Decide whether the JSON-to-SQLite import is enough for the first real review pass or whether a small private UI is worth adding.
+
+## May 5, 2026 Broad Registry Policy And Refresh
+
+Decisions:
+
+- Keep the medium-priority FHABS offset cases attached to broad place-based registry entries for now.
+- Do not create more specific source-landmark sites, move maintained coordinates, or promote the records to `reviewed-local` without stronger verifiable location evidence or local review.
+- Use the existing site-review decision JSON shape as the first private review input path into SQLite.
+
+Implementation:
+
+- Refreshed the public snapshot with `scripts\refresh-live-data.ps1`.
+- Regenerated site-review artifacts with `scripts\build-site-review-report.ps1`.
+- Generated a private local decision JSON file covering all current review priorities.
+- Previewed the decision JSON with `scripts\preview-site-review-decisions.ps1`.
+- Imported the refreshed detailed site-review records and 8 JSON-backed review decisions into `data\private\site-review.local.sqlite`.
+- Re-exported `data\site-review-summary.json` from SQLite.
+
+Next decision:
+
+- Continue with JSON-to-SQLite for the next real review pass unless editing the private JSON becomes too cumbersome.
+
+## May 5, 2026 Static Typography Audit
+
+The cross-platform typography backlog item was advanced with a static CSS audit rather than a full device/browser screenshot pass.
+
+Implemented:
+
+- Added `docs\cross-platform-typography-audit.md`.
+- Expanded the body font stack to include Windows, Apple, common local, and generic sans-serif fallbacks.
+- Expanded the display font stack with additional local serif fallbacks.
+- Normalized explicit `letter-spacing` values to `0`.
+- Kept the no-build, no-external-web-font architecture.
+
+Remaining review:
+
+- Before broad public promotion, capture at least one non-Windows or mobile screenshot and check hero wrapping, navigation labels, stat-card values, chart labels, map details, and source/status cards.
+
+## May 5, 2026 Public Mirror Boundary
+
+The private operations / public mirror posture was tightened now that site-review and field/microscopy workflows have local SQLite stores.
+
+Implemented:
+
+- Added `docs\public-mirror-boundary.md`.
+- Updated deployment notes with private local JSON and SQLite exclusions.
+- Added `*.local.sqlite` to `.gitignore`.
+- Updated validation to guard against public app references to private local paths.
+
+Current rule:
+
+- Private records can affect the public mirror only through reviewed, sanitized exports such as `data\site-review-summary.json` and `data\reviewed-field-observations.json`.
+
+## May 5, 2026 Weather Context Unavailable Writer
+
+The weather-context contract was made reproducible without claiming live weather integration.
+
+Implemented:
+
+- Added `scripts\write-weather-context-unavailable.ps1`.
+- Regenerated `data\weather-context.json` as a public-safe unavailable placeholder.
+- Updated `docs\weather-context-contract.md`, `docs\backbone-integration.md`, README, and backlog wording.
+
+Boundary:
+
+- Regenerating the placeholder updates the status export timestamp only. It is not evidence of reviewed live telemetry, station privacy review, or lake-health interpretation.
+
+## May 5, 2026 Local-First Operating Model
+
+The local-first architecture and shared-backbone boundaries were tightened into a dedicated operating model.
+
+Implemented:
+
+- Added `docs\local-first-operating-model.md`.
+- Defined the path `edge collection -> local processing -> local storage -> reviewed public export -> static public mirror`.
+- Documented that core functions must work without an LLM.
+- Named the current local SQLite stores and public-safe exports.
+- Updated the shared-backbone notes so the public dashboard stays separate from MQTT, local SQLite stores, Grafana, InfluxDB, private gateways, and unreviewed local intake files.
+
+Current boundary:
+
+- Clear Lake Watch can share infrastructure with broader environmental monitoring projects, but lake, weather/soil, field/microscopy, and review-decision modules should remain separate until reviewed exports intentionally connect them.
+
+## May 5, 2026 Git Availability Refresh
+
+The earlier Git tooling note was refreshed against the current project shell.
+
+Verified:
+
+- `git version 2.54.0.windows.1` is available on `PATH`.
+- The Git executable resolved to `C:\Program Files\Git\cmd\git.exe`.
+- `C:/Users/corey/Documents/Codex/Clear-Lake-Watch` is now a Git work tree.
+- `git status --short` works from the project root.
+
+Updated:
+
+- `docs\local-git-workflow.md` now documents local review commands.
+- README and deployment notes now separate Git availability from publication readiness.
+- P2-04 is done for local availability, with staging/commit/publish still reserved for a separate review pass.
+
+## May 5, 2026 Local Screenshot Review
+
+A local mobile-width screenshot review was captured without publishing or changing the public mirror.
+
+Captured:
+
+- `docs\review-screenshots\clear-lake-watch-mobile-width-2026-05-05.png`
+- 486 x 719 px first viewport
+- Codex in-app browser against `http://127.0.0.1:4173/`
+
+Finding:
+
+- The first viewport did not show immediate heading, navigation, button, or card-text wrapping problems.
+
+Boundary:
+
+- This is a private/local review artifact, not a fresh public promotion screenshot. A final publication screenshot and full wording pass are still separate decisions.
+
+## May 5, 2026 Publication Review Checklist
+
+A local checklist was added for the future publication decision.
+
+Implemented:
+
+- Added `docs\publication-review-checklist.md`.
+- Linked it from README, deployment notes, public mirror boundary, backlog, and flagship maturity plan.
+- Defined decision gates for freshness, private-file exclusion, public claims, site-registry posture, screenshots, Git scope, and final publish readiness.
+
+Boundary:
+
+- The checklist does not publish, stage, commit, or promote anything. It exists so the eventual publication pass can be explicit instead of implied by local validation success.
+
+## May 5, 2026 Portfolio-Safe Release Scope
+
+The next fork was narrowed to a portfolio-safe release before live feature expansion.
+
+Implemented:
+
+- Added `docs\portfolio-safe-release-scope.md`.
+- Updated the case study with a publication-readiness and validation section.
+- Adjusted case study next steps toward screenshots, validation status, private soft-share feedback, and real site review before live weather telemetry.
+- Linked the scope from README, flagship maturity plan, publication checklist, and backlog.
+
+Recommendation:
+
+- Use a portfolio-safe release pass first.
+- Soft-share privately before broad promotion.
+- Prefer real site-registry trust hardening before reviewed weather telemetry, because site review is already part of the current public trust boundary.
+
+## May 6, 2026 Internship Share Packet
+
+The portfolio-safe release path was adapted for an upcoming SNHU career services call.
+
+Implemented:
+
+- Added `docs\internship-share-brief.md`.
+- Added `docs\career-services-call-notes.md`.
+- Linked both from README and the portfolio-safe release scope.
+- Updated the backlog to treat internship share materials as part of the portfolio-safe release pass.
+
+Use:
+
+- `docs\internship-share-brief.md` as the one-page share artifact.
+- `docs\career-services-call-notes.md` for the 30-second pitch, questions to ask, role keywords, resume bullet draft, and follow-up message template.

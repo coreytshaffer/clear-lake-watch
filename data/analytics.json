@@ -1,5 +1,5 @@
 {
-    "generatedAt":  "2026-04-25T22:19:55.1934950-07:00",
+    "generatedAt":  "2026-05-05T01:44:49.9967603-07:00",
     "schemaVersion":  1,
     "reportTrendByYear":  [
                               {
@@ -206,9 +206,9 @@
                                     "arm":  "Lower Arm",
                                     "parameterName":  "Discharge",
                                     "unit":  "ft3/s",
-                                    "count":  30,
-                                    "firstObservedDate":  "2026-03-26",
-                                    "lastObservedDate":  "2026-04-24"
+                                    "count":  29,
+                                    "firstObservedDate":  "2026-04-05",
+                                    "lastObservedDate":  "2026-05-03"
                                 },
                                 {
                                     "source":  "USGS",
@@ -217,9 +217,9 @@
                                     "arm":  "Upper Arm",
                                     "parameterName":  "Gage height",
                                     "unit":  "ft",
-                                    "count":  30,
-                                    "firstObservedDate":  "2026-03-26",
-                                    "lastObservedDate":  "2026-04-24"
+                                    "count":  29,
+                                    "firstObservedDate":  "2026-04-05",
+                                    "lastObservedDate":  "2026-05-03"
                                 },
                                 {
                                     "source":  "FHABS",

@@ -2,6 +2,7 @@ param(
   [string]$SitesPath = ".\data\sites.json",
   [string]$LivePath = ".\data\live.json",
   [string]$ReviewJsonPath = ".\data\site-review.json",
+  [string]$PublicSummaryJsonPath = ".\data\site-review-summary.json",
   [string]$ReviewMarkdownPath = ".\docs\site-registry-review.md",
   [string]$HighPriorityMarkdownPath = ".\docs\site-registry-high-priority.md"
 )
@@ -267,7 +268,29 @@ $reviewData = [ordered]@{
   markersBySite = @($markersBySite)
 }
 
+$publicSummaryData = [ordered]@{
+  schemaVersion = "site-review-summary-v0"
+  generatedAt = $reviewData.generatedAt
+  source = "sanitized aggregate from site-registry review workflow"
+  summary = $reviewData.summary
+  priorityCounts = [ordered]@{
+    high = $highPriorityReviewItems.Count
+    medium = $mediumPriorityReviewItems.Count
+    low = $lowPriorityReviewItems.Count
+  }
+  publicNotes = @(
+    "This public summary reports aggregate site-registry review status only.",
+    "Detailed review queues, reviewer notes, draft corrections, and unpublished decisions belong in private review artifacts.",
+    "Counts do not certify site locations, arm assignments, or public-health status."
+  )
+  links = [ordered]@{
+    publicMethodology = ".\methodology.html"
+    reviewWorkflow = ".\docs\site-registry-decision-workflow.md"
+  }
+}
+
 Write-JsonFile -Path $ReviewJsonPath -Data $reviewData
+Write-JsonFile -Path $PublicSummaryJsonPath -Data $publicSummaryData
 
 $markdown = [System.Collections.Generic.List[string]]::new()
 $markdown.Add("# Site Registry Review")
@@ -375,5 +398,6 @@ if ($highPriorityReviewItems.Count -eq 0) {
 [System.IO.File]::WriteAllText([System.IO.Path]::GetFullPath($HighPriorityMarkdownPath), ($highPriorityMarkdown -join [Environment]::NewLine), $utf8NoBom)
 
 Write-Output "Wrote $ReviewJsonPath"
+Write-Output "Wrote $PublicSummaryJsonPath"
 Write-Output "Wrote $ReviewMarkdownPath"
 Write-Output "Wrote $HighPriorityMarkdownPath"

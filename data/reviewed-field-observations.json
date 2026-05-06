@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "reviewed-field-observations-v0",
+  "generatedAt": "2026-05-05T09:06:48.907858-07:00",
+  "sourceFamily": "field-microscopy",
+  "status": "not-connected",
+  "records": [],
+  "qualityNotes": [
+    "This export includes only records with qaStatus approved-public and permissionToPublish true.",
+    "Private collector identity details, custody notes, QA notes, raw photo paths, and unpublished exact coordinates are excluded.",
+    "Field and microscopy records remain a separate source family from FHABS, USGS, CLAMP/CEDEN, Tribal monitoring, and forecast labels."
+  ]
+}

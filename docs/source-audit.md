@@ -100,13 +100,22 @@ This note captures the first pass on public data sources for the Clear Lake dash
 
 ### Future Field And Microscopy Intake
 
+- Contract: `docs/field-microscopy-intake-contract.md`
+- Private surface boundary: `docs/private-surface.md`
+- SQLite private surface: `docs/private-sqlite-surface.md`
+- Reusable schema package: `docs/reusable-schema-package.md`
+- Example private intake shape: `data/field-microscopy-intake.example.json`
+- Public-safe reviewed export: `data/reviewed-field-observations.json`
 - Role: Reviewed local observations, sample metadata, and phytoplankton identifications
-- Status: Stretch goal, not a public feed yet
+- Status: SQLite-backed local private surface started; not a public feed yet
 - Notes:
   - Intended for lakeside observations and freshwater phytoplankton sampling/identification by light microscope, including work collected on behalf of NOAA when appropriate.
-  - This should be an authenticated intake workflow with a QA/review queue, not an open public submission form.
+  - The first implementation is an ignored local SQLite review store with a sanitized public export, not an open public submission form.
+  - Shared field/microscopy review rules live in `../environmental-monitoring-schemas/src/environmental_monitoring_schemas/field_microscopy.py`.
+  - The review-cycle smoke check creates a temporary synthetic approved-public record and confirms private fields are excluded from the export.
   - Records need explicit metadata for sample custody, site precision, microscope method, taxonomic confidence, reviewer, and permission to publish.
   - Approved records should be tagged as a separate field/microscopy source family so they are not confused with FHABS, CLAMP, Tribal, USGS, CEDEN, or official advisory data.
+  - Private intake files should exclude unreviewed records from public exports and model training until QA status and publication permission are explicit.
 
 ### Shared Backbone Weather Context Export
 

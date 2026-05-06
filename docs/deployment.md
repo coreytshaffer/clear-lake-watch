@@ -18,6 +18,23 @@ If a local server is already running on port `4173`, run the full endpoint check
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1
 ```
 
+If you are intentionally reviewing an older static snapshot for portfolio or archival work, make that choice explicit:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp -AllowStaleSnapshot
+```
+
+Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+
+Use `docs/publication-review-checklist.md` before staging, committing, pushing, or promoting the dashboard. That checklist separates local review, private repository work, public mirror updates, and flagship portfolio promotion.
+
+Current working posture as of May 5, 2026:
+
+- The public snapshot was refreshed locally on May 5, 2026.
+- Keep publication as a separate decision from local refresh.
+- Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+- Capture a current screenshot before broad portfolio promotion.
+
 ## GitHub Pages
 
 The project includes `.nojekyll` so GitHub Pages will serve files exactly as written.
@@ -66,17 +83,22 @@ The launcher writes runtime PID and log files under `%LOCALAPPDATA%\ClearLakeWat
 
 ## Local Git Diagnostics
 
-If `git` is not available on `PATH`, run:
+Git is currently available on `PATH` in this project shell, and this folder is a Git work tree. For local review, run:
+
+```powershell
+git status --short
+git --no-pager diff
+```
+
+If `git` is not available on `PATH` in a future shell, run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\find-local-git.ps1
 ```
 
-On this machine, Git may be available through GitHub Desktop's bundled Git even when `git --version` fails in a normal shell.
+On this machine, Git may also be available through GitHub Desktop's bundled Git if a future shell cannot find system Git.
 
-Important: this folder may still not be a Git repository. Finding `git.exe` only proves the tool exists; `git --no-pager diff` requires the project to be inside a repository.
-
-See `docs/local-git-workflow.md` before initializing a repo or moving the project into a cloned repository.
+Important: Git availability only supports local review. It does not mean local changes are ready to stage, commit, push, or publish. See `docs/local-git-workflow.md` before any publication pass.
 
 ## Data Refresh Model
 
@@ -99,10 +121,16 @@ While the combined lake, weather, field-data, and experimental-AI roadmap is sti
 - private operations layer
 - public documentation and demo layer
 
+See `docs/public-mirror-boundary.md` for the current public/private file boundary.
+
 That means the real operational system can stay private or invite-only while the public-facing layer focuses on the methodology, screenshots, reviewed exports, roadmap, and a clearly labeled dashboard mirror.
 
 Keep private until the trust model is tighter:
 
+- `data/private/`
+- `data/site-review-decisions.local.json`
+- `data/*.local.json`
+- `*.local.sqlite`
 - combined live operational dashboards
 - raw or semi-processed local sensor feeds
 - experimental analytics or forecast outputs
@@ -116,6 +144,8 @@ Safe public targets include:
 - project roadmap and source inventory on `project.html`
 - methodology and interpretation guidance
 - reviewed static exports and screenshots
+- aggregate exports such as `data/site-review-summary.json`
+- public-safe reviewed exports such as `data/reviewed-field-observations.json`
 - a clearly labeled demo or public mirror
 - roadmap and stretch-goal documentation
 
@@ -136,8 +166,10 @@ Keep these pieces visible after deployment:
 
 - The dashboard is static and does not issue official advisories.
 - The weather-context panel should remain marked `unavailable` until `data/weather-context.json` is generated from reviewed, public-safe backbone telemetry.
+- Detailed site-review records, local decision JSON, and SQLite review stores are private operational artifacts; publish only `data/site-review-summary.json`.
+- Field/microscopy intake records remain private unless exported through `data/reviewed-field-observations.json`.
 - The local Windows shortcut and launcher are convenience tools only; they are not needed for public hosting.
 - The launcher writes runtime PID and log files under `%LOCALAPPDATA%\ClearLakeWatch\runtime` when possible. Do not publish root-level `server.pid`, `server.out.log`, or `server.err.log` files if they are recreated manually.
 - The current refresh scripts run in PowerShell and are intended for local or Windows-based automation.
 - Future scheduled deployment should avoid live client-side calls to Overpass or other public APIs on every page view.
-- Git may need to be called through GitHub Desktop's bundled executable until a normal repository workflow is chosen.
+- Git is currently available on `PATH`; use `docs/local-git-workflow.md` for local review commands and keep publication as a separate scoped decision.

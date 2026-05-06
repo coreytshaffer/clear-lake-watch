@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "field-microscopy-intake-v0",
+  "status": "example-only",
+  "purpose": "Private reviewed intake example for future Clear Lake Watch field and microscopy records. Do not publish private working files.",
+  "records": [
+    {
+      "recordId": "example-field-microscopy-001",
+      "recordType": "field-microscopy",
+      "createdAt": "2026-05-05T00:00:00-07:00",
+      "updatedAt": "2026-05-05T00:00:00-07:00",
+      "createdBy": "private-reviewer-id",
+      "sampleDateTime": "YYYY-MM-DDTHH:MM:SS-07:00",
+      "collectorName": "private-collector-name",
+      "collectorOrganization": "example organization",
+      "collectionProgram": "example reviewed monitoring program",
+      "custodyId": "example-custody-id",
+      "custodyNotes": "Private custody note; remove from public export.",
+      "siteId": "example-site-id",
+      "siteName": "Example reviewed site",
+      "latitude": 39.000000,
+      "longitude": -122.000000,
+      "gpsPrecisionMeters": 10,
+      "coordinateSource": "field GPS",
+      "lakeArm": "Lower Arm",
+      "locationPrivacyClass": "generalize-before-publication",
+      "sampleType": "shoreline grab sample",
+      "collectionMethod": "example method",
+      "preservationMethod": "example preservation method",
+      "fieldNotes": "Private field notes; remove from public export.",
+      "microscopeMethod": "light microscopy",
+      "magnification": "400x",
+      "preparationMethod": "example slide preparation",
+      "taxonName": "example taxon",
+      "taxonRank": "genus",
+      "identificationConfidence": "low",
+      "abundanceEstimate": "example category",
+      "photoOrVoucherReference": "private-voucher-reference",
+      "qaStatus": "draft",
+      "qaReviewer": "private-reviewer-id",
+      "qaReviewedAt": null,
+      "qaNotes": "Private QA note; remove from public export.",
+      "permissionToPublish": false,
+      "publicLocationPrecision": "not approved",
+      "publicSummary": "Example only. Not reviewed for publication."
+    }
+  ],
+  "allowedReviewStatuses": [
+    "draft",
+    "submitted",
+    "needs-correction",
+    "approved-private",
+    "approved-public",
+    "rejected"
+  ],
+  "publicExportRules": [
+    "Only approved-public records with permissionToPublish true may enter public exports.",
+    "Private collector identity, custody notes, QA notes, raw photo paths, and sensitive coordinates must be removed before publication.",
+    "Field and microscopy records must remain a separate source family from FHABS, CLAMP, CEDEN, Tribal monitoring, and USGS hydrology."
+  ]
+}

@@ -2,19 +2,51 @@
 
 ## Current Status
 
-Git is available through GitHub Desktop's bundled Git, but the active Clear Lake Watch folder is not currently a Git repository.
+As of May 5, 2026, Git is available on `PATH` for this project shell:
 
-That means:
+```text
+git version 2.54.0.windows.1
+```
 
-- `git --version` may fail if `git.exe` is not on `PATH`.
-- an explicit GitHub Desktop Git path can still run Git commands.
-- `git --no-pager diff` cannot show project changes until the folder is inside a Git repository.
+The active Clear Lake Watch folder is also a Git work tree:
 
-This is a tooling-state issue, not a dashboard-code issue.
+```text
+C:/Users/corey/Documents/Codex/Clear-Lake-Watch
+```
+
+That means local review commands such as `git status --short` and `git --no-pager diff` can be run from the project root.
+
+This resolves the local Git availability backlog item. It does not mean the current local changes are ready to publish, stage, commit, or push.
+
+## Recommended Local Review Commands
+
+Check the working tree:
+
+```powershell
+git status --short
+```
+
+Review all unstaged changes:
+
+```powershell
+git --no-pager diff
+```
+
+Review one file:
+
+```powershell
+git --no-pager diff -- .\docs\backlog.md
+```
+
+List untracked files:
+
+```powershell
+git ls-files --others --exclude-standard
+```
 
 ## Find Git Locally
 
-Run:
+If a future shell cannot find `git`, run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\find-local-git.ps1
@@ -26,31 +58,29 @@ The script checks:
 - system Git under `C:\Program Files\Git`
 - GitHub Desktop's bundled Git under `%LOCALAPPDATA%\GitHubDesktop`
 
-Use the quiet mode when another script needs only the executable path:
+Use quiet mode when another script needs only the executable path:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\find-local-git.ps1 -Quiet
 ```
 
-## Current Recommendation
+## Publication Boundary
 
-Use the GitHub Desktop bundled Git path for local diagnostics until a normal repository workflow is chosen.
+The current repository state is local-only prior to review.
 
-Do not install global tools from this project. Do not mutate system `PATH` from the dashboard scripts.
+Before staging or committing, do a scoped review of:
 
-## Repository Decision Still Needed
+- public files intended for the static mirror
+- ignored private files that must remain local
+- generated JSON files that changed during refresh
+- docs that describe implemented proof versus future vision
+- shortcuts or local runtime conveniences that should not be part of a public release
 
-Before using `git diff`, choose one of these paths:
-
-- initialize this folder as a new repository
-- move this folder's contents into a cloned GitHub repository
-- open the project in GitHub Desktop and let it manage the repository setup
-
-This should be an intentional decision because creating `.git` changes the project from a folder snapshot into a repository root.
+Git availability is not a publication decision. Publication still needs a separate review pass.
 
 ## Fallback Review Workflow
 
-If the folder is still not a repository, use the project validator and targeted file checks:
+If Git becomes unavailable in a future shell, use the project validator and targeted file checks:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp
@@ -63,6 +93,6 @@ For generated data changes, also check:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-site-review-report.ps1
 ```
 
-## Decision Point
+## Next Decision Point
 
-The next Git decision is whether Clear Lake Watch should become its own repository now or be folded into a broader environmental-monitoring repository later.
+The next Git-related decision is not tool availability. It is whether a future publication pass should stage the current local work directly, split it into smaller commits, or move through a clean-clone publish path.

@@ -8,10 +8,17 @@ The shared backbone is responsible for local-first collection, validation, revie
 
 Use one shared environmental monitoring backbone, but keep domain products separate.
 
+The detailed local-first operating path is documented in `docs/local-first-operating-model.md`:
+
+```text
+edge collection -> local processing -> local storage -> reviewed public export -> static public mirror
+```
+
 - The backbone may provide config loading, status publishing, storage adapters, review queues, export helpers, and shared operator tooling.
 - The weather and soil modules may provide local telemetry, station health, and contextual environmental drivers.
 - The lake module may provide source adapters, site registry matching, private observation review, lake-specific validation, and public export generation.
 - The Clear Lake Watch dashboard should read only reviewed, publication-safe JSON files from `data/`.
+- Do not connect the public dashboard directly to MQTT, local SQLite databases, Grafana, InfluxDB, private gateway APIs, or unreviewed local intake files.
 
 ## Public And Private Surfaces
 
@@ -37,7 +44,7 @@ Current public inputs include:
 - `data/live.json`
 - `data/sources.json`
 - `data/sites.json`
-- `data/site-review.json` (current QA artifact; migration candidate for the future private portal)
+- `data/site-review-summary.json`
 - `data/reports.json`
 - `data/observations.json`
 - `data/sites-normalized.json`
@@ -53,6 +60,23 @@ Future backbone-generated exports may add files such as:
 
 Those additions should preserve the existing interpretation guardrails: observed data, reported events, derived analytics, weather context, and experimental model outputs must remain visibly distinct.
 
+## Field And Microscopy Intake Contract
+
+Future field observations and freshwater phytoplankton microscopy records should follow `docs/field-microscopy-intake-contract.md`. The first local private surface is documented in `docs/private-surface.md` and `docs/private-sqlite-surface.md`.
+
+Minimum boundary:
+
+- private intake records stay out of the public static site
+- only `approved-public` records with `permissionToPublish: true` can enter public exports
+- private collector details, custody notes, raw QA comments, photo paths, and sensitive coordinates are removed before publication
+- field/microscopy remains a separate source family from FHABS, CLAMP, CEDEN, Tribal monitoring, and USGS hydrology
+- private working records live in an ignored SQLite database under `data/private/` during the first implementation slice
+- the public dashboard consumes only sanitized reviewed exports such as `data/reviewed-field-observations.json`
+- the review-cycle smoke check verifies that synthetic approved-public records export without private fields
+- reusable schema rules live in `../environmental-monitoring-schemas/src/environmental_monitoring_schemas/field_microscopy.py`
+
+The current example shape lives at `data/field-microscopy-intake.example.json`, and the public-safe export placeholder lives at `data/reviewed-field-observations.json`. These are scaffolds, not a live public field-data feed.
+
 ## Weather Context Contract
 
 The first shared-backbone export should be a schema-governed `data/weather-context.json` file. Clear Lake Watch should treat it like any other normalized source file, not as a live dependency on MQTT, InfluxDB, Grafana, or a private gateway.
@@ -60,6 +84,16 @@ The first shared-backbone export should be a schema-governed `data/weather-conte
 The detailed schema and public/private guardrails live in
 `docs/weather-context-contract.md`. The example export lives at
 `data/weather-context.example.json`.
+
+Until live telemetry is reviewed for public export, regenerate the current
+not-connected placeholder with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-unavailable.ps1
+```
+
+That file is a public-safe status export only; it does not prove live weather
+integration.
 
 Minimum public fields:
 
@@ -139,7 +173,9 @@ Any LLM-assisted output should log the model, prompt or instruction set, input d
 
 ## Site Review Privacy Boundary
 
-`data/site-review.json` is currently useful as a transparent QA artifact because it documents unresolved arm assignments and match methods. As the project grows a private review surface, this file should be reclassified.
+`data/site-review-summary.json` is the public-safe aggregate site-registry QA surface. It keeps the dashboard focused on confidence/status counts without depending on the detailed review queue.
+
+`data/site-review.json` remains useful as a local-only transparent QA artifact because it documents unresolved arm assignments and match methods. Detailed site-review records stay local-only prior to review and are imported into the ignored SQLite store at `data/private/site-review.local.sqlite`. The store includes a reusable `review_decisions` table so human decisions can stay separate from generated queue facts. As the project grows a private review surface, use that table before adding reviewer notes, unpublished decisions, or private field observations to public artifacts.
 
 Near-term public-safe use:
 
@@ -156,14 +192,16 @@ Future private-only use:
 - private field observations
 - unpublished QA decisions
 
-The public dashboard can keep showing aggregate confidence badges while the detailed queue moves behind a private portal.
+The public dashboard can keep showing aggregate confidence badges while the detailed queue stays in the local SQLite review store.
 
 ## Near-Term Integration Steps
 
 1. Keep the current static Clear Lake Watch UI stable.
 2. Document the JSON publication contract as the boundary between the backbone and dashboard.
-3. Build or maintain an `env_monitor_lake` module that generates Clear Lake Watch-compatible public exports.
-4. Add a smoke workflow that regenerates lake JSON outputs and then runs `scripts/validate-dashboard.ps1 -SkipHttp`.
-5. Add weather context later as a separate export, not as a direct rewrite of lake metrics.
+3. Keep the site-review and field/microscopy SQLite stores local under `data/private/`.
+4. Keep public exports sanitized through `data/site-review-summary.json`, `data/reviewed-field-observations.json`, and `data/weather-context.json`.
+5. Build or maintain an `env_monitor_lake` module that generates Clear Lake Watch-compatible public exports.
+6. Add a smoke workflow that regenerates lake JSON outputs and then runs `scripts/validate-dashboard.ps1 -SkipHttp`.
+7. Add live weather context later as a separate reviewed export, not as a direct rewrite of lake metrics.
 
 This structure keeps the system resilient and reusable while protecting the public dashboard from ambiguous or unreviewed data.

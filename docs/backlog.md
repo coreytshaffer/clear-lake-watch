@@ -23,7 +23,7 @@ Acceptance criteria:
 
 Priority: P0
 
-Status: In progress; prioritized review queue implemented and Jones Bay split from Jago Bay in the starter registry
+Status: Broad-place policy selected; medium-priority offset checks remain unresolved and should not be promoted or split without stronger verifiable location evidence
 
 Why it matters:
 
@@ -39,6 +39,9 @@ Acceptance criteria:
 - The review queue now includes `reviewPriority`, `reviewReason`, and targeted review actions for current mapped FHABS markers.
 - A focused high-priority review packet exists for the first manual review pass.
 - A review-before-write decision template exists before any registry mutation workflow is automated.
+- Current generated high-priority packet reports no high-priority current marker checks.
+- Policy decision: keep medium-priority offset cases attached to broad place-based registry entries for simplicity and to avoid overclaiming precise location certainty.
+- Public verification notes are recorded in `docs/site-registry-location-verification.md`; future coordinate moves, child/starter sites, or `reviewed-local` promotions require stronger verifiable evidence or local review.
 
 ## P0-03 Add Visible Signal-Type And Confidence Labels
 
@@ -77,7 +80,7 @@ Acceptance criteria:
 
 Priority: P1
 
-Status: Not started
+Status: Done for current prominent dashboard/project summary cards
 
 Why it matters:
 
@@ -88,6 +91,7 @@ Acceptance criteria:
 - USGS-backed cards remain automated and source-dated.
 - New source cards only appear when their data contract is stable.
 - Lagged or sparse feeds are explicitly labeled.
+- The project summary no longer presents the aspirational forecast horizon as a prominent status card; it now reports the implemented automated public feed count instead.
 
 ## P1-02 Add Snapshot Manifest And Source Status Panel
 
@@ -126,7 +130,7 @@ Acceptance criteria:
 
 Priority: P1
 
-Status: Partially done; QA priority counts visible
+Status: Done for current UI
 
 Why it matters:
 
@@ -141,12 +145,37 @@ Acceptance criteria:
 - The dashboard includes a site-registry QA strip summarizing registry sites, current markers, reviewed markers, and records needing local review.
 - The dashboard surfaces high-priority site-registry checks separately from general local-review counts.
 - The dashboard includes a map trust filter for all markers, reviewed-only markers, and markers needing local review.
+- Selected marker details include FHABS source-dataset context, a coordinate map link, and the generated site-review queue link, with a note that these links support provenance and do not certify public-health status or local arm assignment.
+
+## P1-05 Formalize Flagship Portfolio Maturity
+
+Priority: P1
+
+Status: At decision point for portfolio-safe release scope; static portfolio maturity plan is drafted, linked, public snapshot was refreshed on 2026-05-05, local mobile-width screenshot review was captured, publication checklist exists, case-study release framing is documented, and internship share materials are drafted
+
+Why it matters:
+
+Clear Lake Watch can be the portfolio front door only if its public language separates implemented proof from future vision. The project should read as a credible systems-integration artifact without implying official monitoring authority, validated forecasting, or complete field deployment.
+
+Acceptance criteria:
+
+- A flagship maturity plan defines current status, safe public claims, avoided claims, and staged maturity checkpoints.
+- README links the maturity plan near the project brief so reviewers can understand the portfolio boundary quickly.
+- Resume, portfolio, and technical README wording all preserve the late-prototype / early-MVP status.
+- The maturity plan names supporting satellite projects without merging their code or claims into Clear Lake Watch.
+- Before broad public promotion, the dashboard validator is run without stale-snapshot allowance, or a static-snapshot release note is written, and at least one current screenshot is captured.
+- A local first-viewport mobile-width screenshot review is recorded in `docs/screenshot-review.md`.
+- `docs/publication-review-checklist.md` defines freshness, private-file, claim-review, site-registry, screenshot, Git scope, and final publish gates.
+- `docs/portfolio-safe-release-scope.md` defines the recommended next release fork: portfolio presentation, validation evidence, screenshots, case study polish, and conservative claims before live weather telemetry or public field intake.
+- `docs/clear_lake_watch_portfolio_case_study.md` now includes publication-readiness and validation framing.
+- `docs/internship-share-brief.md` and `docs/career-services-call-notes.md` provide a shareable internship packet for SNHU career services and similar conversations.
+- Current decision point: choose whether to proceed with the portfolio-safe release pass. Do not promote a fresh public screenshot until that pass confirms the full UI and wording.
 
 ## P2-01 Expand Validation From Structure To Trust Checks
 
 Priority: P2
 
-Status: Partially done; site-review schema checks added
+Status: Trust checks expanded; stale snapshot validation added and the public snapshot was refreshed on 2026-05-05
 
 Why it matters:
 
@@ -159,6 +188,9 @@ Acceptance criteria:
 - Validation output is understandable to collaborators.
 - Current validation checks required public files, JSON shape, source/output manifest data, OSM attribution, weather-context guardrails, stale FHABS URL pinning, and runtime-file placement.
 - Current validation checks that site-review outputs include high-priority review counts and per-marker review reasons.
+- `scripts/validate-dashboard.ps1` now fails when `data/live.json` is older than `-MaxSnapshotAgeDays` unless `-AllowStaleSnapshot` is passed for intentional archival or portfolio review.
+- Current decision: refreshed public snapshot data on 2026-05-05, but keep publication as a separate decision from local refresh.
+- Next decision point: before any fresh public publish, run validation without stale-snapshot allowance and capture a current screenshot.
 
 ## P2-02 Quarantine Forecasting Behind Experimental Boundary
 
@@ -183,7 +215,7 @@ Acceptance criteria:
 
 Priority: P2
 
-Status: Not started
+Status: SQLite private surface exercised with one representative local draft; local JSON retained as import/export fallback
 
 Why it matters:
 
@@ -194,12 +226,30 @@ Acceptance criteria:
 - Intake schema covers custody, site precision, microscope method, taxonomic confidence, reviewer, and permission-to-publish status.
 - Unreviewed submissions are excluded from public summaries and ML training data.
 - Field/microscopy records remain a separate source family.
+- `docs/field-microscopy-intake-contract.md` defines the review-first workflow, required private fields, allowed QA statuses, and public export rules.
+- `data/field-microscopy-intake.example.json` provides an example private intake shape and remains example-only.
+- `docs/private-surface.md` documents the first local private surface and its public export boundary.
+- `scripts/new-field-microscopy-intake.ps1` creates an ignored local intake file under `data/private/`.
+- `scripts/validate-field-microscopy-intake.ps1` validates required private intake fields and reviewed-public permission rules.
+- `scripts/export-reviewed-field-observations.ps1` writes only approved-public, permissioned records to `data/reviewed-field-observations.json`.
+- `scripts/check-field-microscopy-review-cycle.ps1` proves a synthetic approved-public record can export without leaking private fields.
+- `scripts/field_microscopy_db.py` initializes, imports, validates, smoke-tests, and exports from a local SQLite review store.
+- The current ignored local draft intake record has been imported into `data/private/field-microscopy.local.sqlite`.
+- The SQLite review store validates one private-only draft record and exports zero public records until approval and permission are present.
+- `docs/private-sqlite-surface.md` documents the SQLite-backed private surface.
+- `../environmental-monitoring-schemas/src/environmental_monitoring_schemas/field_microscopy.py` contains reusable schema and validation rules for field/microscopy records.
+- `docs/reusable-schema-package.md` documents the local package boundary and current public API.
+- The sibling `../environmental-monitoring-schemas/` repository has an initial local commit.
+- `data/reviewed-field-observations.json` exists as a public-safe placeholder and excludes private fields.
+- Current decision: keep the sibling schema repository private for now.
+- Current default: keep using the command-line SQLite workflow plus ignored JSON files until editing private review records becomes too cumbersome.
+- Next decision point: after one representative consuming project beyond Clear Lake Watch, revisit whether to publish the schema repository.
 
 ## P2-04 Troubleshoot Local Git Availability
 
 Priority: P2
 
-Status: Partially done; GitHub Desktop bundled Git located, repository decision pending
+Status: Done for local availability; publication staging remains a separate review decision
 
 Why it matters:
 
@@ -212,13 +262,17 @@ Acceptance criteria:
 - The project has a clear recommendation for using system Git, bundled Git, or GitHub Desktop Git without global package installs.
 - The README or deployment notes document the chosen local Git path and a fallback review workflow if Git is unavailable.
 - `scripts/find-local-git.ps1` can locate GitHub Desktop's bundled Git without changing system `PATH`.
-- Remaining decision: initialize this folder as a repo, move it into a cloned repo, or manage it through GitHub Desktop.
+- Current verification: `git version 2.54.0.windows.1` is available from `C:\Program Files\Git\cmd\git.exe`.
+- Current verification: `C:/Users/corey/Documents/Codex/Clear-Lake-Watch` is a Git work tree.
+- `docs/local-git-workflow.md` now separates local diff/review commands from staging, committing, pushing, or publishing.
+- `docs/publication-review-checklist.md` defines the Git scope gate for staging, commit splitting, and clean-clone publication choices.
+- Remaining decision: before publication, choose whether to stage the current local work directly, split it into smaller commits, or move through a clean-clone publish path.
 
 ## P2-05 Formalize Local-First Architecture And Edge-AI Guardrails
 
 Priority: P2
 
-Status: Documented in README; implementation ongoing
+Status: Operating model documented and validation-guarded; edge/live implementation ongoing
 
 Why it matters:
 
@@ -230,12 +284,16 @@ Acceptance criteria:
 - Experimental LLM or edge-AI use is clearly labeled assistive rather than core infrastructure.
 - Core monitoring functions are documented as working without an LLM dependency.
 - Compute guidance favors thresholds and lightweight analytics before heavyweight inference.
+- `docs/local-first-operating-model.md` documents the path `edge collection -> local processing -> local storage -> reviewed public export -> static public mirror`.
+- Current local stores are named as `data/private/site-review.local.sqlite` and `data/private/field-microscopy.local.sqlite`.
+- Current public-safe exports are named as `data/site-review-summary.json`, `data/reviewed-field-observations.json`, and `data/weather-context.json`.
+- Validation checks that the public dashboard remains separate from MQTT, private SQLite stores, Grafana, InfluxDB, private gateways, and unreviewed local intake files.
 
 ## P2-06 Define Shared Backbone For Weather And Lake Monitoring
 
 Priority: P2
 
-Status: Documented; implementation ongoing
+Status: Backbone boundaries documented and tied to local-first operating model; live/domain implementation ongoing
 
 Why it matters:
 
@@ -247,12 +305,16 @@ Acceptance criteria:
 - Weather and lake modules retain separate schemas, QA rules, public interpretation language, and alert logic.
 - Weather context can be shown as driver data without being mistaken for direct lake-health measurement.
 - The project documents a phased integration path instead of a premature full merge.
+- `docs/backbone-integration.md` points to `docs/local-first-operating-model.md` for the public/private operating path.
+- Lake, weather/soil, field/microscopy, and review-decision modules are documented as separate domains that can share backbone infrastructure without merging public claims.
+- Current implementation uses reviewed JSON export boundaries rather than direct live-service connections from the public dashboard.
+- Current recommendation: finish the portfolio-safe release pass and real site-registry trust review before expanding into live weather telemetry.
 
 ## P2-07 Formalize Private Operations And Public Mirror Posture
 
 Priority: P2
 
-Status: Documented; implementation ongoing
+Status: Public/private file boundary documented; validation guardrails added
 
 Why it matters:
 
@@ -264,12 +326,15 @@ Acceptance criteria:
 - Internal-only artifacts such as raw sensor feeds, unreviewed submissions, and prompt/model logs are excluded from public deployment.
 - Conditions for moving from private operation to public beta are documented.
 - Public-facing mirrors remain explicit about not being official public-health guidance.
+- `docs/public-mirror-boundary.md` documents which local files can enter the static public mirror.
+- `.gitignore` excludes private local JSON and local SQLite stores.
+- Validation checks that public app code does not fetch private local paths or local decision files.
 
 ## P2-08 Define Weather Context Export Contract
 
 Priority: P2
 
-Status: Contract, unavailable status export, example, UI, and validation implemented; live export pending
+Status: Contract, reproducible unavailable status export, example, UI, and validation implemented; live export pending
 
 Why it matters:
 
@@ -282,12 +347,14 @@ Acceptance criteria:
 - Public fields exclude private telemetry, exact sensitive station details, and unpublished diagnostics.
 - The environmental monitoring backbone can generate a sample export that Clear Lake Watch can validate.
 - `data/weather-context.json` currently provides a public-safe unavailable status until the weather backbone has live telemetry proof.
+- `scripts/write-weather-context-unavailable.ps1` regenerates the public-safe unavailable placeholder without implying live telemetry.
+- Next decision point: connect a reviewed public-safe backbone export only after weather telemetry has a validated source, station privacy review, and quality notes.
 
 ## P2-09 Move Detailed QA Review Artifacts Behind Private Portal
 
 Priority: P2
 
-Status: Not started
+Status: Public aggregate summary implemented; detailed records moved to local SQLite prior to review
 
 Why it matters:
 
@@ -299,12 +366,26 @@ Acceptance criteria:
 - Detailed review queues, draft corrections, reviewer notes, and private field observations live behind an authenticated private surface.
 - Public exports remove private fields and sensitive location precision.
 - `data/site-review.json` is either sanitized for public use or replaced by a private-only review artifact plus a public aggregate summary.
+- `data/site-review-summary.json` now provides the public aggregate site-registry review surface.
+- The public dashboard now consumes `data/site-review-summary.json` instead of the detailed `data/site-review.json` queue.
+- `scripts/site_review_db.py` imports detailed site-review records into `data/private/site-review.local.sqlite`, validates local records, and exports the public aggregate summary.
+- `data/private/site-review.local.sqlite` now includes a reusable `review_decisions` table for subject-based review decisions across future QA workflows.
+- Existing site-review decision JSON can now be imported into SQLite with `scripts/site_review_db.py import-decisions`.
+- A generated local decision file was imported into SQLite for the first JSON-to-SQLite review pass.
+- `docs/private-site-review-surface.md` documents the public/private boundary for site-registry QA artifacts.
+- Current decision: detailed site-review records stay local-only prior to review.
+- Current first step uses an ignored SQLite database under `data/private/` plus sanitized public exports; this does not yet provide authentication or multi-user access control.
+- Current smoke check verifies the field/microscopy exporter excludes private fields from a synthetic approved-public record.
+- Current SQLite tool imports shared schema rules from sibling repository `../environmental-monitoring-schemas/` instead of owning a separate copy.
+- The sibling schema repository is committed locally but not published.
+- Current decision: the sibling schema repository should remain private until there is a second consuming project or a clear publication reason.
+- Next decision point: continue with JSON-to-SQLite for the next real review pass unless editing the private JSON becomes too cumbersome.
 
 ## P2-10 Audit Cross-Platform Typography
 
 Priority: P2
 
-Status: Not started
+Status: Static CSS audit complete; local mobile-width screenshot review complete; non-Windows/device screenshot review pending
 
 Why it matters:
 
@@ -315,3 +396,8 @@ Acceptance criteria:
 - Typography is reviewed on at least one non-Windows rendering path.
 - Any web-font addition is lightweight, privacy-conscious, and consistent with the existing Clear Lake visual identity.
 - The dashboard remains readable and performant if the preferred font fails to load.
+- `docs/cross-platform-typography-audit.md` records the current no-web-font strategy, font fallback risks, and remaining screenshot checks.
+- `styles.css` uses explicit Windows, Apple, common local, and generic fallback fonts.
+- Explicit `letter-spacing` values are normalized to `0` for more predictable fallback rendering.
+- `docs/screenshot-review.md` records a 486 x 719 px local in-app browser screenshot review with no immediate first-viewport wrapping issue found.
+- Current decision: do not add web fonts unless screenshot review shows a real readability or identity problem.

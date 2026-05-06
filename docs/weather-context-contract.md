@@ -16,6 +16,16 @@ directly to MQTT, private databases, Grafana, or a local gateway.
 The file should be generated upstream by the environmental monitoring backbone
 after deterministic validation and publication filtering.
 
+Until reviewed public-safe weather telemetry exists, use the local unavailable
+writer to regenerate the honest not-connected export:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-unavailable.ps1
+```
+
+This command updates `data/weather-context.json` without implying live weather
+telemetry, lake-health interpretation, or public-health guidance.
+
 ## Publication Boundary
 
 The public dashboard may read:
@@ -143,6 +153,15 @@ dashboard.
 
 If the file exists but reports `stale`, `partial`, or `unavailable`, the
 dashboard should display that status without suppressing the lake-source data.
+
+## Unavailable Placeholder
+
+The current `data/weather-context.json` is a public-safe unavailable placeholder.
+It should remain in that state until the environmental monitoring backbone has a
+reviewed export with public-safe station metadata, reviewed metrics, and quality
+notes.
+
+The placeholder may be regenerated for release hygiene, but regeneration is not evidence of live telemetry.
 
 ## Guardrail
 

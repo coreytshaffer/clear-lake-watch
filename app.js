@@ -91,6 +91,8 @@ const themeColors = {
   light: "#f3efe2",
   dark: "#071817",
 };
+const fhabsReportsDatasetUrl =
+  "https://lab.data.ca.gov/dataset/surface-water-freshwater-harmful-algal-blooms";
 
 const formatDate = (value) =>
   new Intl.DateTimeFormat("en-US", {
@@ -930,6 +932,46 @@ const markerReviewClass = (marker) => {
   return "marker-review-unknown";
 };
 
+const createSourceLink = ({ href, label, external = true }) => {
+  const link = document.createElement("a");
+  link.href = href;
+  link.textContent = label;
+
+  if (external) {
+    link.target = "_blank";
+    link.rel = "noreferrer";
+  }
+
+  return link;
+};
+
+const markerSourceLinks = (marker) => {
+  const links = [
+    {
+      href: fhabsReportsDatasetUrl,
+      label: marker.id ? `FHABS report dataset (${marker.id})` : "FHABS report dataset",
+    },
+  ];
+
+  if (Number.isFinite(marker.latitude) && Number.isFinite(marker.longitude)) {
+    const coordinateUrl =
+      `https://www.openstreetmap.org/?mlat=${marker.latitude}&mlon=${marker.longitude}` +
+      `#map=15/${marker.latitude}/${marker.longitude}`;
+    links.push({
+      href: coordinateUrl,
+      label: "Source coordinate map",
+    });
+  }
+
+  links.push({
+    href: "./docs/site-registry-review.md",
+    label: "Site review queue",
+    external: false,
+  });
+
+  return links;
+};
+
 const setSelectedMarker = (
   marker,
   markerElement,
@@ -977,6 +1019,25 @@ const setSelectedMarker = (
     .map(createSignalBadge)
     .forEach((badge) => signalRow.append(badge));
 
+  const sourceLinks = document.createElement("div");
+  sourceLinks.className = "map-source-links";
+
+  const sourceLinksLabel = document.createElement("p");
+  sourceLinksLabel.className = "detail-label";
+  sourceLinksLabel.textContent = "Source links";
+
+  const sourceLinkList = document.createElement("div");
+  sourceLinkList.className = "map-source-link-list";
+  markerSourceLinks(marker)
+    .map(createSourceLink)
+    .forEach((link) => sourceLinkList.append(link));
+  sourceLinks.append(sourceLinksLabel, sourceLinkList);
+
+  const sourceNote = document.createElement("p");
+  sourceNote.className = "map-source-note";
+  sourceNote.textContent =
+    "Links support review and provenance; they do not certify local arm assignment or public-health status.";
+
   mapDetailElement.replaceChildren(
     label,
     title,
@@ -985,6 +1046,8 @@ const setSelectedMarker = (
     arm,
     coordinates,
     match,
+    sourceLinks,
+    sourceNote,
   );
 
   if (moveFocus) {
@@ -1703,10 +1766,10 @@ const renderStats = (data) => {
       badges: [{ label: "Derived", kind: "derived" }],
     },
     {
-      label: "Forecast horizon target",
-      value: "7 days",
-      note: "Initial aspiration for arm-level bloom severity outlooks.",
-      badges: [{ label: "Experimental", kind: "experimental" }],
+      label: "Automated public feeds",
+      value: "2",
+      note: "USGS hydrology and FHABS reports currently populate the public snapshot; other source families remain planned, manual, or review-gated.",
+      badges: [{ label: "Implemented feeds", kind: "observed" }],
     },
   ];
 
@@ -1805,10 +1868,10 @@ const renderLiveSnapshot = (liveData, shorelineData = null, siteReviewData = nul
   if (siteReviewData) {
     dataProducts.push({
       name: "Site review queue",
-      file: "data/site-review.json",
+      file: "data/site-review-summary.json",
       recordCount: siteReviewData.summary?.needsReviewCurrentMapMarkers ?? 0,
       description:
-        "Generated QA queue for stable site IDs, arm assignments, and current mapped reports needing local review.",
+        "Sanitized aggregate QA summary for stable site IDs, arm assignments, and current mapped reports needing local review.",
     });
   }
   renderDataProducts(dataProducts);
@@ -2077,7 +2140,7 @@ const boot = async () => {
     fetchJson("./data/live.json", { optional: true }),
     fetchJson("./data/sites.json", { optional: true }),
     fetchJson("./data/lake-shoreline.json", { optional: true }),
-    fetchJson("./data/site-review.json", { optional: true }),
+    fetchJson("./data/site-review-summary.json", { optional: true }),
     fetchJson("./data/manifest.json", { optional: true }),
     fetchJson("./data/weather-context.json", { optional: true }),
   ]);

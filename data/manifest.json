@@ -1,5 +1,5 @@
 {
-    "generatedAt":  "2026-04-25T22:19:55.2100159-07:00",
+    "generatedAt":  "2026-05-05T01:44:50.0255703-07:00",
     "schemaVersion":  1,
     "dashboard":  "Clear Lake Watch",
     "status":  "ok",
@@ -10,8 +10,8 @@
                         "label":  "USGS Lakeport lake level",
                         "source":  "USGS",
                         "status":  "ok",
-                        "rowCount":  30,
-                        "latestObservationDate":  "2026-04-24",
+                        "rowCount":  29,
+                        "latestObservationDate":  "2026-05-03",
                         "station":  "11450000",
                         "parameter":  "00065",
                         "note":  "USGS daily values used for the Lakeport lake-level card and hydrology series."
@@ -21,8 +21,8 @@
                         "label":  "USGS Cole Creek discharge",
                         "source":  "USGS",
                         "status":  "ok",
-                        "rowCount":  30,
-                        "latestObservationDate":  "2026-04-24",
+                        "rowCount":  29,
+                        "latestObservationDate":  "2026-05-03",
                         "station":  "11449820",
                         "parameter":  "00060",
                         "note":  "USGS daily values used for tributary-flow context and hydrology series."
@@ -32,11 +32,11 @@
                         "label":  "FHABS bloom reports",
                         "source":  "California Water Boards FHABS",
                         "status":  "ok",
-                        "rowCount":  3428,
+                        "rowCount":  3429,
                         "clearLakeRowCount":  230,
                         "latestObservationDate":  "2025-09-07",
-                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/c6a36b91-ad38-4611-8750-87ee99e497dd/download/bloom-report_2026-04-24.csv",
-                        "resourceDate":  "2026-04-24",
+                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/c6a36b91-ad38-4611-8750-87ee99e497dd/download/bloom-report_2026-05-04.csv",
+                        "resourceDate":  "2026-05-04",
                         "resourceAgeDays":  1,
                         "note":  "Public report records filtered to Clear Lake and normalized into reports, map markers, arm summaries, and report-pattern analytics."
                     },
@@ -48,8 +48,8 @@
                         "rowCount":  2080,
                         "clearLakeRowCount":  169,
                         "latestObservationDate":  "2024-01-11",
-                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/9d4e1df4-0cd6-4165-9e63-effcafd9dccc/download/hab-results_2026-04-24.csv",
-                        "resourceDate":  "2026-04-24",
+                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/9d4e1df4-0cd6-4165-9e63-effcafd9dccc/download/hab-results_2026-05-04.csv",
+                        "resourceDate":  "2026-05-04",
                         "resourceAgeDays":  1,
                         "note":  "Public lab-linked result records filtered to Clear Lake and normalized into observation-shaped records."
                     }
@@ -67,7 +67,7 @@
                     },
                     {
                         "file":  "data/observations.json",
-                        "recordCount":  64,
+                        "recordCount":  62,
                         "description":  "Normalized USGS and FHABS observation records."
                     },
                     {

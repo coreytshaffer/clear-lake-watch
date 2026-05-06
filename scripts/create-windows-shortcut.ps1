@@ -24,6 +24,10 @@ function New-DashboardShortcut {
     [string]$Path
   )
 
+  if (Test-Path $Path) {
+    Remove-Item -LiteralPath $Path -Force
+  }
+
   $shell = New-Object -ComObject WScript.Shell
   $shortcut = $shell.CreateShortcut($Path)
   $shortcut.TargetPath = $powershellPath
@@ -40,3 +44,4 @@ New-DashboardShortcut -Path $desktopShortcutPath
 
 Write-Output "Created $projectShortcutPath"
 Write-Output "Created $desktopShortcutPath"
+Write-Output "Launcher target: $launcherPath"

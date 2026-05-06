@@ -48,7 +48,7 @@ body {
     radial-gradient(circle at top left, rgba(221, 182, 111, 0.32), transparent 28%),
     radial-gradient(circle at top right, rgba(15, 108, 115, 0.24), transparent 26%),
     linear-gradient(180deg, #f6f2e8 0%, #efe7d2 100%);
-  font-family: "Aptos", "Segoe UI", sans-serif;
+  font-family: "Aptos", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -84,8 +84,8 @@ h2,
 .source-name,
 .phase-name,
 .simple-title {
-  font-family: "Georgia", "Palatino Linotype", serif;
-  letter-spacing: -0.02em;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
+  letter-spacing: 0;
 }
 
 p,
@@ -163,7 +163,7 @@ section[id] {
 }
 
 .brand-link {
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-weight: 800;
   text-decoration: none;
   color: var(--lake-deep);
@@ -273,7 +273,7 @@ main:focus-visible {
 .phase-window {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0;
   font-size: 0.77rem;
   color: var(--ink-soft);
 }
@@ -560,7 +560,7 @@ h2 {
   border: 1px solid transparent;
   font-size: 0.76rem;
   font-weight: 900;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
 }
 
 .signal-observed {
@@ -820,7 +820,7 @@ h2 {
 }
 
 .trend-value {
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-size: 1.4rem;
   color: var(--lake-deep);
   white-space: nowrap;
@@ -910,7 +910,7 @@ h2 {
 
 .site-review-panel h3 {
   margin: 0;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
 }
 
 .site-review-panel p {
@@ -1016,7 +1016,7 @@ h2 {
   fill: rgba(13, 59, 58, 0.7);
   font-size: 14px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -1099,12 +1099,42 @@ h2 {
 
 .map-detail h3 {
   margin: 8px 0;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-size: 1.6rem;
 }
 
 .map-detail p {
   color: var(--ink-soft);
+}
+
+.map-source-links {
+  margin-top: 16px;
+}
+
+.map-source-link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.map-source-link-list a {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--lake);
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.map-source-link-list a:hover {
+  text-decoration: underline;
+}
+
+.map-source-note {
+  margin-top: 10px;
+  font-size: 0.9rem;
 }
 
 .marker-list {
@@ -1196,7 +1226,7 @@ h2 {
 
 .source-status-panel h3 {
   margin: 0;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
 }
 
 .source-status-panel p {
@@ -1303,7 +1333,7 @@ h2 {
 
 .weather-context-card h3 {
   margin: 0;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-size: 1.35rem;
 }
 
@@ -1333,7 +1363,7 @@ h2 {
 
 .product-name {
   margin: 0;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-size: 1.25rem;
   font-weight: 700;
 }
@@ -1465,7 +1495,7 @@ h2 {
 
 .chart-heading h3 {
   margin: 8px 0 14px;
-  font-family: "Georgia", "Palatino Linotype", serif;
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", Times, serif;
   font-size: 1.45rem;
 }
 
@@ -1674,7 +1704,7 @@ h2 {
   .stat-label,
   .source-owner,
   .phase-window {
-    letter-spacing: 0.11em;
+    letter-spacing: 0;
     font-size: 0.72rem;
   }
 

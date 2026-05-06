@@ -43,6 +43,12 @@ For a short shareable overview, see:
 - [Project brief (Markdown)](docs/project-brief.md)
 - [Project brief (PDF)](docs/Clear-Lake-Watch-Project-Brief.pdf)
 
+## Flagship maturity
+
+Clear Lake Watch is currently mature enough to serve as a flagship systems-integration portfolio artifact, with the explicit boundary that it is not a finished public monitoring authority.
+
+Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume wording, portfolio positioning, maturity checkpoints, and the staged roadmap from late prototype to a stronger public beta candidate.
+
 ## What is here
 
 - `index.html`: Single-page dashboard prototype
@@ -56,7 +62,8 @@ For a short shareable overview, see:
 - `data/reports.json`: Normalized FHABS Clear Lake report export
 - `data/observations.json`: Normalized observation export combining USGS daily values and FHABS results
 - `data/sites-normalized.json`: Generated normalized copy of the site registry
-- `data/site-review.json`: Generated site-registry and current-marker review queue
+- `data/site-review-summary.json`: Public-safe aggregate site-registry review summary
+- `data/site-review.json`: Detailed generated site-registry and current-marker review queue for local review
 - `data/site-review-decisions.example.json`: Example review-before-write decision file for site-registry QA
 - `data/analytics.json`: Generated historical summaries for dashboard charts
 - `data/manifest.json`: Generated source-status manifest with source freshness, row counts, and output inventory
@@ -66,18 +73,40 @@ For a short shareable overview, see:
 - `data/weather-context.json`: Current public weather-context status export, currently marked unavailable until live telemetry is reviewed
 - `data/weather-context.example.json`: Example public-safe weather-context export from the shared backbone
 - `data/forecast-output.example.json`: Example-only forecast output contract with required experimental metadata
+- `data/field-microscopy-intake.example.json`: Example-only private field/microscopy intake shape
+- `data/reviewed-field-observations.json`: Public-safe reviewed field/microscopy export placeholder
 - `docs/backlog.md`: Prioritized issue-style backlog for trust hardening and future work
 - `docs/backbone-integration.md`: Shared-backbone boundary between Clear Lake Watch and the broader environmental monitoring platform
 - `docs/conversation-log.md`: Project conversation memory, implementation decisions, and next-step context
+- `docs/cross-platform-typography-audit.md`: Static typography fallback audit and remaining screenshot checks
+- `docs/career-services-call-notes.md`: Prep notes and follow-up template for internship/career-services conversations
 - `docs/deployment.md`: Static hosting, validation, and public deployment notes
 - `docs/forecast-boundary.md`: Experimental forecast-output boundary and required metadata
+- `docs/local-first-operating-model.md`: Local-first operating tiers, private storage boundary, public export path, and edge-AI guardrails
+- `docs/internship-share-brief.md`: One-page internship-facing share brief for Clear Lake Watch
+- `docs/private-surface.md`: Local private-review surface boundary for ignored field/microscopy intake files and sanitized exports
+- `docs/private-site-review-surface.md`: Public/private boundary for site-registry QA review artifacts
+- `docs/private-sqlite-surface.md`: SQLite-backed private review surface for reusable local field/microscopy records
+- `docs/portfolio-safe-release-scope.md`: Conservative release scope for portfolio presentation before live feature expansion
+- `docs/public-mirror-boundary.md`: Public/private file boundary for static publishing
+- `docs/publication-review-checklist.md`: Local checklist for deciding whether changes are ready to stage, publish, or promote
+- `docs/reusable-schema-package.md`: Reusable Python schema package boundary for shared review rules
+- `docs/screenshot-review.md`: Local screenshot review notes for typography, layout, and promotion readiness
 - `docs/local-git-workflow.md`: Local Git discovery and repository-decision notes
 - `docs/site-registry-decision-workflow.md`: Review-before-write workflow for updating site-registry assignments
 - `docs/site-registry-high-priority.md`: Focused review packet for the current high-priority FHABS marker checks
 - `docs/weather-context-contract.md`: Schema and guardrails for optional weather-context integration
 - `scripts/refresh-live-data.ps1`: Public-data refresh script for USGS and FHABS snapshot data
 - `scripts/refresh-osm-shoreline.ps1`: Public OpenStreetMap shoreline refresh script
-- `scripts/build-site-review-report.ps1`: Generates site-registry QA JSON and Markdown review queue
+- `scripts/write-weather-context-unavailable.ps1`: Regenerates the public-safe unavailable weather-context export
+- `scripts/build-site-review-report.ps1`: Generates public aggregate and local detailed site-registry QA review artifacts
+- `scripts/site_review_db.py`: Manages the local SQLite site-registry review store and public summary export
+- `scripts/new-field-microscopy-intake.ps1`: Creates an ignored local private field/microscopy intake file
+- `scripts/validate-field-microscopy-intake.ps1`: Validates the ignored local field/microscopy intake file
+- `scripts/export-reviewed-field-observations.ps1`: Writes a sanitized reviewed field/microscopy public export
+- `scripts/check-field-microscopy-review-cycle.ps1`: Runs a synthetic private-to-public export smoke check
+- `scripts/field_microscopy_db.py`: Manages the local SQLite field/microscopy review store
+- `../environmental-monitoring-schemas/src/environmental_monitoring_schemas/field_microscopy.py`: Reusable field/microscopy schema and validation module in the sibling schema repository
 - `scripts/preview-site-review-decisions.ps1`: Dry-run checker for proposed site-registry review decisions
 - `scripts/find-local-git.ps1`: Locates PATH, system, or GitHub Desktop Git without changing global settings
 - `scripts/validate-dashboard.ps1`: Local validation checks for required files, JSON contracts, JavaScript syntax, and optional HTTP endpoints
@@ -128,11 +157,11 @@ The current dashboard is intentionally no-build. That keeps the public publicati
 
 ## Next implementation priorities
 
-1. Review the two high-priority site-registry checks identified in `docs/site-registry-high-priority.md` and record decisions using the workflow in `docs/site-registry-decision-workflow.md`.
-2. Expand the snapshot manifest into a fuller QA panel for validation status, missing feeds, and source lag.
-3. Harden analytics copy so report counts cannot be mistaken for bloom severity.
+1. Keep medium-priority FHABS location offsets attached to broad place-based registry entries unless stronger verifiable location evidence or local review supports a specific site split or coordinate move.
+2. Continue the JSON-to-SQLite private review workflow for site-registry decisions unless editing the private JSON becomes too cumbersome.
+3. Use the SQLite private surface and sibling reusable schema package for the first field/microscopy review cycle; keep the committed schema repository private until another project needs it.
 4. Generate a real `data/weather-context.json` export from the environmental monitoring backbone once public-safe weather telemetry exists.
-5. Move detailed review queues and private field/microscopy workflows behind a private surface before they contain sensitive or unpublished data.
+5. Extend the local SQLite review schema before adding real reviewer notes, reviewer identity fields, or unpublished site decisions.
 6. Keep the public dashboard focused on reviewed situational awareness while project planning remains on `project.html`.
 
 ## Site registry
@@ -169,7 +198,9 @@ The refresh script writes six dashboard-ready JSON files:
 
 The Lakeport lake-level card labels the USGS gage height as feet Rumsey and includes approximate water-surface elevation using Zero Rumsey = 1318.256 ft above mean sea level.
 
-`scripts/build-site-review-report.ps1` writes `data/site-review.json`, `docs/site-registry-review.md`, and `docs/site-registry-high-priority.md`. These files make unresolved arm assignments visible without pretending they have been locally certified. The review queue includes priority, evidence notes, targeted review actions, map links, and decision checklists so local review can start with the most suspicious matches first.
+`scripts/build-site-review-report.ps1` writes `data/site-review.json`, `docs/site-registry-review.md`, and `docs/site-registry-high-priority.md` as local detail artifacts. `scripts/site_review_db.py` imports the detailed JSON into the ignored local SQLite store at `data/private/site-review.local.sqlite` and exports `data/site-review-summary.json` for the public dashboard. The SQLite store also includes a reusable `review_decisions` table, and existing site-review decision JSON can be imported with `site_review_db.py import-decisions`. Detailed site-review records stay local-only prior to review and are not public dashboard inputs.
+
+These files make unresolved arm assignments visible without pretending they have been locally certified. The review queue includes priority, evidence notes, targeted review actions, map links, and decision checklists so local review can start with the most suspicious matches first.
 
 The validator intentionally warns, rather than fails, when current map markers still need local review. That keeps the public trust cue visible while allowing the prototype to remain shareable during review.
 
@@ -187,11 +218,31 @@ The Henderson Point / Riviera Point Launch marker is now split from generic Soda
 
 ## Future field-data intake
 
+The first private field/microscopy surface is local and SQLite-backed. It is documented in `docs/private-sqlite-surface.md` and uses ignored files under `data/private/`, not a public submission form. The current local draft has been imported into SQLite and remains private-only; it exports zero public records until QA approval and publication permission are present.
+
 A later stretch goal is to add authenticated data entry for lakeside field observations and freshwater phytoplankton sampling/identification performed with a light microscope, including work that may be collected on behalf of NOAA. This should be designed as a reviewed intake workflow rather than a direct public posting form.
 
 Minimum fields should include sample date and time, collector, organization or program, site, GPS precision, lake arm, sample type, preservation method, microscope method, magnification, taxon name, identification confidence, abundance estimate, photo or voucher reference, QA reviewer, and permission-to-publish status.
 
 These records should stay separate from public agency feeds until they pass review. Approved records can later support the dashboard, data exports, and ML features as a distinct "field/microscopy" source family.
+
+Create the first ignored local intake file:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\new-field-microscopy-intake.ps1
+```
+
+Export reviewed public-safe records:
+
+```powershell
+python .\scripts\field_microscopy_db.py export-public
+```
+
+Run the SQLite review-cycle smoke check:
+
+```powershell
+python .\scripts\field_microscopy_db.py smoke-cycle
+```
 
 ## Local-first architecture
 
@@ -201,9 +252,11 @@ Clear Lake Watch should default to a local-first operating model wherever practi
 
 Build the system as:
 
-**edge collection -> local processing -> local storage -> optional sync/public mirror**
+**edge collection -> local processing -> local storage -> reviewed public export -> static public mirror**
 
 That means the monitoring stack should still be able to collect, store, review, and summarize data when public hosting, cloud APIs, or outside network access are temporarily unavailable.
+
+The durable operating contract lives in `docs/local-first-operating-model.md`. It names the current private SQLite stores, reviewed public exports, domain-module boundaries, and the rule that the public dashboard should not connect directly to MQTT, local SQLite databases, Grafana, InfluxDB, private gateways, or unreviewed local intake files.
 
 ### What stays local by default
 
@@ -269,6 +322,12 @@ The dashboard now includes a weather-context panel backed by
 `docs/weather-context-contract.md` and `data/weather-context.example.json` as
 the target contract for the backbone-generated public export.
 
+Regenerate the current public-safe not-connected weather export:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-unavailable.ps1
+```
+
 ## Refresh live snapshot
 
 Run this from PowerShell to update `data/live.json` with current public data:
@@ -295,6 +354,10 @@ Run this to rebuild the site-registry review queue:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-site-review-report.ps1
+python .\scripts\site_review_db.py import-json
+python .\scripts\site_review_db.py import-decisions --input .\data\site-review-decisions.local.json
+python .\scripts\site_review_db.py validate
+python .\scripts\site_review_db.py export-summary
 ```
 
 ## Validate before publishing
@@ -313,15 +376,28 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard
 
 See `docs/deployment.md` for GitHub Pages and static-hosting notes.
 
+Before staging, committing, pushing, or promoting the dashboard, use `docs/publication-review-checklist.md` to separate local review from a public publish decision.
+
+For the next portfolio-facing pass, use `docs/portfolio-safe-release-scope.md` to keep the release focused on presentation, validation evidence, screenshots, and conservative claims before adding live weather telemetry or public field intake.
+
+For internship conversations, use `docs/internship-share-brief.md` and `docs/career-services-call-notes.md` as a concise share packet and call-prep guide.
+
 ## Local Git discovery
 
-If `git` is unavailable in the shell, run:
+Git is currently available from this project shell, and this folder is a Git work tree. Use local review commands before any publication pass:
+
+```powershell
+git status --short
+git --no-pager diff
+```
+
+If `git` is unavailable in a future shell, run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\find-local-git.ps1
 ```
 
-This project currently treats Git setup as an explicit decision point. The script can locate GitHub Desktop's bundled Git, but `git diff` still requires the folder to be inside a Git repository.
+Git availability is not a publication decision. Current local changes should remain local-only until a separate scoped review decides what to stage, commit, or publish. See `docs/local-git-workflow.md`.
 
 ## Local desktop shortcut
 
