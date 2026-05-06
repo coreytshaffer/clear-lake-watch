@@ -84,6 +84,7 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 - `docs/forecast-boundary.md`: Experimental forecast-output boundary and required metadata
 - `docs/local-first-operating-model.md`: Local-first operating tiers, private storage boundary, public export path, and edge-AI guardrails
 - `docs/internship-share-brief.md`: One-page internship-facing share brief for Clear Lake Watch
+- `docs/internship-role-fit-map.md`: Role-family map, search terms, and resume bullet variants for internship targeting
 - `docs/private-surface.md`: Local private-review surface boundary for ignored field/microscopy intake files and sanitized exports
 - `docs/private-site-review-surface.md`: Public/private boundary for site-registry QA review artifacts
 - `docs/private-sqlite-surface.md`: SQLite-backed private review surface for reusable local field/microscopy records

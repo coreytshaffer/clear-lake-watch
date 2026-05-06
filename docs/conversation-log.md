@@ -697,3 +697,18 @@ Use:
 
 - `docs\internship-share-brief.md` as the one-page share artifact.
 - `docs\career-services-call-notes.md` for the 30-second pitch, questions to ask, role keywords, resume bullet draft, and follow-up message template.
+
+## May 6, 2026 Internship Role Fit Map
+
+The internship packet was expanded with a role-family translation layer.
+
+Implemented:
+
+- Added `docs\internship-role-fit-map.md`.
+- Linked it from the share brief, career-services call notes, README, and backlog.
+
+Use:
+
+- Map Clear Lake Watch to environmental data, GIS, water resources, climate resilience, and environmental communication internships.
+- Pull resume bullet variants by role family instead of using one generic bullet for every application.
+- Keep the boundary language intact: prototype, not official guidance or a complete monitoring platform.

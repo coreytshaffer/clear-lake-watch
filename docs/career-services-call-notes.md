@@ -55,6 +55,7 @@ The safest starting points are:
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
 - Methodology page: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
 - Internship share brief: `docs/internship-share-brief.md`
+- Internship role fit map: `docs/internship-role-fit-map.md`
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 
 I am especially interested in internships involving water quality, GIS, watershed planning, environmental monitoring, climate resilience, environmental data systems, or public-sector environmental communication.

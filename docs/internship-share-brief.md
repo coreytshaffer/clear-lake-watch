@@ -18,6 +18,7 @@ It is a portfolio artifact and systems-integration case study, not official publ
 - Project page: https://coreytshaffer.github.io/clear-lake-watch/project.html
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 - Publication readiness checklist: `docs/publication-review-checklist.md`
+- Internship role fit map: `docs/internship-role-fit-map.md`
 
 ## What It Demonstrates
 
@@ -66,6 +67,8 @@ This project is relevant for internships or early-career roles involving:
 - environmental data management
 - public-sector or nonprofit environmental communication
 - field-data QA/QC and data stewardship
+
+Use `docs/internship-role-fit-map.md` to translate these broad fit areas into role families, evidence points, resume bullet variants, and search keywords.
 
 ## Suggested Ask For Career Services
 

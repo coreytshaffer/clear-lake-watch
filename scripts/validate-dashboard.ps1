@@ -384,6 +384,7 @@ try {
     "docs\portfolio-safe-release-scope.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\internship-share-brief.md",
+    "docs\internship-role-fit-map.md",
     "docs\site-registry-decision-workflow.md",
     "docs\site-registry-review.md",
     "docs\site-registry-high-priority.md",
@@ -682,6 +683,7 @@ try {
   $portfolioSafeReleaseScopeDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-safe-release-scope.md") -Raw
   $caseStudyDoc = Get-Content (Resolve-ProjectPath "docs\clear_lake_watch_portfolio_case_study.md") -Raw
   $internshipShareBriefDoc = Get-Content (Resolve-ProjectPath "docs\internship-share-brief.md") -Raw
+  $internshipRoleFitMapDoc = Get-Content (Resolve-ProjectPath "docs\internship-role-fit-map.md") -Raw
   $weatherContextContractDoc = Get-Content (Resolve-ProjectPath "docs\weather-context-contract.md") -Raw
   $fieldMicroscopyIntakeDoc = Get-Content (Resolve-ProjectPath "docs\field-microscopy-intake-contract.md") -Raw
   $privateSiteReviewSurfaceDoc = Get-Content (Resolve-ProjectPath "docs\private-site-review-surface.md") -Raw
@@ -832,12 +834,20 @@ try {
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Internship-Relevant Skill Signals" -Message "docs/internship-share-brief.md must include skill signals."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Claims To Avoid" -Message "docs/internship-share-brief.md must include claims to avoid."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Suggested Ask For Career Services" -Message "docs/internship-share-brief.md must include a career-services ask."
+  Assert-TextContains -Text $internshipShareBriefDoc -Needle "docs/internship-role-fit-map.md" -Message "docs/internship-share-brief.md must link to the internship role fit map."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "run May 6, 2026" -Message "docs/internship-share-brief.md must include the latest validation date."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "8 detailed queue records" -Message "docs/internship-share-brief.md must include site-review validation detail."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "Internship Role Fit Map" -Message "docs/internship-role-fit-map.md must define the internship role fit map."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "Environmental Data / Monitoring Intern" -Message "docs/internship-role-fit-map.md must include environmental data roles."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "GIS / Spatial Analysis Intern" -Message "docs/internship-role-fit-map.md must include GIS roles."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "Water Resources / Watershed Intern" -Message "docs/internship-role-fit-map.md must include water resources roles."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "Resume Bullet Variants" -Message "docs/internship-role-fit-map.md must include resume bullet variants."
+  Assert-TextContains -Text $internshipRoleFitMapDoc -Needle "Do not frame Clear Lake Watch as a complete monitoring system" -Message "docs/internship-role-fit-map.md must preserve the boundary reminder."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Thirty-Second Project Pitch" -Message "docs/career-services-call-notes.md must include a short project pitch."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Questions To Ask" -Message "docs/career-services-call-notes.md must include questions for career services."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Resume Bullet Draft" -Message "docs/career-services-call-notes.md must include a resume bullet draft."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Follow-Up Message Template" -Message "docs/career-services-call-notes.md must include a follow-up template."
+  Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/internship-role-fit-map.md" -Message "docs/career-services-call-notes.md must link to the internship role fit map."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Call Boundary" -Message "docs/career-services-call-notes.md must include a conservative call boundary."
   Assert-TextContains -Text $caseStudyDoc -Needle "Publication Readiness and Validation" -Message "case study must include publication readiness and validation framing."
   Assert-TextContains -Text $caseStudyDoc -Needle "portfolio-safe release" -Message "case study must preserve portfolio-safe release framing."
