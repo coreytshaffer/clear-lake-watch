@@ -11,10 +11,10 @@ The project is designed as a **situational-awareness and research-planning proto
 **Location focus:** Clear Lake, Lake County, California  
 **Primary themes:** Water quality, cyanobacterial blooms, public data, GIS, source transparency, community monitoring, local-first infrastructure
 
-**Live dashboard:** [Add link]  
-**GitHub repository:** [Add link]  
-**Methodology page:** [Add link]  
-**Project page:** [Add link]
+**Live dashboard:** https://coreytshaffer.github.io/clear-lake-watch/  
+**GitHub repository:** https://github.com/coreytshaffer/clear-lake-watch  
+**Methodology page:** https://coreytshaffer.github.io/clear-lake-watch/methodology.html  
+**Project page:** https://coreytshaffer.github.io/clear-lake-watch/project.html
 
 ---
 
@@ -259,6 +259,12 @@ Current release evidence includes:
 - a local mobile-width screenshot review for first-viewport typography and wrapping
 - public/private mirror documentation that keeps local records, SQLite stores, and unreviewed intake files out of the public dashboard
 
+Latest local validation status, checked May 6, 2026:
+
+- Dashboard validation passed with the expected conservative warning that all current map markers still need local review.
+- Field/microscopy SQLite validation passed with one private draft record and zero publishable records.
+- Site-review SQLite validation passed with 8 detailed queue records, 8 marker-by-site records, and 8 review decision records.
+
 The recommended next release scope is a **portfolio-safe release**, not a broad public launch. That means the project can be shown as a professional artifact with clear validation evidence, screenshots, README, methodology page, project page, and case study, while avoiding official monitoring, public-health advisory, live field-submission, validated forecast, or deployed sensor-network claims.
 
 ---
@@ -280,11 +286,16 @@ Near-term priorities include:
 
 ## Screenshots
 
-[Add screenshot: dashboard hero and live snapshot]
+Current local review screenshot:
 
-[Add screenshot: map trust filter and site-registry QA]
+![Clear Lake Watch mobile-width first viewport](review-screenshots/clear-lake-watch-mobile-width-2026-05-05.png)
 
-[Add screenshot: methodology disclaimer or signal types]
+Remaining screenshot targets for a polished portfolio version:
+
+- dashboard hero and live snapshot
+- map trust filter and site-registry QA
+- methodology disclaimer or signal-type explanation
+- optional validation or publication-checklist evidence
 
 ---
 
@@ -298,12 +309,7 @@ Near-term priorities include:
 
 To finish this case study, I should add:
 
-- Live dashboard URL
-- GitHub repository URL
-- Project page URL
-- Methodology page URL
-- Three screenshots
+- final polished screenshot set
 - A brief personal note about why Clear Lake matters to me
 - Any concrete project metrics I want to highlight
-- Validation status from the latest dashboard check
 - Whether I want to frame this under “Cybernetic Ecology” publicly or keep that as a subtitle

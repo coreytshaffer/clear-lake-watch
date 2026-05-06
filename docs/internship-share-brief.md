@@ -73,11 +73,11 @@ This project is relevant for internships or early-career roles involving:
 
 ## Current Validation Status
 
-Latest local checks:
+Latest local checks, run May 6, 2026:
 
 - dashboard validation passed with the expected conservative site-review warning
-- field/microscopy SQLite validation passed
-- site-review SQLite validation passed
+- field/microscopy SQLite validation passed with one private draft record and zero publishable records
+- site-review SQLite validation passed with 8 detailed queue records, 8 marker-by-site records, and 8 review decision records
 
 Known boundary:
 

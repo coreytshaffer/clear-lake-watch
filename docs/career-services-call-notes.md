@@ -54,7 +54,13 @@ The safest starting points are:
 - Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
 - Methodology page: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
+- Internship share brief: `docs/internship-share-brief.md`
+- Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 
 I am especially interested in internships involving water quality, GIS, watershed planning, environmental monitoring, climate resilience, environmental data systems, or public-sector environmental communication.
 
 I would appreciate feedback on which roles this project best supports and whether the project language feels clear and appropriately scoped for internship applications.
+
+## Call Boundary
+
+Do not describe Clear Lake Watch as official guidance, a complete monitoring platform, a deployed sensor network, or a validated forecasting system. Use "late prototype / early MVP" and "watershed intelligence dashboard prototype."
