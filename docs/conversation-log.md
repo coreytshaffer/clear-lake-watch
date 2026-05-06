@@ -727,3 +727,18 @@ Use:
 - Send or open the packet index first.
 - Let career services choose a five-minute, fifteen-minute, or deeper review path.
 - Ask for role-title, resume-language, lead-artifact, and overclaiming feedback.
+
+## May 6, 2026 Resume And LinkedIn Snippets
+
+The internship packet was expanded with copy-ready application language.
+
+Implemented:
+
+- Added `docs\resume-linkedin-snippets.md`.
+- Linked it from the career-services packet, share brief, role fit map, call notes, README, and backlog.
+
+Use:
+
+- Copy role-specific resume bullets into internship applications.
+- Use the LinkedIn, Handshake, or email blurbs without changing the project's maturity boundary.
+- Keep "late prototype / early MVP" and avoid official-guidance or deployed-sensor claims.

@@ -168,7 +168,7 @@ Acceptance criteria:
 - `docs/publication-review-checklist.md` defines freshness, private-file, claim-review, site-registry, screenshot, Git scope, and final publish gates.
 - `docs/portfolio-safe-release-scope.md` defines the recommended next release fork: portfolio presentation, validation evidence, screenshots, case study polish, and conservative claims before live weather telemetry or public field intake.
 - `docs/clear_lake_watch_portfolio_case_study.md` now includes publication-readiness and validation framing.
-- `docs/career-services-share-packet.md`, `docs/internship-share-brief.md`, `docs/career-services-call-notes.md`, and `docs/internship-role-fit-map.md` provide a shareable internship packet for SNHU career services and similar conversations.
+- `docs/career-services-share-packet.md`, `docs/internship-share-brief.md`, `docs/career-services-call-notes.md`, `docs/internship-role-fit-map.md`, and `docs/resume-linkedin-snippets.md` provide a shareable internship packet for SNHU career services and similar conversations.
 - Current decision point: choose whether to proceed with the portfolio-safe release pass. Do not promote a fresh public screenshot until that pass confirms the full UI and wording.
 
 ## P2-01 Expand Validation From Structure To Trust Checks

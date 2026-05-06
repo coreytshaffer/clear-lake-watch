@@ -11,7 +11,8 @@ This packet is a guided path through Clear Lake Watch for SNHU career services o
 1. Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
 2. Internship share brief: `docs/internship-share-brief.md`
 3. Internship role fit map: `docs/internship-role-fit-map.md`
-4. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
+4. Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
+5. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 
 ## What This Project Is
 
@@ -57,6 +58,7 @@ Please review whether the project communicates:
 - Which internship titles should I search for?
 - Which role family is the strongest fit: environmental science, GIS, water resources, environmental data, or public communication?
 - Which resume bullet variant is strongest?
+- Which LinkedIn or Handshake summary is strongest?
 - Does the project language feel appropriately scoped for an internship applicant?
 - Does anything sound like it overclaims official authority, sensor deployment, forecasting, or public-health guidance?
 - Which artifact should I lead with when contacting employers?

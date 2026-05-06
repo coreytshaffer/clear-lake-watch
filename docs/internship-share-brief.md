@@ -20,6 +20,7 @@ It is a portfolio artifact and systems-integration case study, not official publ
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 - Publication readiness checklist: `docs/publication-review-checklist.md`
 - Internship role fit map: `docs/internship-role-fit-map.md`
+- Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
 
 ## What It Demonstrates
 

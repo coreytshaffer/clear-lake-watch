@@ -128,6 +128,8 @@ Search terms:
 
 ## Resume Bullet Variants
 
+For a copy-ready set of resume, LinkedIn, Handshake, and email snippets, see `docs/resume-linkedin-snippets.md`.
+
 Environmental data version:
 
 Built Clear Lake Watch, a late-prototype environmental data dashboard for Clear Lake, CA, integrating public hydrology and harmful-algal-bloom report data with source-status metadata, validation checks, and conservative public methodology guardrails.

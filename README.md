@@ -93,6 +93,7 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 - `docs/public-mirror-boundary.md`: Public/private file boundary for static publishing
 - `docs/publication-review-checklist.md`: Local checklist for deciding whether changes are ready to stage, publish, or promote
 - `docs/reusable-schema-package.md`: Reusable Python schema package boundary for shared review rules
+- `docs/resume-linkedin-snippets.md`: Copy-ready resume, LinkedIn, Handshake, and email snippets for internship applications
 - `docs/screenshot-review.md`: Local screenshot review notes for typography, layout, and promotion readiness
 - `docs/local-git-workflow.md`: Local Git discovery and repository-decision notes
 - `docs/site-registry-decision-workflow.md`: Review-before-write workflow for updating site-registry assignments
