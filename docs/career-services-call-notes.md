@@ -54,6 +54,7 @@ The safest starting points are:
 - Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
 - Methodology page: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
+- Career services packet index: `docs/career-services-share-packet.md`
 - Internship share brief: `docs/internship-share-brief.md`
 - Internship role fit map: `docs/internship-role-fit-map.md`
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`

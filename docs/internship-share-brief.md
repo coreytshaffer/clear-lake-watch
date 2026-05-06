@@ -16,6 +16,7 @@ It is a portfolio artifact and systems-integration case study, not official publ
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
 - Methodology page: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
 - Project page: https://coreytshaffer.github.io/clear-lake-watch/project.html
+- Career services packet index: `docs/career-services-share-packet.md`
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 - Publication readiness checklist: `docs/publication-review-checklist.md`
 - Internship role fit map: `docs/internship-role-fit-map.md`

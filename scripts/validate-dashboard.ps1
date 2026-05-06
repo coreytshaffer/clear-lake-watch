@@ -367,6 +367,7 @@ try {
     "data\weather-context.example.json",
     "docs\backlog.md",
     "docs\career-services-call-notes.md",
+    "docs\career-services-share-packet.md",
     "docs\cross-platform-typography-audit.md",
     "docs\field-microscopy-intake-contract.md",
     "docs\private-site-review-surface.md",
@@ -675,6 +676,7 @@ try {
   $backlog = Get-Content (Resolve-ProjectPath "docs\backlog.md") -Raw
   $conversationLog = Get-Content (Resolve-ProjectPath "docs\conversation-log.md") -Raw
   $careerServicesCallNotesDoc = Get-Content (Resolve-ProjectPath "docs\career-services-call-notes.md") -Raw
+  $careerServicesSharePacketDoc = Get-Content (Resolve-ProjectPath "docs\career-services-share-packet.md") -Raw
   $crossPlatformTypographyAuditDoc = Get-Content (Resolve-ProjectPath "docs\cross-platform-typography-audit.md") -Raw
   $sourceAudit = Get-Content (Resolve-ProjectPath "docs\source-audit.md") -Raw
   $forecastBoundaryDoc = Get-Content (Resolve-ProjectPath "docs\forecast-boundary.md") -Raw
@@ -834,6 +836,7 @@ try {
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Internship-Relevant Skill Signals" -Message "docs/internship-share-brief.md must include skill signals."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Claims To Avoid" -Message "docs/internship-share-brief.md must include claims to avoid."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "Suggested Ask For Career Services" -Message "docs/internship-share-brief.md must include a career-services ask."
+  Assert-TextContains -Text $internshipShareBriefDoc -Needle "docs/career-services-share-packet.md" -Message "docs/internship-share-brief.md must link to the career-services packet index."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "docs/internship-role-fit-map.md" -Message "docs/internship-share-brief.md must link to the internship role fit map."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "run May 6, 2026" -Message "docs/internship-share-brief.md must include the latest validation date."
   Assert-TextContains -Text $internshipShareBriefDoc -Needle "8 detailed queue records" -Message "docs/internship-share-brief.md must include site-review validation detail."
@@ -847,8 +850,15 @@ try {
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Questions To Ask" -Message "docs/career-services-call-notes.md must include questions for career services."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Resume Bullet Draft" -Message "docs/career-services-call-notes.md must include a resume bullet draft."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Follow-Up Message Template" -Message "docs/career-services-call-notes.md must include a follow-up template."
+  Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/career-services-share-packet.md" -Message "docs/career-services-call-notes.md must link to the packet index."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/internship-role-fit-map.md" -Message "docs/career-services-call-notes.md must link to the internship role fit map."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Call Boundary" -Message "docs/career-services-call-notes.md must include a conservative call boundary."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Career Services Share Packet" -Message "docs/career-services-share-packet.md must define the packet index."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Five-Minute Review" -Message "docs/career-services-share-packet.md must include a short review path."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Fifteen-Minute Review" -Message "docs/career-services-share-packet.md must include a medium review path."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Feedback Requested" -Message "docs/career-services-share-packet.md must ask for feedback."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "not official public-health guidance" -Message "docs/career-services-share-packet.md must preserve public-health boundary language."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Avoid:" -Message "docs/career-services-share-packet.md must include avoid-language guidance."
   Assert-TextContains -Text $caseStudyDoc -Needle "Publication Readiness and Validation" -Message "case study must include publication readiness and validation framing."
   Assert-TextContains -Text $caseStudyDoc -Needle "portfolio-safe release" -Message "case study must preserve portfolio-safe release framing."
   Assert-TextContains -Text $caseStudyDoc -Needle "https://coreytshaffer.github.io/clear-lake-watch/" -Message "case study must include the live dashboard URL."

@@ -712,3 +712,18 @@ Use:
 - Map Clear Lake Watch to environmental data, GIS, water resources, climate resilience, and environmental communication internships.
 - Pull resume bullet variants by role family instead of using one generic bullet for every application.
 - Keep the boundary language intact: prototype, not official guidance or a complete monitoring platform.
+
+## May 6, 2026 Career Services Share Packet Index
+
+The internship materials were given a guided front door for career-services review.
+
+Implemented:
+
+- Added `docs\career-services-share-packet.md`.
+- Linked it from the README, internship share brief, career-services call notes, and backlog.
+
+Use:
+
+- Send or open the packet index first.
+- Let career services choose a five-minute, fifteen-minute, or deeper review path.
+- Ask for role-title, resume-language, lead-artifact, and overclaiming feedback.

@@ -80,6 +80,7 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 - `docs/conversation-log.md`: Project conversation memory, implementation decisions, and next-step context
 - `docs/cross-platform-typography-audit.md`: Static typography fallback audit and remaining screenshot checks
 - `docs/career-services-call-notes.md`: Prep notes and follow-up template for internship/career-services conversations
+- `docs/career-services-share-packet.md`: Guided packet index for internship and career-services review
 - `docs/deployment.md`: Static hosting, validation, and public deployment notes
 - `docs/forecast-boundary.md`: Experimental forecast-output boundary and required metadata
 - `docs/local-first-operating-model.md`: Local-first operating tiers, private storage boundary, public export path, and edge-AI guardrails
@@ -381,7 +382,7 @@ Before staging, committing, pushing, or promoting the dashboard, use `docs/publi
 
 For the next portfolio-facing pass, use `docs/portfolio-safe-release-scope.md` to keep the release focused on presentation, validation evidence, screenshots, and conservative claims before adding live weather telemetry or public field intake.
 
-For internship conversations, use `docs/internship-share-brief.md` and `docs/career-services-call-notes.md` as a concise share packet and call-prep guide.
+For internship conversations, start with `docs/career-services-share-packet.md`, then use `docs/internship-share-brief.md` and `docs/career-services-call-notes.md` as the concise share packet and call-prep guide.
 
 ## Local Git discovery
 
