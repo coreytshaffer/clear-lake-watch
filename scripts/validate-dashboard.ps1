@@ -367,6 +367,7 @@ try {
     "data\weather-context.example.json",
     "docs\backlog.md",
     "docs\career-services-call-notes.md",
+    "docs\career-services-day-of-checklist.md",
     "docs\career-services-share-packet.md",
     "docs\cross-platform-typography-audit.md",
     "docs\field-microscopy-intake-contract.md",
@@ -677,6 +678,7 @@ try {
   $backlog = Get-Content (Resolve-ProjectPath "docs\backlog.md") -Raw
   $conversationLog = Get-Content (Resolve-ProjectPath "docs\conversation-log.md") -Raw
   $careerServicesCallNotesDoc = Get-Content (Resolve-ProjectPath "docs\career-services-call-notes.md") -Raw
+  $careerServicesDayOfChecklistDoc = Get-Content (Resolve-ProjectPath "docs\career-services-day-of-checklist.md") -Raw
   $careerServicesSharePacketDoc = Get-Content (Resolve-ProjectPath "docs\career-services-share-packet.md") -Raw
   $crossPlatformTypographyAuditDoc = Get-Content (Resolve-ProjectPath "docs\cross-platform-typography-audit.md") -Raw
   $sourceAudit = Get-Content (Resolve-ProjectPath "docs\source-audit.md") -Raw
@@ -854,11 +856,19 @@ try {
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Questions To Ask" -Message "docs/career-services-call-notes.md must include questions for career services."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Resume Bullet Draft" -Message "docs/career-services-call-notes.md must include a resume bullet draft."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Follow-Up Message Template" -Message "docs/career-services-call-notes.md must include a follow-up template."
+  Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/career-services-day-of-checklist.md" -Message "docs/career-services-call-notes.md must link to the day-of checklist."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/career-services-share-packet.md" -Message "docs/career-services-call-notes.md must link to the packet index."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/internship-role-fit-map.md" -Message "docs/career-services-call-notes.md must link to the internship role fit map."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "docs/resume-linkedin-snippets.md" -Message "docs/career-services-call-notes.md must link to resume and LinkedIn snippets."
   Assert-TextContains -Text $careerServicesCallNotesDoc -Needle "Call Boundary" -Message "docs/career-services-call-notes.md must include a conservative call boundary."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Career Services Day-Of Checklist" -Message "docs/career-services-day-of-checklist.md must define the call-day checklist."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Open Before The Call" -Message "docs/career-services-day-of-checklist.md must include pre-call open items."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Main Ask" -Message "docs/career-services-day-of-checklist.md must include the main ask."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Three Questions To Prioritize" -Message "docs/career-services-day-of-checklist.md must include prioritized questions."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Notes To Capture During The Call" -Message "docs/career-services-day-of-checklist.md must include call notes fields."
+  Assert-TextContains -Text $careerServicesDayOfChecklistDoc -Needle "Avoid:" -Message "docs/career-services-day-of-checklist.md must include avoid-language guidance."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Career Services Share Packet" -Message "docs/career-services-share-packet.md must define the packet index."
+  Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "docs/career-services-day-of-checklist.md" -Message "docs/career-services-share-packet.md must link to the day-of checklist."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Five-Minute Review" -Message "docs/career-services-share-packet.md must include a short review path."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "docs/resume-linkedin-snippets.md" -Message "docs/career-services-share-packet.md must link to resume and LinkedIn snippets."
   Assert-TextContains -Text $careerServicesSharePacketDoc -Needle "Fifteen-Minute Review" -Message "docs/career-services-share-packet.md must include a medium review path."

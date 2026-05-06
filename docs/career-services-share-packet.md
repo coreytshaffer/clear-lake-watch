@@ -8,11 +8,12 @@ This packet is a guided path through Clear Lake Watch for SNHU career services o
 
 ## Open First
 
-1. Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
-2. Internship share brief: `docs/internship-share-brief.md`
-3. Internship role fit map: `docs/internship-role-fit-map.md`
-4. Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
-5. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
+1. Day-of checklist: `docs/career-services-day-of-checklist.md`
+2. Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
+3. Internship share brief: `docs/internship-share-brief.md`
+4. Internship role fit map: `docs/internship-role-fit-map.md`
+5. Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
+6. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
 
 ## What This Project Is
 

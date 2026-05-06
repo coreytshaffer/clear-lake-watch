@@ -80,6 +80,7 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 - `docs/conversation-log.md`: Project conversation memory, implementation decisions, and next-step context
 - `docs/cross-platform-typography-audit.md`: Static typography fallback audit and remaining screenshot checks
 - `docs/career-services-call-notes.md`: Prep notes and follow-up template for internship/career-services conversations
+- `docs/career-services-day-of-checklist.md`: Call-day checklist for opening artifacts, asking focused questions, and capturing follow-up actions
 - `docs/career-services-share-packet.md`: Guided packet index for internship and career-services review
 - `docs/deployment.md`: Static hosting, validation, and public deployment notes
 - `docs/forecast-boundary.md`: Experimental forecast-output boundary and required metadata

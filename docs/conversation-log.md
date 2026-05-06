@@ -742,3 +742,18 @@ Use:
 - Copy role-specific resume bullets into internship applications.
 - Use the LinkedIn, Handshake, or email blurbs without changing the project's maturity boundary.
 - Keep "late prototype / early MVP" and avoid official-guidance or deployed-sensor claims.
+
+## May 6, 2026 Career Services Day-Of Checklist
+
+The internship packet was given a call-day operating checklist.
+
+Implemented:
+
+- Added `docs\career-services-day-of-checklist.md`.
+- Linked it from the packet index, career-services call notes, README, and backlog.
+
+Use:
+
+- Open the checklist before the call.
+- Use the prepared pitch, main ask, and three prioritized questions.
+- Capture recommended role titles, search keywords, resume language, lead artifact, wording concerns, and follow-up actions.
