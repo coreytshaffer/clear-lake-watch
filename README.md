@@ -92,6 +92,7 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 - `docs/private-site-review-surface.md`: Public/private boundary for site-registry QA review artifacts
 - `docs/private-sqlite-surface.md`: SQLite-backed private review surface for reusable local field/microscopy records
 - `docs/portfolio-safe-release-scope.md`: Conservative release scope for portfolio presentation before live feature expansion
+- `docs/portfolio-release-branch-handoff.md`: Local branch handoff note for the portfolio-safe release prep branch
 - `docs/public-mirror-boundary.md`: Public/private file boundary for static publishing
 - `docs/publication-review-checklist.md`: Local checklist for deciding whether changes are ready to stage, publish, or promote
 - `docs/reusable-schema-package.md`: Reusable Python schema package boundary for shared review rules

@@ -772,3 +772,31 @@ Use:
 - Move call notes into structured follow-up tables after the call.
 - Track recommended role titles, search keywords, organizations, contacts, profile updates, application leads, and follow-up messages.
 - Keep application wording inside the same conservative project boundary.
+
+## May 6, 2026 Portfolio Release Branch Handoff
+
+The local portfolio-safe release prep branch was documented for review before any push or publication decision.
+
+Implemented:
+
+- Added `docs\portfolio-release-branch-handoff.md`.
+- Linked it from README, publication checklist, and backlog.
+
+Current branch:
+
+- `codex/portfolio-safe-release-prep`
+
+Current local commit stack:
+
+- `77f7bec Add career services follow-up tracker`
+- `d91e22c Add career services day-of checklist`
+- `be8a26f Add resume and LinkedIn snippets`
+- `7bbd193 Add career services packet index`
+- `e2af38f Add internship role fit map`
+- `b136fa2 Polish internship share materials`
+- `fea08a8 Prepare portfolio-safe release checkpoint`
+
+Boundary:
+
+- The branch remains local and unpushed.
+- Shortcut binaries and `docs\Project_Brief_DRAFT_1.docx` remain intentionally uncommitted pending separate review.

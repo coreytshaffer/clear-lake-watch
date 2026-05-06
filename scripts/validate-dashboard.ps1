@@ -385,6 +385,7 @@ try {
     "docs\forecast-boundary.md",
     "docs\local-first-operating-model.md",
     "docs\local-git-workflow.md",
+    "docs\portfolio-release-branch-handoff.md",
     "docs\portfolio-safe-release-scope.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\internship-share-brief.md",
@@ -687,6 +688,7 @@ try {
   $forecastBoundaryDoc = Get-Content (Resolve-ProjectPath "docs\forecast-boundary.md") -Raw
   $localFirstOperatingModelDoc = Get-Content (Resolve-ProjectPath "docs\local-first-operating-model.md") -Raw
   $localGitWorkflowDoc = Get-Content (Resolve-ProjectPath "docs\local-git-workflow.md") -Raw
+  $portfolioReleaseBranchHandoffDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-release-branch-handoff.md") -Raw
   $portfolioSafeReleaseScopeDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-safe-release-scope.md") -Raw
   $caseStudyDoc = Get-Content (Resolve-ProjectPath "docs\clear_lake_watch_portfolio_case_study.md") -Raw
   $internshipShareBriefDoc = Get-Content (Resolve-ProjectPath "docs\internship-share-brief.md") -Raw
@@ -830,6 +832,13 @@ try {
   Assert-TextContains -Text $localGitWorkflowDoc -Needle "Git work tree" -Message "docs/local-git-workflow.md must document that the current folder is a Git work tree."
   Assert-TextContains -Text $localGitWorkflowDoc -Needle "git --no-pager diff" -Message "docs/local-git-workflow.md must document local diff review."
   Assert-TextContains -Text $localGitWorkflowDoc -Needle "Git availability is not a publication decision" -Message "docs/local-git-workflow.md must separate Git availability from publication."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Portfolio Release Branch Handoff" -Message "docs/portfolio-release-branch-handoff.md must define the branch handoff note."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "codex/portfolio-safe-release-prep" -Message "docs/portfolio-release-branch-handoff.md must document the current branch."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "77f7bec Add career services follow-up tracker" -Message "docs/portfolio-release-branch-handoff.md must document the latest local commit."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "has not been pushed" -Message "docs/portfolio-release-branch-handoff.md must document that the branch is local/unpushed."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Intentionally Uncommitted" -Message "docs/portfolio-release-branch-handoff.md must document intentionally uncommitted files."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "docs/Project_Brief_DRAFT_1.docx" -Message "docs/portfolio-release-branch-handoff.md must document the uncommitted docx artifact."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "docs/publication-review-checklist.md" -Message "docs/portfolio-release-branch-handoff.md must point to the publication checklist."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "Portfolio-Safe Release Scope" -Message "docs/portfolio-safe-release-scope.md must define the portfolio-safe release scope."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "late prototype / early MVP" -Message "docs/portfolio-safe-release-scope.md must preserve maturity status."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "official monitoring authority" -Message "docs/portfolio-safe-release-scope.md must avoid authority claims."
@@ -951,6 +960,7 @@ try {
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "git ls-files --others --exclude-standard" -Message "docs/publication-review-checklist.md must include untracked-file review before publication."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "Git availability is not a publication decision." -Message "docs/publication-review-checklist.md must separate Git availability from publication."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "docs/portfolio-safe-release-scope.md" -Message "docs/publication-review-checklist.md must point to the portfolio-safe release scope."
+  Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "docs/portfolio-release-branch-handoff.md" -Message "docs/publication-review-checklist.md must point to the branch handoff note."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "Soft-Share Gate" -Message "docs/publication-review-checklist.md must include a private soft-share gate."
   Assert-TextContains -Text $deploymentDoc -Needle "docs/public-mirror-boundary.md" -Message "docs/deployment.md must point to the public mirror boundary."
   Assert-TextContains -Text $deploymentDoc -Needle "docs/publication-review-checklist.md" -Message "docs/deployment.md must point to the publication review checklist."

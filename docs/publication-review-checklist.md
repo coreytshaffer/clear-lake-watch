@@ -95,6 +95,8 @@ Before staging, decide whether to:
 
 Git availability is not a publication decision.
 
+For the current local portfolio-safe release prep branch, see `docs/portfolio-release-branch-handoff.md` before pushing or opening a pull request.
+
 ## Final Publish Gate
 
 Only publish after all of these are true:
