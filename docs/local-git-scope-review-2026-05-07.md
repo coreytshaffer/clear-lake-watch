@@ -57,16 +57,12 @@ Private/ignored supporting files:
 
 ## Separate Existing Local Artifacts
 
-These files should be reviewed separately before staging because they are not part of the screenshot-only packet itself:
+The publication-status portfolio docs were reviewed and committed in `c7b73a7 Record published commentary portfolio update`.
+
+These files still require an explicit local/publication decision:
 
 | File | Status | Suggested handling |
 | --- | --- | --- |
-| `docs/career-services-share-packet.md` | Modified | Review separately; likely career-services packet update. |
-| `docs/clear_lake_watch_portfolio_case_study.md` | Modified | Review separately; may belong with portfolio packet after inspection. |
-| `docs/internship-share-brief.md` | Modified | Review separately; likely career-services packet update. |
-| `docs/resume-linkedin-snippets.md` | Modified | Review separately; publication-ready career/social snippets. |
-| `docs/published-commentary.md` | New | Review separately; published commentary tracker, not dashboard code. |
-| `docs/submitted-commentary.md` | Deleted | Replaced by `docs/published-commentary.md` after publication. |
 | `docs/Project_Brief_DRAFT_1.docx` | New binary document | Do not stage automatically; decide whether repo should carry this draft. |
 | `shortcuts/Clear Lake Watch.lnk` | Modified binary shortcut | Do not stage automatically. |
 | `shortcuts/Clear Lake Watch test.lnk` | New binary shortcut | Do not stage automatically. |

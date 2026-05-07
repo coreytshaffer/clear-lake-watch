@@ -16,10 +16,10 @@ Branch:
 codex/portfolio-safe-release-prep
 ```
 
-Latest local commit:
+Latest committed portfolio milestone:
 
 ```text
-db903db Add portfolio-safe screenshot review packet
+c7b73a7 Record published commentary portfolio update
 ```
 
 The branch has not been pushed.
@@ -27,6 +27,8 @@ The branch has not been pushed.
 ## Local Commit Stack
 
 ```text
+c7b73a7 Record published commentary portfolio update
+73cb57b Add community writing to career packet
 db903db Add portfolio-safe screenshot review packet
 1851540 Refresh branch handoff summary
 9ff94e3 Add portfolio release branch handoff
@@ -62,10 +64,12 @@ fea08a8 Prepare portfolio-safe release checkpoint
 - site-registry trust-review notes
 - unresolved FHABS marker decision
 - local Git scope review for the current uncommitted artifacts
+- published commentary tracker for the Lake County News Robin Lane article
+- publication-ready resume, LinkedIn, and internship share language
 
 ## Latest Validation
 
-Latest local checks passed on May 7, 2026:
+Latest local checks passed on May 7, 2026 after `c7b73a7`:
 
 - `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp`
 - `python .\scripts\site_review_db.py validate`
@@ -80,20 +84,13 @@ All current map markers still need local review; public map trust cues should re
 
 These files remain outside the branch commits:
 
-- `docs/career-services-share-packet.md`
-- `docs/clear_lake_watch_portfolio_case_study.md`
-- `docs/internship-share-brief.md`
-- `docs/resume-linkedin-snippets.md`
-- `docs/published-commentary.md`
-- `docs/submitted-commentary.md` deletion, replaced by `docs/published-commentary.md`
 - `docs/Project_Brief_DRAFT_1.docx`
 - `shortcuts/Clear Lake Watch.lnk`
 - `shortcuts/Clear Lake Watch test.lnk`
 
 Reason:
 
-- career-services, case-study, resume/LinkedIn, and commentary edits should be reviewed as a separate publication-status slice
-- `docs/published-commentary.md` replaces the earlier submitted-commentary tracker after Lake County News publication
+- publication-status portfolio docs are committed in `c7b73a7`
 - shortcut binaries are local convenience artifacts
 - the `.docx` is a separate draft artifact and should be reviewed before deciding whether it belongs in the repo
 
@@ -115,6 +112,6 @@ The reviewed screenshot/trust-review packet is now committed locally. Keep the b
 
 If a shareable GitHub branch or pull request becomes useful, push the branch after reviewing the publication checklist and open it as a draft.
 
-Publication/push review started on 2026-05-07 and is not approved for push yet. See `docs/publication-push-review-2026-05-07.md`.
+Publication/push review started on 2026-05-07. See `docs/publication-push-review-2026-05-07.md`.
 
-Next local decision: commit the publication-status portfolio docs, leave them local, or use a clean-clone publication path.
+Next local decision: leave the remaining local artifacts alone, remove/relocate them, push the branch as a draft/shareable branch, or use a clean-clone publication path.

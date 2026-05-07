@@ -13,14 +13,14 @@ codex/portfolio-safe-release-prep
 Latest committed packet:
 
 ```text
-db903db Add portfolio-safe screenshot review packet
+c7b73a7 Record published commentary portfolio update
 ```
 
 ## Review Outcome
 
-Do not push yet.
+Do not push automatically.
 
-The committed screenshot/trust-review packet is valid locally, but the worktree still contains separate uncommitted files and local binary artifacts. A push or public mirror update should wait until those are either committed intentionally, left local with a clean worktree strategy, or excluded through a clean-clone publication path.
+The committed screenshot/trust-review packet and publication-status portfolio update are valid locally. The worktree still contains separate local binary/draft artifacts, so a push or public mirror update should be an explicit decision: leave those artifacts local, remove/relocate them, or use a clean-clone publication path.
 
 ## Gates Checked
 
@@ -31,22 +31,12 @@ The committed screenshot/trust-review packet is valid locally, but the worktree 
 | Private-file boundary | Passed locally | `data/private/` and `data/*.local.json` are ignored. |
 | Site-registry boundary | Passed | FHABS markers remain `needs-local-review`; no reviewed-local promotion. |
 | Screenshot packet | Passed locally | Screenshot-only packet exists and is committed. |
-| Git scope | Not clean for push | Separate uncommitted docs, `.docx`, and shortcut artifacts remain. |
+| Publication-status docs | Passed locally | Published commentary tracker and career-facing snippets are committed in `c7b73a7`. |
+| Git scope | Not clean locally | Only `.docx` and shortcut artifacts remain uncommitted. |
 
 ## Remaining Uncommitted Files
 
-Text docs to review separately:
-
-- `docs/career-services-share-packet.md`
-- `docs/clear_lake_watch_portfolio_case_study.md`
-- `docs/internship-share-brief.md`
-- `docs/portfolio-release-branch-handoff.md`
-- `docs/portfolio-safe-release-gate-summary.md`
-- `docs/resume-linkedin-snippets.md`
-- `docs/published-commentary.md`
-- `docs/submitted-commentary.md` deletion, replaced by `docs/published-commentary.md`
-
-Binary/local artifacts to avoid staging automatically:
+Local artifacts to avoid staging automatically:
 
 - `docs/Project_Brief_DRAFT_1.docx`
 - `shortcuts/Clear Lake Watch.lnk`
@@ -59,19 +49,19 @@ Ignored private files confirmed:
 
 ## Recommended Next Step
 
-Decide whether to commit the publication-status portfolio docs as a small separate slice, leave them local, or use a clean-clone publication path.
+Decide how to handle the remaining local artifacts before any push or public mirror update.
 
 Recommended order:
 
-1. Review the publication-status portfolio docs together.
-2. Leave shortcut binaries and `.docx` drafts out of publication unless explicitly needed.
-3. Only then decide whether to push the branch or use a clean-clone publication path.
+1. Leave shortcut binaries and `.docx` drafts out of publication unless explicitly needed.
+2. Decide whether this branch should be pushed as a draft/shareable branch.
+3. Use a clean-clone publication path if only selected committed content should be promoted.
 
 ## Decision Point
 
 Choose one:
 
-1. Commit the publication-status portfolio docs.
-2. Leave the publication-status portfolio docs local for now.
-3. Leave all remaining files local and stop before push.
-4. Use a clean-clone publication path for only the committed branch content.
+1. Leave the remaining local artifacts alone and push the branch as a draft/shareable branch.
+2. Remove or relocate the local DOCX/shortcut artifacts before push.
+3. Keep everything local and stop before push.
+4. Use a clean-clone publication path for only selected committed content.
