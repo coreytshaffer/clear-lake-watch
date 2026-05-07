@@ -15,7 +15,7 @@ This packet is a guided path through Clear Lake Watch for SNHU career services o
 5. Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
 6. Follow-up tracker: `docs/career-services-follow-up-tracker.md`
 7. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
-8. Submitted commentary log: `docs/submitted-commentary.md`
+8. Published commentary: `docs/published-commentary.md`
 
 ## What This Project Is
 

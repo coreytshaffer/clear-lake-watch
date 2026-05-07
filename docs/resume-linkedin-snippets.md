@@ -38,12 +38,29 @@ Data systems:
 Public communication:
 
 - Designed public-facing environmental communication guardrails that separate observed, reported, derived, needs-review, and experimental signals for a sensitive water-quality topic.
+- Published local environmental infrastructure commentary in Lake County News connecting wastewater system resilience, monitoring/SCADA, public transparency, and Clear Lake watershed health.
 
 ## LinkedIn Project Description
 
 Clear Lake Watch is my flagship environmental systems portfolio project: a late-prototype / early-MVP watershed intelligence dashboard for Clear Lake, California. It integrates public hydrology and harmful-algal-bloom report data, GIS context, source-status metadata, site-registry QA, methodology guardrails, and local-first architecture planning.
 
 The project is designed as a situational-awareness and research-planning prototype, not official public-health guidance. Its strongest signal is the trust model: source freshness, signal labels, map review status, public/private boundaries, and conservative language around uncertain or provisional environmental data.
+
+## Published Commentary Blurb
+
+My related public-interest commentary, "After Robin Lane: Clearlake Needs More Than Cleanup," was published by Lake County News on May 7, 2026. The piece connects wastewater infrastructure resilience, monitoring/SCADA, maintenance planning, public records, transparency, and Clear Lake watershed health.
+
+Use this as a supporting communication artifact, not as official public-health guidance or policy authority.
+
+## LinkedIn Publication Post
+
+I am grateful to Lake County News for publishing my commentary on the Robin Lane wastewater failure and what it reveals about infrastructure resilience in the Clear Lake watershed.
+
+My argument is simple: cleanup and accountability matter, but preventing the next failure also requires better monitoring, better records, stronger maintenance planning, and public transparency.
+
+Wastewater infrastructure policy is Clear Lake ecosystem policy.
+
+Published here: https://lakeconews.com/news/community/commentary/84368-after-robin-lane-clearlake-needs-more-than-cleanup
 
 ## Short Email Blurb
 
@@ -99,3 +116,4 @@ Avoid these terms:
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
 - Methodology: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
 - Project page: https://coreytshaffer.github.io/clear-lake-watch/project.html
+- Published commentary: https://lakeconews.com/news/community/commentary/84368-after-robin-lane-clearlake-needs-more-than-cleanup

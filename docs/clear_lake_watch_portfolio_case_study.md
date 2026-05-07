@@ -50,9 +50,9 @@ Clear Lake Watch also supports public-interest communication around local enviro
 
 Current portfolio-supporting writing artifact:
 
-- **After Robin Lane: Clearlake Needs More Than Cleanup** — submitted guest commentary to Lake County News on May 6, 2026. The piece connects wastewater infrastructure resilience, real-time monitoring, predictive maintenance, public transparency, and Clear Lake watershed protection. See [submitted-commentary.md](submitted-commentary.md).
+- **After Robin Lane: Clearlake Needs More Than Cleanup** — published commentary in Lake County News on May 7, 2026. The piece connects wastewater infrastructure resilience, real-time monitoring, predictive maintenance, public transparency, and Clear Lake watershed protection. See [published-commentary.md](published-commentary.md).
 
-This item is listed as **submitted commentary**, not as a published article, unless a published link is added later.
+This item is listed as **published commentary**, separate from official public-health guidance or policy authority.
 
 ---
 
