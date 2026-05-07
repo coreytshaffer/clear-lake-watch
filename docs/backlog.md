@@ -23,7 +23,7 @@ Acceptance criteria:
 
 Priority: P0
 
-Status: Broad-place policy selected; medium-priority offset checks remain unresolved and should not be promoted or split without stronger verifiable location evidence
+Status: Conservative trust review completed for the current generated queue; current decision is to keep all FHABS markers as `needs-local-review` for now, and no marker should be promoted or split without stronger verifiable location evidence
 
 Why it matters:
 
@@ -42,6 +42,11 @@ Acceptance criteria:
 - Current generated high-priority packet reports no high-priority current marker checks.
 - Policy decision: keep medium-priority offset cases attached to broad place-based registry entries for simplicity and to avoid overclaiming precise location certainty.
 - Public verification notes are recorded in `docs/site-registry-location-verification.md`; future coordinate moves, child/starter sites, or `reviewed-local` promotions require stronger verifiable evidence or local review.
+- `docs/site-registry-trust-review-pass-001.md` records the first public-safe trust-review pass for the three medium-priority offset checks.
+- The ignored local file `data/site-review-decisions.medium.local.json` was previewed, imported into the private SQLite review store, and validated without changing `data/sites.json`.
+- `docs/site-registry-trust-review-pass-002.md` records the low-priority trust-review pass and confirms the existing private decisions also remain `needs-review`.
+- `docs/site-registry-unresolved-decision.md` records the active decision to keep all current FHABS markers unresolved for now.
+- Next decision point: revisit site-registry promotion only when a true local review pass can provide named reviewer evidence and permission to publish reviewed-local decisions.
 
 ## P0-03 Add Visible Signal-Type And Confidence Labels
 
@@ -151,7 +156,7 @@ Acceptance criteria:
 
 Priority: P1
 
-Status: At decision point for portfolio-safe release scope; static portfolio maturity plan is drafted, linked, public snapshot was refreshed on 2026-05-05, local mobile-width screenshot review was captured, publication checklist exists, case-study release framing is documented, and internship share materials are drafted
+Status: At decision point for portfolio-safe release scope; static portfolio maturity plan is drafted, linked, public snapshot was refreshed on 2026-05-05, local mobile-width screenshot review was captured, publication checklist exists, case-study release framing is documented, internship share materials are drafted, the README now includes a short "What works now / What is planned" maturity summary, and a local validation log records the current dashboard, field/microscopy, and site-review validation pass
 
 Why it matters:
 
@@ -168,6 +173,7 @@ Acceptance criteria:
 - `docs/publication-review-checklist.md` defines freshness, private-file, claim-review, site-registry, screenshot, Git scope, and final publish gates.
 - `docs/portfolio-safe-release-scope.md` defines the recommended next release fork: portfolio presentation, validation evidence, screenshots, case study polish, and conservative claims before live weather telemetry or public field intake.
 - `docs/portfolio-release-branch-handoff.md` summarizes the local portfolio-safe release prep branch, commits, validation status, intentionally uncommitted artifacts, and next push/publish decision.
+- `docs/portfolio-safe-release-validation-log.md` records the latest dashboard, field/microscopy, and site-review validation evidence for portfolio-safe review.
 - `docs/clear_lake_watch_portfolio_case_study.md` now includes publication-readiness and validation framing.
 - `docs/career-services-day-of-checklist.md`, `docs/career-services-follow-up-tracker.md`, `docs/career-services-share-packet.md`, `docs/internship-share-brief.md`, `docs/career-services-call-notes.md`, `docs/internship-role-fit-map.md`, and `docs/resume-linkedin-snippets.md` provide a shareable internship packet for SNHU career services and similar conversations.
 - Current decision point: choose whether to proceed with the portfolio-safe release pass. Do not promote a fresh public screenshot until that pass confirms the full UI and wording.

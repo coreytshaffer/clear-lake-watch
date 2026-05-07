@@ -42,12 +42,19 @@ For a short shareable overview, see:
 
 - [Project brief (Markdown)](docs/project-brief.md)
 - [Project brief (PDF)](docs/Clear-Lake-Watch-Project-Brief.pdf)
+- [Research readiness brief](docs/research-readiness-brief.md)
 
 ## Flagship maturity
 
 Clear Lake Watch is currently mature enough to serve as a flagship systems-integration portfolio artifact, with the explicit boundary that it is not a finished public monitoring authority.
 
 Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume wording, portfolio positioning, maturity checkpoints, and the staged roadmap from late prototype to a stronger public beta candidate.
+
+Latest local portfolio-safe validation evidence is recorded in [docs/portfolio-safe-release-validation-log.md](docs/portfolio-safe-release-validation-log.md).
+
+The current local release-gate summary is recorded in [docs/portfolio-safe-release-gate-summary.md](docs/portfolio-safe-release-gate-summary.md).
+
+The local screenshot-only portfolio packet is recorded in [docs/screenshot-only-portfolio-packet.md](docs/screenshot-only-portfolio-packet.md).
 
 ## What is here
 
@@ -120,6 +127,14 @@ Use [the flagship maturity plan](docs/flagship-maturity-plan.md) for resume word
 ## Current maturity
 
 Status: late prototype / early MVP.
+
+### What works now
+
+Clear Lake Watch currently works as a static, public-facing watershed intelligence dashboard prototype. It can load reviewed public JSON exports, show USGS hydrology context, summarize FHABS-derived report context, display shoreline and site-registry map context, surface source-status metadata, and keep public methodology/disclaimer language near the interpretation layer.
+
+### What is planned
+
+The next work is trust hardening, not authority expansion: local review of unresolved site-registry assignments, current validation before broad promotion, reviewed weather-context export only after telemetry is public-safe, and private field/microscopy workflows that export only approved public records.
 
 Already implemented:
 

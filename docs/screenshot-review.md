@@ -30,3 +30,18 @@ No immediate mobile-width typography or wrapping issue was found in the captured
 ## Remaining Review
 
 Before broad public promotion, still capture a final publication screenshot after the full wording/publication review. If possible, add at least one non-Windows or physical mobile browser check, because this pass used a mobile-width viewport in the local in-app browser rather than a separate operating system.
+
+## Screenshot-Only Portfolio Packet
+
+Prepared: 2026-05-07
+
+A screenshot-only portfolio packet has been prepared for local/private review. See `docs/screenshot-only-portfolio-packet.md`.
+
+Captured files:
+
+- `docs/review-screenshots/clear-lake-watch-homepage-current-2026-05-07.png`
+- `docs/review-screenshots/clear-lake-watch-map-trust-2026-05-07.png`
+- `docs/review-screenshots/clear-lake-watch-methodology-boundary-2026-05-07.png`
+- `docs/review-screenshots/clear-lake-watch-project-page-2026-05-07.png`
+
+This packet is not a public launch or public mirror confirmation.

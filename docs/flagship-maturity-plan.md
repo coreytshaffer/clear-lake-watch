@@ -86,10 +86,16 @@ Current posture:
 - [x] Capture one local mobile-width first-viewport screenshot for private review before publication.
 - [x] Add a publication review checklist before staging, publishing, or broad promotion.
 - [x] Define a portfolio-safe release scope before adding live weather telemetry or public field intake.
-- [ ] Decide whether the medium-priority location offsets should remain broad place-based registry entries or become more specific source-landmark entries.
-- [ ] Add a short "What works now / What is planned" summary to portfolio copy.
+- [x] Decide whether the medium-priority location offsets should remain broad place-based registry entries or become more specific source-landmark entries.
+- [x] Add a short "What works now / What is planned" summary to portfolio copy.
 - [ ] Confirm the public mirror reflects the current local maturity language.
-- [ ] Run the dashboard validator without stale-snapshot allowance before sharing broadly, or publish an explicit static-snapshot release note.
+- [x] Run the dashboard validator without stale-snapshot allowance before sharing broadly, or publish an explicit static-snapshot release note.
+
+Current note:
+
+- Medium-priority FHABS markers remain attached to broad place-based registry entries and stay `needs-local-review`; see `docs/site-registry-unresolved-decision.md`.
+- The validator passed locally without stale-snapshot allowance on the current review pass.
+- The public mirror has not been promoted in this pass, so public-mirror confirmation remains a separate gate.
 
 ### Later Public Beta Conditions
 

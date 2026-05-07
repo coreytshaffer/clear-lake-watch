@@ -60,16 +60,31 @@ Ask for feedback on:
 - whether any claim feels overstated
 - whether the project reads as a prototype rather than an authority
 
+## Current Technical Fork
+
+The first site-registry trust-hardening pass has been completed conservatively:
+
+- high-priority current markers: none generated,
+- medium-priority markers: kept `needs-local-review`,
+- low-priority markers: kept `needs-local-review`,
+- current decision: keep all FHABS markers unresolved for now.
+
+See:
+
+- `docs/site-registry-trust-review-pass-001.md`
+- `docs/site-registry-trust-review-pass-002.md`
+- `docs/site-registry-unresolved-decision.md`
+
 ## Next Technical Fork
 
 After the portfolio-safe release pass, choose between:
 
-- site-registry trust hardening
+- named local site-registry review, if local evidence is available
 - reviewed weather telemetry integration
 
-Recommendation: do real site review before live weather telemetry.
+Recommendation: site-registry trust hardening should stay ahead of weather expansion. Do not proceed to reviewed weather telemetry as a public-facing feature until deciding whether the current unresolved site-registry posture is acceptable for the next portfolio/review share.
 
-Reason: site-registry trust is already part of the public dashboard's current credibility boundary. Weather telemetry expands the system surface and should wait until the current public trust layer is tighter.
+Reason: site-registry trust is already part of the public dashboard's current credibility boundary. Weather telemetry expands the system surface and should wait until the current public trust layer is intentionally accepted or locally reviewed.
 
 ## Decision Rule
 
