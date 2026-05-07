@@ -11,6 +11,13 @@ For a short shareable overview, see:
 - [Project brief (Markdown)](docs/project-brief.md)
 - [Project brief (PDF)](docs/Clear-Lake-Watch-Project-Brief.pdf)
 
+## Portfolio and public writing
+
+Clear Lake Watch also includes public-interest communication and internship-facing portfolio materials:
+
+- [Published commentary](docs/published-commentary.md): Lake County News commentary connecting wastewater infrastructure resilience, monitoring, transparency, and Clear Lake watershed health.
+- [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md): Conservative application-ready language for describing the project without overstating its authority or maturity.
+
 ## What is here
 
 - `index.html`: Single-page dashboard prototype
