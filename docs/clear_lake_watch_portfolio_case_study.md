@@ -44,6 +44,18 @@ This project reflects my broader interest in **Cybernetic Ecology**: using feedb
 
 ---
 
+## Public Policy and Community Writing
+
+Clear Lake Watch also supports public-interest communication around local environmental monitoring, infrastructure resilience, and watershed protection.
+
+Current portfolio-supporting writing artifact:
+
+- **After Robin Lane: Clearlake Needs More Than Cleanup** — submitted guest commentary to Lake County News on May 6, 2026. The piece connects wastewater infrastructure resilience, real-time monitoring, predictive maintenance, public transparency, and Clear Lake watershed protection. See [submitted-commentary.md](submitted-commentary.md).
+
+This item is listed as **submitted commentary**, not as a published article, unless a published link is added later.
+
+---
+
 ## Project Goals
 
 Clear Lake Watch was designed around five core goals:

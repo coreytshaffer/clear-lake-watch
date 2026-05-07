@@ -18,6 +18,7 @@ It is a portfolio artifact and systems-integration case study, not official publ
 - Project page: https://coreytshaffer.github.io/clear-lake-watch/project.html
 - Career services packet index: `docs/career-services-share-packet.md`
 - Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
+- Submitted commentary log: `docs/submitted-commentary.md`
 - Publication readiness checklist: `docs/publication-review-checklist.md`
 - Internship role fit map: `docs/internship-role-fit-map.md`
 - Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
@@ -31,6 +32,7 @@ It is a portfolio artifact and systems-integration case study, not official publ
 - Conservative public-health wording and methodology guardrails
 - Local-first architecture planning for future field, weather, and sensor workflows
 - Review discipline: private records, SQLite review stores, and public-safe exports stay separated
+- Public policy communication through submitted community commentary on wastewater infrastructure resilience and Clear Lake watershed protection
 
 ## Internship-Relevant Skill Signals
 
@@ -78,11 +80,11 @@ Use `docs/internship-role-fit-map.md` to translate these broad fit areas into ro
 
 ## Current Validation Status
 
-Latest local checks, run May 6, 2026:
+Latest local checks, run May 6, 2026, and refreshed during local review on May 7, 2026:
 
 - dashboard validation passed with the expected conservative site-review warning
 - field/microscopy SQLite validation passed with one private draft record and zero publishable records
-- site-review SQLite validation passed with 8 detailed queue records, 8 marker-by-site records, and 8 review decision records
+- site-review SQLite validation passed with 8 detailed queue records, 8 marker-by-site records, and 11 review decision records
 
 Known boundary:
 

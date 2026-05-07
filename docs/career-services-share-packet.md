@@ -15,6 +15,7 @@ This packet is a guided path through Clear Lake Watch for SNHU career services o
 5. Resume and LinkedIn snippets: `docs/resume-linkedin-snippets.md`
 6. Follow-up tracker: `docs/career-services-follow-up-tracker.md`
 7. Case study draft: `docs/clear_lake_watch_portfolio_case_study.md`
+8. Submitted commentary log: `docs/submitted-commentary.md`
 
 ## What This Project Is
 
@@ -30,6 +31,7 @@ Please review whether the project communicates:
 - GIS and spatial-analysis relevance
 - environmental data and monitoring relevance
 - careful public-health boundary language
+- public policy and community-writing relevance
 - professionalism for internship applications
 - clear fit for water resources, GIS, environmental data, watershed planning, or climate resilience roles
 
