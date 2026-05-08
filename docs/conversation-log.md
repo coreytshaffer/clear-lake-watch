@@ -801,3 +801,32 @@ Boundary:
 
 - The branch remains local and unpushed.
 - Shortcut binaries and `docs\Project_Brief_DRAFT_1.docx` remain intentionally uncommitted pending separate review.
+
+## May 8, 2026 Draft PR Review Surface And Trusted Feedback Path
+
+The portfolio-safe release prep branch was moved from a local/pushed branch checkpoint into a draft PR review surface without starting public mirror or `main` promotion review.
+
+Implemented:
+
+- Opened draft PR #2: `https://github.com/coreytshaffer/clear-lake-watch/pull/2`.
+- Created review-only base branch `codex/portfolio-safe-release-base` because remote `main` follows a separate public-mirror history line.
+- Kept PR #2 targeted at `codex/portfolio-safe-release-base`, not `main`.
+- Added `docs\trusted-review-request.md` for private mentor/advisor feedback.
+- Added `docs\trusted-review-feedback-log.md` for recording feedback without implying endorsement.
+- Updated `docs\publication-push-review-2026-05-07.md`, `docs\portfolio-safe-release-gate-summary.md`, `docs\portfolio-release-branch-handoff.md`, and `docs\backlog.md` to reflect the draft PR review state.
+- Expanded `scripts\validate-dashboard.ps1` so the draft PR boundary, trusted-review request, feedback log, and backlog state are validation-guarded.
+
+Boundary:
+
+- Draft PR #2 is a review surface, not a release request.
+- The public mirror was not promoted.
+- `main` was not merged.
+- Current FHABS markers remain `needs-local-review`.
+- Trusted feedback must not be treated as official approval, agency endorsement, Tribal approval, public-health guidance, or local site certification.
+
+Next decision:
+
+- Keep PR #2 as an internal review surface,
+- request trusted private feedback,
+- return to implementation work, or
+- start a separate public mirror/main promotion review.
