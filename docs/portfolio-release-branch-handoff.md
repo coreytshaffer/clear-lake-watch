@@ -70,6 +70,8 @@ fea08a8 Prepare portfolio-safe release checkpoint
 - published commentary tracker for the Lake County News Robin Lane article
 - publication-ready resume, LinkedIn, and internship share language
 - validation checks for the portfolio review docs, screenshot packet, trust-review decisions, publication/push review, and published-commentary boundary language
+- draft PR #2 review-surface documentation
+- trusted review request and private feedback log
 
 ## Latest Validation
 
@@ -100,12 +102,12 @@ Minimum next review:
 1. Re-run validation.
 2. Review `git status --short`.
 3. Confirm private local files remain ignored.
-4. Decide whether to keep the pushed branch as review-only, open a draft pull request, squash/reorder commits, or use a clean-clone publish path.
+4. Decide whether to keep draft PR #2 as review-only, request trusted private feedback, or start a separate public mirror/main promotion review.
 5. Do not treat this branch as a public launch without a final publication decision.
 
 ## Suggested Next Decision
 
-The reviewed screenshot/trust-review packet and validation-hardening slice are now committed and pushed to the shareable review branch.
+The reviewed screenshot/trust-review packet, validation-hardening slice, draft PR boundary docs, and trusted-review packet are now committed and pushed to the shareable review branch.
 
 Publication/push review started on 2026-05-07. The branch is pushed as a shareable review branch, but not promoted to the public mirror or `main`. See `docs/publication-push-review-2026-05-07.md`.
 

@@ -797,10 +797,12 @@ Current local commit stack:
 - `b136fa2 Polish internship share materials`
 - `fea08a8 Prepare portfolio-safe release checkpoint`
 
-Boundary:
+Boundary at the time:
 
 - The branch remains local and unpushed.
 - Shortcut binaries and `docs\Project_Brief_DRAFT_1.docx` remain intentionally uncommitted pending separate review.
+
+Later status: this historical note was superseded by the May 8 draft PR review checkpoint below.
 
 ## May 8, 2026 Draft PR Review Surface And Trusted Feedback Path
 
