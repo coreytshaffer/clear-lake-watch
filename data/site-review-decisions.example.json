@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Example review-decision file for FHABS site-registry QA. Copy this shape into a private working file before applying any registry changes.",
+  "generatedFrom": "docs/site-registry-high-priority.md",
+  "decisions": [
+    {
+      "decisionId": "example-jones-bay-2026-04-22",
+      "siteId": "fhabs-jones-bay",
+      "landmark": "Jones bay",
+      "action": "keep-needs-review",
+      "proposedAlias": null,
+      "proposedAssignmentStatus": "needs-local-review",
+      "reviewer": "local-reviewer-name",
+      "reviewedAt": "2026-04-22T00:00:00-07:00",
+      "evidenceNote": "Replace with local evidence confirming the distinct Jones Bay landmark and whether the starter registry coordinate and match radius are appropriate.",
+      "publicNote": "Jones Bay remains a distinct but locally unreviewed registry site until evidence is sufficient to promote the assignment.",
+      "permissionToPublish": false
+    },
+    {
+      "decisionId": "example-riviera-point-2026-04-22",
+      "siteId": "fhabs-henderson-point",
+      "landmark": "Riveria Point Launch at Henderson Point in Soda Bay",
+      "action": "keep-needs-review",
+      "proposedAlias": null,
+      "proposedAssignmentStatus": "needs-local-review",
+      "reviewer": "local-reviewer-name",
+      "reviewedAt": "2026-04-22T00:00:00-07:00",
+      "evidenceNote": "Replace with local evidence confirming whether the FHABS spelling should be corrected to Riviera Point and whether Henderson Point / Riviera Point Launch is the appropriate maintained site label.",
+      "publicNote": "Specific Henderson Point / Riviera Point Launch assignment remains locally unreviewed.",
+      "permissionToPublish": false
+    }
+  ],
+  "allowedActions": [
+    "keep-needs-review",
+    "add-alias",
+    "create-site",
+    "promote-reviewed-local"
+  ],
+  "guardrails": [
+    "Do not promote to reviewed-local without evidenceNote and reviewer.",
+    "Do not publish private reviewer notes or sensitive field details.",
+    "Do not use unresolved decisions as public-health guidance or model labels."
+  ]
+}

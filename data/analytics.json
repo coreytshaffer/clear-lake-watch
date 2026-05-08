@@ -1,0 +1,269 @@
+{
+    "generatedAt":  "2026-05-05T01:44:49.9967603-07:00",
+    "schemaVersion":  1,
+    "reportTrendByYear":  [
+                              {
+                                  "year":  2016,
+                                  "total":  1,
+                                  "arms":  {
+                                               "Upper Arm":  1,
+                                               "Lower Arm":  0,
+                                               "Oaks Arm":  0,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2017,
+                                  "total":  9,
+                                  "arms":  {
+                                               "Upper Arm":  0,
+                                               "Lower Arm":  4,
+                                               "Oaks Arm":  5,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2018,
+                                  "total":  22,
+                                  "arms":  {
+                                               "Upper Arm":  11,
+                                               "Lower Arm":  5,
+                                               "Oaks Arm":  6,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2019,
+                                  "total":  35,
+                                  "arms":  {
+                                               "Upper Arm":  18,
+                                               "Lower Arm":  7,
+                                               "Oaks Arm":  10,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2020,
+                                  "total":  40,
+                                  "arms":  {
+                                               "Upper Arm":  19,
+                                               "Lower Arm":  9,
+                                               "Oaks Arm":  12,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2021,
+                                  "total":  40,
+                                  "arms":  {
+                                               "Upper Arm":  19,
+                                               "Lower Arm":  8,
+                                               "Oaks Arm":  13,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2022,
+                                  "total":  38,
+                                  "arms":  {
+                                               "Upper Arm":  18,
+                                               "Lower Arm":  9,
+                                               "Oaks Arm":  11,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2023,
+                                  "total":  19,
+                                  "arms":  {
+                                               "Upper Arm":  10,
+                                               "Lower Arm":  6,
+                                               "Oaks Arm":  3,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2024,
+                                  "total":  18,
+                                  "arms":  {
+                                               "Upper Arm":  6,
+                                               "Lower Arm":  3,
+                                               "Oaks Arm":  9,
+                                               "Needs Review":  0
+                                           }
+                              },
+                              {
+                                  "year":  2025,
+                                  "total":  8,
+                                  "arms":  {
+                                               "Upper Arm":  0,
+                                               "Lower Arm":  6,
+                                               "Oaks Arm":  2,
+                                               "Needs Review":  0
+                                           }
+                              }
+                          ],
+    "advisoryDistributionByArm":  [
+                                      {
+                                          "arm":  "Upper Arm",
+                                          "total":  102,
+                                          "categories":  [
+                                                             {
+                                                                 "label":  "None",
+                                                                 "count":  57
+                                                             },
+                                                             {
+                                                                 "label":  "Caution",
+                                                                 "count":  18
+                                                             },
+                                                             {
+                                                                 "label":  "NA - refer to Report Details",
+                                                                 "count":  13
+                                                             },
+                                                             {
+                                                                 "label":  "Unspecified",
+                                                                 "count":  13
+                                                             },
+                                                             {
+                                                                 "label":  "Visual observation",
+                                                                 "count":  1
+                                                             }
+                                                         ]
+                                      },
+                                      {
+                                          "arm":  "Lower Arm",
+                                          "total":  57,
+                                          "categories":  [
+                                                             {
+                                                                 "label":  "None",
+                                                                 "count":  23
+                                                             },
+                                                             {
+                                                                 "label":  "Caution",
+                                                                 "count":  14
+                                                             },
+                                                             {
+                                                                 "label":  "Unspecified",
+                                                                 "count":  8
+                                                             },
+                                                             {
+                                                                 "label":  "NA - refer to Report Details",
+                                                                 "count":  6
+                                                             },
+                                                             {
+                                                                 "label":  "Warning",
+                                                                 "count":  4
+                                                             },
+                                                             {
+                                                                 "label":  "Danger",
+                                                                 "count":  2
+                                                             }
+                                                         ]
+                                      },
+                                      {
+                                          "arm":  "Oaks Arm",
+                                          "total":  71,
+                                          "categories":  [
+                                                             {
+                                                                 "label":  "None",
+                                                                 "count":  26
+                                                             },
+                                                             {
+                                                                 "label":  "Caution",
+                                                                 "count":  13
+                                                             },
+                                                             {
+                                                                 "label":  "Unspecified",
+                                                                 "count":  9
+                                                             },
+                                                             {
+                                                                 "label":  "Danger",
+                                                                 "count":  7
+                                                             },
+                                                             {
+                                                                 "label":  "NA - refer to Report Details",
+                                                                 "count":  7
+                                                             },
+                                                             {
+                                                                 "label":  "Warning",
+                                                                 "count":  7
+                                                             }
+                                                         ]
+                                      },
+                                      {
+                                          "arm":  "Needs Review",
+                                          "total":  0,
+                                          "categories":  [
+
+                                                         ]
+                                      }
+                                  ],
+    "observationCoverage":  [
+                                {
+                                    "source":  "USGS",
+                                    "siteId":  "usgs-11449820",
+                                    "siteName":  "COLE C A KELSEYVILLE CA",
+                                    "arm":  "Lower Arm",
+                                    "parameterName":  "Discharge",
+                                    "unit":  "ft3/s",
+                                    "count":  29,
+                                    "firstObservedDate":  "2026-04-05",
+                                    "lastObservedDate":  "2026-05-03"
+                                },
+                                {
+                                    "source":  "USGS",
+                                    "siteId":  "usgs-11450000",
+                                    "siteName":  "CLEAR LK A LAKEPORT CA",
+                                    "arm":  "Upper Arm",
+                                    "parameterName":  "Gage height",
+                                    "unit":  "ft",
+                                    "count":  29,
+                                    "firstObservedDate":  "2026-04-05",
+                                    "lastObservedDate":  "2026-05-03"
+                                },
+                                {
+                                    "source":  "FHABS",
+                                    "siteId":  null,
+                                    "siteName":  "Unmatched FHABS result",
+                                    "arm":  "Upper Arm",
+                                    "parameterName":  "Saxitoxin",
+                                    "unit":  "",
+                                    "count":  1,
+                                    "firstObservedDate":  "2022-08-23",
+                                    "lastObservedDate":  "2022-08-23"
+                                },
+                                {
+                                    "source":  "FHABS",
+                                    "siteId":  "fhabs-clearlake-oaks",
+                                    "siteName":  "Clearlake Oaks",
+                                    "arm":  "Oaks Arm",
+                                    "parameterName":  "Dominant",
+                                    "unit":  "",
+                                    "count":  1,
+                                    "firstObservedDate":  "2024-01-11",
+                                    "lastObservedDate":  "2024-01-11"
+                                },
+                                {
+                                    "source":  "FHABS",
+                                    "siteId":  null,
+                                    "siteName":  "Unmatched FHABS result",
+                                    "arm":  "Upper Arm",
+                                    "parameterName":  "Cylindrospermopsin",
+                                    "unit":  "",
+                                    "count":  1,
+                                    "firstObservedDate":  "2022-08-23",
+                                    "lastObservedDate":  "2022-08-23"
+                                },
+                                {
+                                    "source":  "FHABS",
+                                    "siteId":  null,
+                                    "siteName":  "Unmatched FHABS result",
+                                    "arm":  "Upper Arm",
+                                    "parameterName":  "Microcystins total",
+                                    "unit":  "",
+                                    "count":  1,
+                                    "firstObservedDate":  "2022-08-23",
+                                    "lastObservedDate":  "2022-08-23"
+                                }
+                            ]
+}

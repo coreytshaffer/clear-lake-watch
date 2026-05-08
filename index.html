@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f3efe2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Clear Lake Watch">
+    <title>Clear Lake Watch Prototype</title>
+    <meta
+      name="description"
+      content="Prototype dashboard plan for publicly monitoring Clear Lake environmental health and cyanobacterial bloom risk."
+    >
+    <link rel="icon" href="./assets/clear-lake-watch.ico">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to dashboard content</a>
+    <div class="page-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand-link" href="./index.html">Clear Lake Watch</a>
+        <div class="nav-links">
+          <a href="#live" data-section-link="live">Snapshot</a>
+          <a href="#map" data-section-link="map">Map</a>
+          <a href="#analytics" data-section-link="analytics">Analytics</a>
+          <a href="#data-products" data-section-link="data-products">Data</a>
+          <a href="./project.html">Project</a>
+          <a href="./methodology.html">Methodology</a>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+            Dark Mode
+          </button>
+        </div>
+      </nav>
+
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Public Prototype</p>
+          <h1>Clear Lake Watch</h1>
+          <p class="hero-text">
+            A public-facing dashboard concept for tracking lake health, cyanotoxins,
+            watershed inputs, and bloom risk across the Upper, Lower, and Oaks arms
+            of Clear Lake using reviewed public snapshot files.
+          </p>
+          <div class="hero-actions">
+            <a href="#live" class="button button-primary">View Live Snapshot</a>
+            <a href="./methodology.html" class="button button-secondary">Read Methodology</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <p class="panel-label">MVP Shape</p>
+          <ul class="hero-list">
+            <li>Arm-level conditions and monitoring coverage</li>
+            <li>Source-status manifest and normalized public exports</li>
+            <li>Clear caveats around reports, observations, and analytics</li>
+          </ul>
+          <div class="timestamp">
+            <span id="generated-label">Snapshot Status</span>
+            <strong id="generated-on">Loading live snapshot</strong>
+          </div>
+        </aside>
+      </header>
+
+      <main id="main-content" tabindex="-1">
+        <section
+          class="section"
+          id="live"
+          role="region"
+          aria-labelledby="live-heading"
+          aria-describedby="live-sr-summary"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">Latest Public Snapshot</p>
+            <h2 id="live-heading">What The Current Feeds Are Showing</h2>
+            <div class="freshness-row" id="freshness-row" aria-live="polite"></div>
+            <div class="notification-panel" id="notification-panel" aria-live="polite">
+              <div>
+                <p class="eyebrow">Local Snapshot Alerts</p>
+                <p id="notification-status">
+                  Local alerts are off. Enable alerts to receive snapshot change alerts while this app is open.
+                </p>
+                <p class="notification-last-tested">
+                  These are not background emergency alerts or official public-health notifications.
+                </p>
+                <div class="notification-rule-grid" id="notification-rule-grid">
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-stale">
+                        <span>Stale snapshot alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-stale"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-stale" type="button">
+                      Test
+                    </button>
+                  </div>
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-sources">
+                        <span>Source status alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-sources"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-sources" type="button">
+                      Test
+                    </button>
+                  </div>
+                  <div class="notification-rule-row">
+                    <div>
+                      <label class="notification-rule">
+                        <input type="checkbox" id="notification-rule-caution">
+                        <span>Caution increase alerts</span>
+                      </label>
+                      <p class="notification-last-tested" id="notification-last-tested-caution"></p>
+                    </div>
+                    <button class="button button-secondary notification-test-button" id="notification-test-caution" type="button">
+                      Test
+                    </button>
+                  </div>
+                </div>
+                <ul class="notification-history" id="notification-history"></ul>
+              </div>
+              <div class="notification-actions">
+                <button class="button button-secondary" id="notification-toggle" type="button">
+                  Enable Alerts
+                </button>
+                <button class="button button-secondary" id="notification-clear-history" type="button">
+                  Clear History
+                </button>
+                <button class="button button-secondary" id="notification-reset-settings" type="button">
+                  Reset Settings
+                </button>
+              </div>
+            </div>
+            <p class="sr-only" id="live-sr-summary" aria-live="polite">
+              Snapshot summary loading.
+            </p>
+            <p id="live-summary">
+              This section is populated from local snapshot files generated from official public sources.
+            </p>
+          </div>
+          <div class="stats-grid" id="live-stats"></div>
+          <div class="split-section live-detail-section">
+            <div>
+              <div class="section-heading compact">
+                <p class="eyebrow">Hydrology Trends</p>
+                <h2>Last 30 Days</h2>
+              </div>
+              <div class="trend-grid" id="trend-grid"></div>
+            </div>
+            <div>
+              <div class="section-heading compact">
+                <p class="eyebrow">Arm Grouping</p>
+                <h2>FHABS Reports By Arm</h2>
+              </div>
+              <div class="list-card" id="arm-summary"></div>
+            </div>
+          </div>
+          <div class="split-section live-detail-section">
+            <div>
+              <div class="section-heading compact">
+                <p class="eyebrow">Recent FHABS Locations</p>
+                <h2>Recent Clear Lake Reports</h2>
+              </div>
+              <div class="list-card" id="recent-locations"></div>
+            </div>
+            <div>
+              <div class="section-heading compact">
+                <p class="eyebrow">Advisory Mix</p>
+                <h2>Clear Lake Report Categories</h2>
+              </div>
+              <div class="list-card" id="advisory-mix"></div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="section"
+          id="map"
+          role="region"
+          aria-labelledby="map-heading"
+          aria-describedby="map-sr-summary"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">Map Layer</p>
+            <h2 id="map-heading">Recent Public Reports With Coordinates</h2>
+            <p>
+              Markers are pulled from FHABS report coordinates, matched to the
+              starter site registry when possible, and grouped to arms with
+              reviewed assignments or documented fallbacks.
+            </p>
+            <p id="registry-summary"></p>
+            <p class="sr-only" id="map-sr-summary" aria-live="polite">
+              Map summary loading.
+            </p>
+          </div>
+          <div class="site-review-panel" aria-live="polite">
+            <div>
+              <p class="eyebrow">Site Registry QA</p>
+              <h3>Current Marker Review Status</h3>
+              <p>
+                Generated from the site-review queue so unresolved arm and
+                landmark assignments stay visible before authoritative use.
+              </p>
+            </div>
+            <div class="review-summary-grid" id="site-review-grid"></div>
+          </div>
+          <div class="map-filter-panel">
+            <label for="map-review-filter">Map trust filter</label>
+            <select id="map-review-filter">
+              <option value="all">All current markers</option>
+              <option value="reviewed">Reviewed markers only</option>
+              <option value="needs-review">Needs local review</option>
+            </select>
+            <p>
+              Use this filter to separate locally reviewed markers from
+              provisional FHABS registry matches.
+            </p>
+          </div>
+          <div class="map-layout">
+            <div class="map-card">
+              <svg
+                id="lake-map"
+                class="lake-map"
+                viewBox="0 0 680 520"
+                role="img"
+                aria-label="Clear Lake schematic map with recent FHABS report markers"
+              ></svg>
+              <div class="map-legend">
+                <span><i class="legend-dot caution"></i>Caution</span>
+                <span><i class="legend-dot visual"></i>Visual observation</span>
+                <span><i class="legend-dot other"></i>Other or unspecified</span>
+              </div>
+              <p class="map-attribution" id="map-attribution">
+                Shoreline fallback schematic. Public source attribution appears here when loaded.
+              </p>
+            </div>
+            <aside class="map-detail" id="map-detail" tabindex="-1" aria-live="polite">
+              <p class="eyebrow">Selected Marker</p>
+              <h3>Choose a marker</h3>
+              <p>Select a map point to inspect its source date, advisory label, and estimated arm grouping.</p>
+            </aside>
+          </div>
+          <div class="marker-list" id="marker-list"></div>
+        </section>
+
+        <section
+          class="section"
+          id="data-products"
+          role="region"
+          aria-labelledby="data-products-heading"
+          aria-describedby="data-products-sr-summary"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">Data Products</p>
+            <h2 id="data-products-heading">Normalized Public Exports</h2>
+            <p>
+              These generated files are designed to support the dashboard, public
+              downloads, charting, and future machine-learning feature tables.
+            </p>
+            <p class="sr-only" id="data-products-sr-summary" aria-live="polite">
+              Data products summary loading.
+            </p>
+          </div>
+          <div class="source-status-panel" aria-live="polite">
+            <div>
+              <p class="eyebrow">Source Status</p>
+              <h3>Latest Refresh Manifest</h3>
+              <p>
+                Source rows, observation dates, and generated output counts come
+                from the public snapshot manifest.
+              </p>
+            </div>
+            <div class="source-status-grid" id="source-status-grid"></div>
+            <div class="source-output-panel">
+              <div>
+                <p class="eyebrow">Generated Outputs</p>
+                <h3>Files In This Public Snapshot</h3>
+              </div>
+              <div class="source-output-grid" id="source-output-grid"></div>
+            </div>
+            <div class="manifest-notes" id="manifest-notes"></div>
+          </div>
+          <div class="product-grid" id="product-grid"></div>
+        </section>
+
+        <section class="section" id="weather-context" role="region" aria-labelledby="weather-context-heading">
+          <div class="section-heading">
+            <p class="eyebrow">Weather Context</p>
+            <h2 id="weather-context-heading">Shared Backbone Context Layer</h2>
+            <p>
+              Weather context is designed as a separate public-safe export from
+              the environmental monitoring backbone. It can provide rainfall,
+              wind, heat, and station-health context without turning weather
+              telemetry into lake-health claims.
+            </p>
+          </div>
+          <div class="weather-context-panel">
+            <div class="weather-context-grid" id="weather-context-grid"></div>
+            <div class="manifest-notes weather-context-notes" id="weather-context-notes"></div>
+          </div>
+        </section>
+
+        <section
+          class="section"
+          id="analytics"
+          role="region"
+          aria-labelledby="analytics-heading"
+          aria-describedby="analytics-sr-summary"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">Reporting Activity</p>
+            <h2 id="analytics-heading">Monitoring And Reporting Patterns</h2>
+            <p>
+              These charts summarize public reporting activity and normalized
+              observation coverage. They are not direct bloom-severity estimates
+              and should not be read as public-health guidance.
+            </p>
+            <p class="sr-only" id="analytics-sr-summary" aria-live="polite">
+              Analytics summary loading.
+            </p>
+          </div>
+          <div class="split-section live-detail-section">
+            <div class="chart-card">
+              <div class="chart-heading">
+                <p class="eyebrow">FHABS Reporting Activity</p>
+                <h3>Annual Clear Lake Report Counts</h3>
+                <div class="signal-row" aria-label="Chart signal type">
+                  <span class="signal-badge signal-derived">Derived</span>
+                  <span class="signal-badge signal-review">Reporting pattern</span>
+                </div>
+              </div>
+              <p class="chart-caveat">
+                Higher counts can reflect monitoring intensity, public attention,
+                or source availability, not necessarily worse bloom conditions.
+              </p>
+              <div class="bar-chart" id="report-trend-chart"></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-heading">
+                <p class="eyebrow">FHABS Advisory Labels</p>
+                <h3>Most Common Reported Categories</h3>
+                <div class="signal-row" aria-label="Chart signal type">
+                  <span class="signal-badge signal-derived">Derived</span>
+                  <span class="signal-badge signal-review">Reporting pattern</span>
+                </div>
+              </div>
+              <p class="chart-caveat">
+                Category mixes describe labels present in FHABS records; they do
+                not replace official advisories or site-specific agency guidance.
+              </p>
+              <div class="bar-chart" id="advisory-distribution-chart"></div>
+            </div>
+          </div>
+          <div class="chart-card coverage-card">
+            <div class="chart-heading">
+              <p class="eyebrow">Observation Coverage</p>
+              <h3>Current Normalized Observation Series</h3>
+              <div class="signal-row" aria-label="Chart signal type">
+                <span class="signal-badge signal-observed">Observed</span>
+                <span class="signal-badge signal-derived">Coverage summary</span>
+              </div>
+            </div>
+            <p class="chart-caveat">
+              Coverage shows which normalized series are available for the
+              dashboard; it is a data-availability summary, not a lake-condition
+              rating.
+            </p>
+            <div class="coverage-grid" id="coverage-grid"></div>
+            <div class="coverage-actions" id="coverage-actions"></div>
+          </div>
+        </section>
+
+        <section class="section callout-section">
+          <div class="section-heading">
+            <p class="eyebrow">Project Details</p>
+            <h2>Roadmap And Source Inventory Moved To Their Own Page</h2>
+            <p>
+              Implementation phases, source inventory, MVP modules, guardrails,
+              and forecasting roadmap now live on the project page so this
+              dashboard can stay focused on current public situational awareness.
+            </p>
+            <div class="hero-actions">
+              <a href="./project.html" class="button button-primary">View Project Page</a>
+              <a href="./methodology.html" class="button button-secondary">Read Methodology</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="stat-template">
+      <article class="stat-card">
+        <p class="stat-label"></p>
+        <strong class="stat-value"></strong>
+        <p class="stat-note"></p>
+      </article>
+    </template>
+
+    <template id="arm-template">
+      <article class="arm-card">
+        <div class="arm-card-top">
+          <p class="arm-name"></p>
+          <span class="arm-badge"></span>
+        </div>
+        <p class="arm-summary"></p>
+        <div class="chip-row arm-focus"></div>
+        <div class="arm-details">
+          <div>
+            <p class="detail-label">Primary signals</p>
+            <div class="chip-row arm-signals"></div>
+          </div>
+          <div>
+            <p class="detail-label">Priority questions</p>
+            <ul class="mini-list arm-questions"></ul>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="source-template">
+      <article class="source-card">
+        <div class="source-top">
+          <div>
+            <p class="source-name"></p>
+            <p class="source-owner"></p>
+          </div>
+          <span class="source-status"></span>
+        </div>
+        <p class="source-summary"></p>
+        <div class="meta-grid">
+          <div>
+            <p class="detail-label">Cadence</p>
+            <p class="meta-value source-cadence"></p>
+          </div>
+          <div>
+            <p class="detail-label">Coverage</p>
+            <p class="meta-value source-coverage"></p>
+          </div>
+          <div>
+            <p class="detail-label">Use in MVP</p>
+            <p class="meta-value source-usage"></p>
+          </div>
+          <div>
+            <p class="detail-label">Automation</p>
+            <p class="meta-value source-automation"></p>
+          </div>
+        </div>
+        <a class="source-link" target="_blank" rel="noreferrer">Open Source</a>
+      </article>
+    </template>
+
+    <template id="simple-card-template">
+      <article class="simple-card">
+        <p class="simple-title"></p>
+        <p class="simple-body"></p>
+      </article>
+    </template>
+
+    <template id="phase-template">
+      <article class="phase-card">
+        <div class="phase-top">
+          <p class="phase-name"></p>
+          <span class="phase-window"></span>
+        </div>
+        <p class="phase-goal"></p>
+        <ul class="mini-list phase-deliverables"></ul>
+      </article>
+    </template>
+
+    <template id="list-item-template">
+      <article class="list-item">
+        <div class="list-item-top">
+          <p class="list-item-title"></p>
+          <span class="list-item-tag"></span>
+        </div>
+        <p class="list-item-body"></p>
+      </article>
+    </template>
+
+    <template id="trend-template">
+      <article class="trend-card">
+        <div class="trend-top">
+          <div>
+            <p class="trend-title"></p>
+            <p class="trend-subtitle"></p>
+          </div>
+          <strong class="trend-value"></strong>
+        </div>
+        <svg class="sparkline" viewBox="0 0 220 72" role="img"></svg>
+        <p class="trend-note"></p>
+      </article>
+    </template>
+
+    <template id="marker-card-template">
+      <button class="marker-card" type="button">
+        <span class="marker-card-title"></span>
+        <span class="marker-card-meta"></span>
+      </button>
+    </template>
+
+    <template id="product-template">
+      <article class="product-card">
+        <div class="product-top">
+          <p class="product-name"></p>
+          <span class="product-count"></span>
+        </div>
+        <p class="product-description"></p>
+        <a class="product-link" target="_blank" rel="noreferrer">Open JSON</a>
+      </article>
+    </template>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
