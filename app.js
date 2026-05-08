@@ -9,6 +9,7 @@ const markerListElement = document.querySelector("#marker-list");
 const mapAttributionElement = document.querySelector("#map-attribution");
 const mapReviewFilterElement = document.querySelector("#map-review-filter");
 const registrySummaryElement = document.querySelector("#registry-summary");
+const mapReviewStatusElement = document.querySelector("#map-review-status");
 const siteReviewGridElement = document.querySelector("#site-review-grid");
 const productGridElement = document.querySelector("#product-grid");
 const sourceStatusGridElement = document.querySelector("#source-status-grid");
@@ -33,6 +34,7 @@ const mlGridElement = document.querySelector("#ml-grid");
 const generatedLabelElement = document.querySelector("#generated-label");
 const generatedOnElement = document.querySelector("#generated-on");
 const freshnessRowElement = document.querySelector("#freshness-row");
+const snapshotStatusGridElement = document.querySelector("#snapshot-status-grid");
 const notificationPanelElement = document.querySelector("#notification-panel");
 const notificationStatusElement = document.querySelector("#notification-status");
 const notificationToggleElement = document.querySelector("#notification-toggle");
@@ -94,12 +96,26 @@ const themeColors = {
 const fhabsReportsDatasetUrl =
   "https://lab.data.ca.gov/dataset/surface-water-freshwater-harmful-algal-blooms";
 
-const formatDate = (value) =>
-  new Intl.DateTimeFormat("en-US", {
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(value));
+});
+
+const formatDate = (value) => {
+  if (typeof value === "string") {
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+    if (dateOnlyMatch) {
+      const [, year, month, day] = dateOnlyMatch;
+      return dateFormatter.format(
+        new Date(Number(year), Number(month) - 1, Number(day)),
+      );
+    }
+  }
+
+  return dateFormatter.format(new Date(value));
+};
 
 const formatDateTime = (value) =>
   new Intl.DateTimeFormat("en-US", {
@@ -576,7 +592,7 @@ const setSnapshotHeader = (liveData) => {
   }
 
   generatedLabelElement.textContent = "Snapshot Status";
-  generatedOnElement.textContent = "Live snapshot unavailable";
+    generatedOnElement.textContent = "Public snapshot unavailable";
   generatedOnElement.classList.add("snapshot-unavailable");
 };
 
@@ -585,10 +601,10 @@ const renderScreenReaderSummaries = (liveData, manifestData, siteReviewData) => 
     const ageDays = daysSince(liveData?.generatedAt);
     const cards = liveData?.liveCards?.length ?? 0;
     liveSrSummaryElement.textContent = liveData
-      ? `Live snapshot loaded with ${cards} summary cards. Snapshot age is ${
+      ? `Public snapshot loaded with ${cards} summary cards. Snapshot age is ${
           ageDays === null ? "unknown" : `${ageDays} day${ageDays === 1 ? "" : "s"}`
         }.`
-      : "Live snapshot is unavailable. Current-condition cards are not shown.";
+      : "Public snapshot is unavailable. Snapshot cards are not shown.";
   }
 
   if (mapSrSummaryElement) {
@@ -1296,6 +1312,13 @@ const renderCurrentMarkerReviewSummary = (markers = []) => {
   ).length;
 
   registrySummaryElement.textContent = `${registrySummaryElement.textContent} Current mapped reports: ${reviewedCount} reviewed, ${needsReviewCount} needing local review.`;
+
+  if (mapReviewStatusElement) {
+    mapReviewStatusElement.textContent =
+      needsReviewCount > 0
+        ? `Map review status: ${needsReviewCount} current FHABS marker${needsReviewCount === 1 ? "" : "s"} still need local review before site or arm assignments should be treated as authoritative.`
+        : "Map review status: current markers have reviewed site and arm assignments.";
+  }
 };
 
 const renderSiteReviewSummary = (siteReviewData) => {
@@ -1565,6 +1588,100 @@ const renderSourceStatus = (manifestData) => {
   });
 };
 
+const findManifestSource = (manifestData, sourceId) =>
+  manifestData?.sources?.find((source) => source.id === sourceId);
+
+const createSnapshotStatusCard = ({ label, value, note, kind = "derived" }) => {
+  const article = document.createElement("article");
+  article.className = "snapshot-status-card";
+
+  const labelElement = document.createElement("p");
+  labelElement.className = "stat-label";
+  labelElement.textContent = label;
+
+  const valueElement = document.createElement("strong");
+  valueElement.className = "snapshot-status-value";
+  valueElement.textContent = value;
+
+  const noteElement = document.createElement("p");
+  noteElement.className = "stat-note";
+  noteElement.textContent = note;
+
+  article.append(labelElement, valueElement, noteElement);
+  appendSignalBadges(article, [{ label: "Snapshot context", kind }]);
+  return article;
+};
+
+const renderSnapshotStatusStrip = (manifestData) => {
+  if (!snapshotStatusGridElement) {
+    return;
+  }
+
+  snapshotStatusGridElement.replaceChildren();
+
+  if (!manifestData) {
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent =
+      "Snapshot status is unavailable because the public manifest could not be loaded.";
+    snapshotStatusGridElement.append(empty);
+    return;
+  }
+
+  const usgsLevel = findManifestSource(manifestData, "usgs-lake-level");
+  const usgsFlow = findManifestSource(manifestData, "usgs-cole-creek-discharge");
+  const fhabsReports = findManifestSource(manifestData, "fhabs-bloom-reports");
+  const fhabsResults = findManifestSource(manifestData, "fhabs-results");
+  const usgsDates = [usgsLevel, usgsFlow]
+    .map((source) => source?.latestObservationDate)
+    .filter(Boolean)
+    .sort();
+  const latestUsgsDate = usgsDates.at(-1);
+
+  const cards = [
+    {
+      label: "Snapshot generated",
+      value: manifestData.generatedAt
+        ? formatDateTime(manifestData.generatedAt)
+        : "Unavailable",
+      note: "Dashboard files are generated snapshots, not live sensor telemetry.",
+      kind: "derived",
+    },
+    {
+      label: "USGS observations through",
+      value: latestUsgsDate ? formatDate(latestUsgsDate) : "Unavailable",
+      note: "Hydrology dates can be newer than bloom-report or lab-result dates.",
+      kind: "observed",
+    },
+    {
+      label: "Latest Clear Lake FHABS report",
+      value: fhabsReports?.latestObservationDate
+        ? formatDate(fhabsReports.latestObservationDate)
+        : "Unavailable",
+      note: "Report dates reflect what is present in the public FHABS source file.",
+      kind: "reported",
+    },
+    {
+      label: "Latest FHABS lab-linked sample",
+      value: fhabsResults?.latestObservationDate
+        ? formatDate(fhabsResults.latestObservationDate)
+        : "Unavailable",
+      note: "Lab-linked result records may lag the public report stream.",
+      kind: "reported",
+    },
+    {
+      label: "Use boundary",
+      value: "Research and situational awareness only",
+      note: "Not recreation guidance, emergency guidance, or public-health guidance.",
+      kind: "review",
+    },
+  ];
+
+  cards.forEach((card) => {
+    snapshotStatusGridElement.append(createSnapshotStatusCard(card));
+  });
+};
+
 const renderFreshnessBadge = (generatedAt, { unavailable = false } = {}) => {
   if (!freshnessRowElement) {
     return;
@@ -1578,7 +1695,7 @@ const renderFreshnessBadge = (generatedAt, { unavailable = false } = {}) => {
 
   if (unavailable) {
     badge.classList.add("freshness-unavailable");
-    badge.textContent = "Live snapshot unavailable";
+    badge.textContent = "Public snapshot unavailable";
   } else if (ageDays === null) {
     badge.classList.add("freshness-unknown");
     badge.textContent = "Snapshot freshness unknown";
@@ -1593,7 +1710,7 @@ const renderFreshnessBadge = (generatedAt, { unavailable = false } = {}) => {
   const note = document.createElement("span");
   note.className = "freshness-note";
   note.textContent = unavailable
-    ? "The live data bundle could not be loaded, so current values are not being shown."
+    ? "The public data bundle could not be loaded, so snapshot values are not being shown."
     : "Source observation dates may be older than the dashboard refresh time.";
 
   freshnessRowElement.append(badge, note);
@@ -1798,7 +1915,7 @@ const renderLiveSnapshot = (liveData, shorelineData = null, siteReviewData = nul
     renderFreshnessBadge(null, { unavailable: true });
     if (liveSummaryElement) {
       liveSummaryElement.textContent =
-        "The live public snapshot could not be loaded. Current-condition cards are unavailable until the public data bundle loads successfully.";
+        "The public snapshot could not be loaded. Snapshot cards are unavailable until the public data bundle loads successfully.";
     }
     renderDataProducts([]);
     renderAnalytics(null);
@@ -2150,6 +2267,7 @@ const boot = async () => {
   renderSiteRegistrySummary(sitesData);
   renderLiveSnapshot(liveData, shorelineData, siteReviewData);
   renderSourceStatus(manifestData);
+  renderSnapshotStatusStrip(manifestData);
   evaluateSnapshotNotifications(liveData, manifestData);
   updateNotificationPanel();
   renderScreenReaderSummaries(liveData, manifestData, siteReviewData);
