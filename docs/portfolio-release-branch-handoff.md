@@ -112,6 +112,6 @@ The reviewed screenshot/trust-review packet is now committed locally. Keep the b
 
 If a shareable GitHub branch or pull request becomes useful, push the branch after reviewing the publication checklist and open it as a draft.
 
-Publication/push review started on 2026-05-07. See `docs/publication-push-review-2026-05-07.md`.
+Publication/push review started on 2026-05-07. The branch is pushed as a shareable review branch, but not promoted to the public mirror or `main`. See `docs/publication-push-review-2026-05-07.md`.
 
-Next local decision: leave the remaining local artifacts alone, remove/relocate them, push the branch as a draft/shareable branch, or use a clean-clone publication path.
+Next local decision: keep the pushed branch as the review surface, open a draft pull request, start public mirror/main-branch promotion review, or return to implementation work.

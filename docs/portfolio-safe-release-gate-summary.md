@@ -27,19 +27,19 @@ This summary records where the portfolio-safe release pass currently stands. It 
 | Final current screenshot | Complete for screenshot-only packet | Local screenshots captured and indexed in `docs/screenshot-only-portfolio-packet.md`. |
 | Screenshot/trust-review commit | Complete locally | `db903db Add portfolio-safe screenshot review packet` |
 | Published commentary portfolio commit | Complete locally | `c7b73a7 Record published commentary portfolio update` |
-| Public mirror confirmation | Pending | Local docs have changed and have not been promoted to the public mirror in this pass. |
+| Public mirror confirmation | Pending | Branch docs are pushed for review, but not promoted to the public mirror/main branch in this pass. |
 | Git scope review | Complete locally | `docs/local-git-scope-review-2026-05-07.md` groups portfolio docs, trust-review docs, and separate local artifacts before staging. |
 | Git staging decision | Complete for reviewed packet and publication-status docs | Reviewed screenshot/trust-review files and published-commentary portfolio docs are committed; local binary/draft artifacts remain unstaged. |
-| Publication/push review | Decision required | `docs/publication-push-review-2026-05-07.md` records remaining choices before any push/public mirror update. |
+| Publication/push review | Complete for draft/shareable branch | `docs/publication-push-review-2026-05-07.md` records that the branch is pushed for review; public mirror promotion remains separate. |
 | Public promotion decision | Pending | This pass is local review evidence, not a launch decision. |
 
 ## Current Decision Point
 
 Choose the next posture:
 
-1. Leave the remaining local artifacts alone and push the branch as a draft/shareable branch.
-2. Remove or relocate the local DOCX/shortcut artifacts before push.
-3. Keep everything local and stop before push.
-4. Use a clean-clone publication path for only selected committed content.
+1. Keep the pushed branch as a shareable review branch.
+2. Open a draft pull request for review.
+3. Start public mirror/main-branch promotion review.
+4. Return to implementation work.
 
 Until that decision is made, do not treat the local changes as public mirror content.

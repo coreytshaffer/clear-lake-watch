@@ -1,6 +1,6 @@
 # Publication / Push Review
 
-Status: local review, not approved for push
+Status: branch pushed as shareable/draft review branch; public mirror not promoted
 
 Date: 2026-05-07
 
@@ -10,17 +10,19 @@ Branch reviewed:
 codex/portfolio-safe-release-prep
 ```
 
-Latest committed packet:
+Latest committed branch state:
 
 ```text
-c7b73a7 Record published commentary portfolio update
+b7de805 Refresh handoff after publication update
 ```
 
 ## Review Outcome
 
-Do not push automatically.
+Branch push is complete for the portfolio-safe release prep branch.
 
-The committed screenshot/trust-review packet and publication-status portfolio update are valid locally. The worktree still contains separate local binary/draft artifacts, so a push or public mirror update should be an explicit decision: leave those artifacts local, remove/relocate them, or use a clean-clone publication path.
+The branch is aligned with `origin/codex/portfolio-safe-release-prep` and the worktree is clean. This makes the branch suitable for draft/shareable review.
+
+This does not promote the public mirror, merge to `main`, or approve broad public launch.
 
 ## Gates Checked
 
@@ -32,15 +34,13 @@ The committed screenshot/trust-review packet and publication-status portfolio up
 | Site-registry boundary | Passed | FHABS markers remain `needs-local-review`; no reviewed-local promotion. |
 | Screenshot packet | Passed locally | Screenshot-only packet exists and is committed. |
 | Publication-status docs | Passed locally | Published commentary tracker and career-facing snippets are committed in `c7b73a7`. |
-| Git scope | Not clean locally | Only `.docx` and shortcut artifacts remain uncommitted. |
+| Git scope | Clean locally | Branch is aligned with `origin/codex/portfolio-safe-release-prep`. |
 
-## Remaining Uncommitted Files
+## Remaining Local Artifact Decision
 
-Local artifacts to avoid staging automatically:
+No uncommitted local artifacts are present in the current worktree.
 
-- `docs/Project_Brief_DRAFT_1.docx`
-- `shortcuts/Clear Lake Watch.lnk`
-- `shortcuts/Clear Lake Watch test.lnk`
+Previous `.docx` and shortcut artifacts have been handled outside the current committed branch state.
 
 Ignored private files confirmed:
 
@@ -49,19 +49,19 @@ Ignored private files confirmed:
 
 ## Recommended Next Step
 
-Decide how to handle the remaining local artifacts before any push or public mirror update.
+Choose whether this pushed branch should remain a private/shareable branch, become a draft pull request, or be promoted through a public mirror/main-branch review.
 
 Recommended order:
 
-1. Leave shortcut binaries and `.docx` drafts out of publication unless explicitly needed.
-2. Decide whether this branch should be pushed as a draft/shareable branch.
-3. Use a clean-clone publication path if only selected committed content should be promoted.
+1. Keep the pushed branch as the review surface.
+2. Open a draft pull request only if a GitHub review surface is useful.
+3. Do not update the public mirror or merge to `main` until the final publish gate is explicitly approved.
 
 ## Decision Point
 
 Choose one:
 
-1. Leave the remaining local artifacts alone and push the branch as a draft/shareable branch.
-2. Remove or relocate the local DOCX/shortcut artifacts before push.
-3. Keep everything local and stop before push.
-4. Use a clean-clone publication path for only selected committed content.
+1. Keep the pushed branch as a shareable review branch.
+2. Open a draft pull request for review.
+3. Start public mirror/main-branch promotion review.
+4. Return to implementation work.

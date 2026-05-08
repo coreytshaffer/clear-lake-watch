@@ -1,10 +1,12 @@
 # Local Git Scope Review
 
-Status: local staging/publishing scope note
+Status: historical local staging/publishing scope note
 
 Date: 2026-05-07
 
-This note records the current uncommitted worktree scope before any staging, commit, push, public mirror update, or broad promotion. It does not stage or publish anything.
+This note records the uncommitted worktree scope observed before the portfolio-safe packet and commentary updates were committed. It is retained as process evidence. It does not describe the current clean branch state.
+
+Current branch status after later cleanup: see `docs/publication-push-review-2026-05-07.md`.
 
 ## Recommended Scope Decision
 
