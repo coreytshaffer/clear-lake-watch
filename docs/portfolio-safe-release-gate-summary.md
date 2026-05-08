@@ -31,7 +31,7 @@ This summary records where the portfolio-safe release pass currently stands. It 
 | Public mirror confirmation | Pending | Branch docs are pushed for review, but not promoted to the public mirror/main branch in this pass. |
 | Git scope review | Complete locally | `docs/local-git-scope-review-2026-05-07.md` groups portfolio docs, trust-review docs, and separate local artifacts before staging. |
 | Git staging decision | Complete for reviewed packet and publication-status docs | Reviewed screenshot/trust-review files and published-commentary portfolio docs are committed; local binary/draft artifacts remain unstaged. |
-| Publication/push review | Complete for draft/shareable branch | `docs/publication-push-review-2026-05-07.md` records that the branch is pushed for review and current through `6da57f2`; public mirror promotion remains separate. |
+| Publication/push review | Complete for draft/shareable branch | `docs/publication-push-review-2026-05-07.md` records that the branch was pushed for review after the validation-hardening milestone; public mirror promotion remains separate. |
 | Public promotion decision | Pending | This pass is local review evidence, not a launch decision. |
 
 ## Current Decision Point

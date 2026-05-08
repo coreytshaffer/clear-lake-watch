@@ -10,7 +10,7 @@ Branch reviewed:
 codex/portfolio-safe-release-prep
 ```
 
-Latest committed branch state:
+Latest validated implementation milestone:
 
 ```text
 6da57f2 Add validation checks for portfolio review docs
@@ -35,7 +35,7 @@ This does not promote the public mirror, merge to `main`, or approve broad publi
 | Screenshot packet | Passed locally | Screenshot-only packet exists and is committed. |
 | Publication-status docs | Passed locally | Published commentary tracker and career-facing snippets are committed in `c7b73a7`. |
 | Validation-hardening docs | Passed locally | `6da57f2` adds automated checks for the proof packet, trust-review docs, publication/push review, and commentary boundary language. |
-| Git scope | Clean locally | Branch is aligned with `origin/codex/portfolio-safe-release-prep`. |
+| Git scope | Clean at last push review | Re-check `git status -sb` before any pull request, merge, or public mirror promotion. |
 
 ## Remaining Local Artifact Decision
 

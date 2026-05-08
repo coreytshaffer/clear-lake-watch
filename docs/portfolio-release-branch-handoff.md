@@ -16,15 +16,15 @@ Branch:
 codex/portfolio-safe-release-prep
 ```
 
-Latest committed portfolio milestone:
+Latest validated implementation milestone:
 
 ```text
 6da57f2 Add validation checks for portfolio review docs
 ```
 
-The branch is pushed and aligned with `origin/codex/portfolio-safe-release-prep`. It has not been promoted to the public mirror or merged to `main`.
+The branch has been pushed for review. This note may have local follow-up commits after the latest pushed baseline; check `git status -sb` for exact local/remote alignment. The branch has not been promoted to the public mirror or merged to `main`.
 
-## Local Commit Stack
+## Review Commit Stack Snapshot
 
 ```text
 6da57f2 Add validation checks for portfolio review docs
@@ -73,7 +73,7 @@ fea08a8 Prepare portfolio-safe release checkpoint
 
 ## Latest Validation
 
-Latest local checks passed on May 7, 2026 after `6da57f2`:
+Latest local checks passed on May 7, 2026 after the validation-hardening milestone:
 
 - `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp`
 - `python .\scripts\field_microscopy_db.py validate`
