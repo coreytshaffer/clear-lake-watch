@@ -20,6 +20,8 @@ If the scope is only local review, stop before staging.
 
 For the recommended portfolio-safe release scope, see `docs/portfolio-safe-release-scope.md`. That scope favors evidence, screenshots, case study polish, and conservative claims before any live weather telemetry or public field-intake expansion.
 
+For the active public mirror review, see `docs/public-mirror-review-2026-05-08.md`.
+
 ## Draft PR Review Surface Gate
 
 The current review surface is Draft PR #2:

@@ -178,7 +178,8 @@ Acceptance criteria:
 - `docs/career-services-day-of-checklist.md`, `docs/career-services-follow-up-tracker.md`, `docs/career-services-share-packet.md`, `docs/internship-share-brief.md`, `docs/career-services-call-notes.md`, `docs/internship-role-fit-map.md`, and `docs/resume-linkedin-snippets.md` provide a shareable internship packet for SNHU career services and similar conversations.
 - Draft PR #2 provides a GitHub review surface against review-only base branch `codex/portfolio-safe-release-base`, not `main`.
 - `docs/trusted-review-request.md` and `docs/trusted-review-feedback-log.md` provide a private feedback request and feedback-capture path.
-- Current decision point: choose whether to keep PR #2 as an internal review surface, request trusted private feedback, return to implementation work, or begin a separate public mirror/main promotion review.
+- `docs/public-mirror-review-2026-05-08.md` starts the public mirror review and records that `origin/main` and the review branch do not share a merge base.
+- Current decision point: choose the curated public mirror file set before creating a clean `main` candidate branch.
 - Do not promote a fresh public screenshot or public mirror update until a separate promotion pass confirms the full UI, wording, history path, and publication target.
 
 ## P2-01 Expand Validation From Structure To Trust Checks

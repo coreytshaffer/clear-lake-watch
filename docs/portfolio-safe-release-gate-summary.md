@@ -35,6 +35,7 @@ This summary records where the portfolio-safe release pass currently stands. It 
 | Trusted review request | Drafted | `docs/trusted-review-request.md` provides a private mentor/advisor feedback path. |
 | Trusted feedback log | Drafted | `docs/trusted-review-feedback-log.md` records private feedback without implying endorsement. |
 | Local portfolio index | Complete locally | `portfolio-materials.html` provides a one-file entry point for the review packet and local shortcuts. |
+| Public mirror review | Started | `docs/public-mirror-review-2026-05-08.md` records that `main` and the review branch do not share a merge base, so a clean curated public mirror path is recommended. |
 | Public promotion decision | Pending | This pass is local review evidence, not a launch decision. |
 
 ## Current Decision Point
@@ -43,7 +44,7 @@ Choose the next posture:
 
 1. Keep draft PR #2 as a review-only surface.
 2. Request trusted feedback on draft PR #2.
-3. Start public mirror/main-branch promotion review.
+3. Choose the curated public mirror file set before creating a clean `main` candidate branch.
 4. Return to implementation work.
 
 Until that decision is made, do not treat the local changes as public mirror content.
