@@ -1,5 +1,5 @@
-const STATIC_CACHE = "clear-lake-watch-static-v1";
-const DATA_CACHE = "clear-lake-watch-data-v1";
+const STATIC_CACHE = "clear-lake-watch-static-v2";
+const DATA_CACHE = "clear-lake-watch-data-v2";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
