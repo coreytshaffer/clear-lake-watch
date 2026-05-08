@@ -337,6 +337,7 @@ Push-Location $projectRoot
 try {
   $requiredFiles = @(
     "index.html",
+    "portfolio-materials.html",
     "project.html",
     "methodology.html",
     "styles.css",
@@ -689,6 +690,7 @@ try {
   }
 
   $index = Get-Content (Resolve-ProjectPath "index.html") -Raw
+  $portfolioMaterials = Get-Content (Resolve-ProjectPath "portfolio-materials.html") -Raw
   $project = Get-Content (Resolve-ProjectPath "project.html") -Raw
   $methodology = Get-Content (Resolve-ProjectPath "methodology.html") -Raw
   $app = Get-Content (Resolve-ProjectPath "app.js") -Raw
@@ -751,6 +753,15 @@ try {
   $schemaPackagePyproject = Get-Content (Resolve-SchemaPackagePath "pyproject.toml") -Raw
   $fieldMicroscopySchemaModule = Get-Content (Resolve-SchemaPackagePath "src\environmental_monitoring_schemas\field_microscopy.py") -Raw
   Assert-True -Condition ($index.Contains('rel="icon"')) -Message "index.html must include the favicon link."
+  Assert-TextContains -Text $portfolioMaterials -Needle "Clear Lake Watch Portfolio Materials" -Message "portfolio-materials.html must define the portfolio materials index."
+  Assert-TextContains -Text $portfolioMaterials -Needle "late prototype / early MVP" -Message "portfolio-materials.html must preserve maturity language."
+  Assert-TextContains -Text $portfolioMaterials -Needle "not official public-health guidance" -Message "portfolio-materials.html must preserve the public-health boundary."
+  Assert-TextContains -Text $portfolioMaterials -Needle "public mirror promotion decision" -Message "portfolio-materials.html must preserve the no-public-promotion boundary."
+  Assert-TextContains -Text $portfolioMaterials -Needle "docs/trusted-review-request.md" -Message "portfolio-materials.html must link to the trusted review request."
+  Assert-TextContains -Text $portfolioMaterials -Needle "docs/trusted-review-feedback-log.md" -Message "portfolio-materials.html must link to the trusted review feedback log."
+  Assert-TextContains -Text $portfolioMaterials -Needle "docs/portfolio-safe-release-gate-summary.md" -Message "portfolio-materials.html must link to the gate summary."
+  Assert-TextContains -Text $portfolioMaterials -Needle "docs/publication-review-checklist.md" -Message "portfolio-materials.html must link to the publication checklist."
+  Assert-TextContains -Text $portfolioMaterials -Needle "https://github.com/coreytshaffer/clear-lake-watch/pull/2" -Message "portfolio-materials.html must link to draft PR #2."
   Assert-True -Condition ($project.Contains('rel="icon"')) -Message "project.html must include the favicon link."
   Assert-True -Condition ($methodology.Contains('rel="icon"')) -Message "methodology.html must include the favicon link."
   Assert-True -Condition ($index.Contains('rel="manifest"')) -Message "index.html must include the web app manifest link."
