@@ -377,6 +377,7 @@ try {
     "docs\private-surface.md",
     "docs\private-sqlite-surface.md",
     "docs\public-mirror-boundary.md",
+    "docs\public-mirror-file-set-2026-05-08.md",
     "docs\public-mirror-review-2026-05-08.md",
     "docs\publication-review-checklist.md",
     "docs\reusable-schema-package.md",
@@ -727,6 +728,7 @@ try {
   $privateSurfaceDoc = Get-Content (Resolve-ProjectPath "docs\private-surface.md") -Raw
   $privateSqliteSurfaceDoc = Get-Content (Resolve-ProjectPath "docs\private-sqlite-surface.md") -Raw
   $publicMirrorBoundaryDoc = Get-Content (Resolve-ProjectPath "docs\public-mirror-boundary.md") -Raw
+  $publicMirrorFileSetDoc = Get-Content (Resolve-ProjectPath "docs\public-mirror-file-set-2026-05-08.md") -Raw
   $publicMirrorReviewDoc = Get-Content (Resolve-ProjectPath "docs\public-mirror-review-2026-05-08.md") -Raw
   $publicationReviewChecklistDoc = Get-Content (Resolve-ProjectPath "docs\publication-review-checklist.md") -Raw
   $reusableSchemaPackageDoc = Get-Content (Resolve-ProjectPath "docs\reusable-schema-package.md") -Raw
@@ -853,7 +855,8 @@ try {
   Assert-TextContains -Text $backlog -Needle "docs/trusted-review-request.md" -Message "docs/backlog.md must track the trusted review request."
   Assert-TextContains -Text $backlog -Needle "docs/trusted-review-feedback-log.md" -Message "docs/backlog.md must track the trusted review feedback log."
   Assert-TextContains -Text $backlog -Needle "docs/public-mirror-review-2026-05-08.md" -Message "docs/backlog.md must track the active public mirror review."
-  Assert-TextContains -Text $backlog -Needle "choose the curated public mirror file set" -Message "docs/backlog.md must preserve the current public mirror decision point."
+  Assert-TextContains -Text $backlog -Needle "docs/public-mirror-file-set-2026-05-08.md" -Message "docs/backlog.md must track the public mirror file set."
+  Assert-TextContains -Text $backlog -Needle 'create a clean `main` candidate branch using the curated public mirror file set' -Message "docs/backlog.md must preserve the current public mirror decision point."
   Assert-TextContains -Text $backlog -Needle "draft PR boundary, trusted-review docs" -Message "docs/backlog.md must track validator coverage for draft PR and trusted-review docs."
   Assert-TextContains -Text $conversationLog -Needle "April 22, 2026 Trust-Hardening Update" -Message "docs/conversation-log.md must include the latest trust-hardening update."
   Assert-TextContains -Text $conversationLog -Needle "Git was not available" -Message "docs/conversation-log.md must preserve the local Git availability caveat."
@@ -895,6 +898,7 @@ try {
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/trusted-review-request.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the trusted review request."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/trusted-review-feedback-log.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the trusted feedback log."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/public-mirror-review-2026-05-08.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the public mirror review."
+  Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/public-mirror-file-set-2026-05-08.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the public mirror file set."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "clean curated public mirror path" -Message "docs/portfolio-safe-release-gate-summary.md must preserve the clean public mirror path recommendation."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "not a launch decision" -Message "docs/portfolio-safe-release-gate-summary.md must preserve the no-launch boundary."
   Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "Portfolio-Safe Release Validation Log" -Message "docs/portfolio-safe-release-validation-log.md must define the validation log."
@@ -1063,6 +1067,16 @@ try {
   Assert-TextContains -Text $publicMirrorBoundaryDoc -Needle "data/site-review-summary.json" -Message "docs/public-mirror-boundary.md must document public aggregate site-review export."
   Assert-TextContains -Text $publicMirrorBoundaryDoc -Needle "data/reviewed-field-observations.json" -Message "docs/public-mirror-boundary.md must document public-safe reviewed field export."
   Assert-TextContains -Text $publicMirrorBoundaryDoc -Needle "docs/publication-review-checklist.md" -Message "docs/public-mirror-boundary.md must point to the publication review checklist."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "Public Mirror File Set - 2026-05-08" -Message "docs/public-mirror-file-set-2026-05-08.md must define the public mirror file set."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "dashboard plus selected portfolio docs" -Message "docs/public-mirror-file-set-2026-05-08.md must record the recommended file-set choice."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle 'Do not retarget Draft PR #2 to `main`.' -Message "docs/public-mirror-file-set-2026-05-08.md must preserve the no-retarget rule."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle '`README.md`, after public-mirror trimming' -Message "docs/public-mirror-file-set-2026-05-08.md must require README trimming."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "public-mirror validator" -Message "docs/public-mirror-file-set-2026-05-08.md must require validator trimming or replacement."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "portfolio-materials.html" -Message "docs/public-mirror-file-set-2026-05-08.md must exclude the local portfolio index."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "docs/trusted-review-feedback-log.md" -Message "docs/public-mirror-file-set-2026-05-08.md must exclude the trusted feedback log."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "shortcuts/" -Message "docs/public-mirror-file-set-2026-05-08.md must exclude shortcut binaries."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "data/site-review.json" -Message "docs/public-mirror-file-set-2026-05-08.md must exclude the detailed site-review queue."
+  Assert-TextContains -Text $publicMirrorFileSetDoc -Needle "Next slice: create a clean public mirror candidate branch" -Message "docs/public-mirror-file-set-2026-05-08.md must name the next branch-building slice."
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle "Public Mirror Review - 2026-05-08" -Message "docs/public-mirror-review-2026-05-08.md must define the public mirror review."
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle 'Do not merge the current review branch directly into `main`.' -Message "docs/public-mirror-review-2026-05-08.md must preserve the no-direct-main-merge recommendation."
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle "do not share a merge base" -Message "docs/public-mirror-review-2026-05-08.md must document the unrelated-history finding."
@@ -1071,8 +1085,10 @@ try {
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle "docs/trusted-review-feedback-log.md" -Message "docs/public-mirror-review-2026-05-08.md must review the trusted feedback publication boundary."
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle "shortcuts/Clear Lake Watch.lnk" -Message "docs/public-mirror-review-2026-05-08.md must exclude shortcut binaries from broad mirror publishing."
   Assert-TextContains -Text $publicMirrorReviewDoc -Needle "dashboard plus selected portfolio docs" -Message "docs/public-mirror-review-2026-05-08.md must recommend the selected-docs public mirror scope."
+  Assert-TextContains -Text $publicMirrorReviewDoc -Needle "docs/public-mirror-file-set-2026-05-08.md" -Message "docs/public-mirror-review-2026-05-08.md must point to the selected file set."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "local review only" -Message "docs/publication-review-checklist.md must distinguish local review from publication."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "docs/public-mirror-review-2026-05-08.md" -Message "docs/publication-review-checklist.md must point to the active public mirror review."
+  Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "docs/public-mirror-file-set-2026-05-08.md" -Message "docs/publication-review-checklist.md must point to the public mirror file set."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle 'Do not use `-AllowStaleSnapshot` for a fresh public publish.' -Message "docs/publication-review-checklist.md must preserve the fresh-publish freshness rule."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "data/private/" -Message "docs/publication-review-checklist.md must include the private-file gate."
   Assert-TextContains -Text $publicationReviewChecklistDoc -Needle "late prototype / early MVP" -Message "docs/publication-review-checklist.md must preserve maturity claim language."

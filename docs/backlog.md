@@ -179,7 +179,8 @@ Acceptance criteria:
 - Draft PR #2 provides a GitHub review surface against review-only base branch `codex/portfolio-safe-release-base`, not `main`.
 - `docs/trusted-review-request.md` and `docs/trusted-review-feedback-log.md` provide a private feedback request and feedback-capture path.
 - `docs/public-mirror-review-2026-05-08.md` starts the public mirror review and records that `origin/main` and the review branch do not share a merge base.
-- Current decision point: choose the curated public mirror file set before creating a clean `main` candidate branch.
+- `docs/public-mirror-file-set-2026-05-08.md` drafts the recommended dashboard plus selected portfolio docs file set and excludes private/review-only artifacts.
+- Current decision point: create a clean `main` candidate branch using the curated public mirror file set, with README and validator trims.
 - Do not promote a fresh public screenshot or public mirror update until a separate promotion pass confirms the full UI, wording, history path, and publication target.
 
 ## P2-01 Expand Validation From Structure To Trust Checks

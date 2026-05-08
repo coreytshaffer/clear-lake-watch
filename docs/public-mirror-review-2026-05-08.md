@@ -140,3 +140,9 @@ Choose the public mirror file set:
 3. full review packet, not recommended for broad public mirror.
 
 Recommended choice: dashboard plus selected portfolio docs.
+
+## Selected File Set
+
+The recommended file set is now drafted in `docs/public-mirror-file-set-2026-05-08.md`.
+
+Key implementation note: `README.md` and `scripts/validate-dashboard.ps1` should be trimmed or replaced for the clean public mirror candidate branch so they do not require private/review-only docs that are intentionally excluded from broad public publishing.

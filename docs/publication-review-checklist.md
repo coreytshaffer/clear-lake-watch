@@ -22,6 +22,8 @@ For the recommended portfolio-safe release scope, see `docs/portfolio-safe-relea
 
 For the active public mirror review, see `docs/public-mirror-review-2026-05-08.md`.
 
+For the recommended public mirror file set, see `docs/public-mirror-file-set-2026-05-08.md`.
+
 ## Draft PR Review Surface Gate
 
 The current review surface is Draft PR #2:
