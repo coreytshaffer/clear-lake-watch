@@ -195,6 +195,7 @@ Acceptance criteria:
 - Validation output is understandable to collaborators.
 - Current validation checks required public files, JSON shape, source/output manifest data, OSM attribution, weather-context guardrails, stale FHABS URL pinning, and runtime-file placement.
 - Current validation checks that site-review outputs include high-priority review counts and per-marker review reasons.
+- Current validation also checks portfolio-safe screenshot packet, site-registry trust-review decision docs, publication/push review status, and published-commentary boundary language.
 - `scripts/validate-dashboard.ps1` now fails when `data/live.json` is older than `-MaxSnapshotAgeDays` unless `-AllowStaleSnapshot` is passed for intentional archival or portfolio review.
 - Current decision: refreshed public snapshot data on 2026-05-05, but keep publication as a separate decision from local refresh.
 - Next decision point: before any fresh public publish, run validation without stale-snapshot allowance and capture a current screenshot.

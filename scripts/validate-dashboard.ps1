@@ -381,18 +381,32 @@ try {
     "docs\resume-linkedin-snippets.md",
     "docs\screenshot-review.md",
     "docs\review-screenshots\clear-lake-watch-mobile-width-2026-05-05.png",
+    "docs\review-screenshots\clear-lake-watch-homepage-current-2026-05-07.png",
+    "docs\review-screenshots\clear-lake-watch-map-trust-2026-05-07.png",
+    "docs\review-screenshots\clear-lake-watch-methodology-boundary-2026-05-07.png",
+    "docs\review-screenshots\clear-lake-watch-project-page-2026-05-07.png",
     "docs\deployment.md",
     "docs\forecast-boundary.md",
     "docs\local-first-operating-model.md",
     "docs\local-git-workflow.md",
+    "docs\local-git-scope-review-2026-05-07.md",
     "docs\portfolio-release-branch-handoff.md",
+    "docs\portfolio-safe-release-gate-summary.md",
     "docs\portfolio-safe-release-scope.md",
+    "docs\portfolio-safe-release-validation-log.md",
+    "docs\publication-push-review-2026-05-07.md",
+    "docs\published-commentary.md",
+    "docs\research-readiness-brief.md",
+    "docs\screenshot-only-portfolio-packet.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\internship-share-brief.md",
     "docs\internship-role-fit-map.md",
     "docs\site-registry-decision-workflow.md",
     "docs\site-registry-review.md",
     "docs\site-registry-high-priority.md",
+    "docs\site-registry-trust-review-pass-001.md",
+    "docs\site-registry-trust-review-pass-002.md",
+    "docs\site-registry-unresolved-decision.md",
     "docs\source-audit.md",
     "docs\conversation-log.md",
     "docs\weather-context-contract.md",
@@ -688,8 +702,15 @@ try {
   $forecastBoundaryDoc = Get-Content (Resolve-ProjectPath "docs\forecast-boundary.md") -Raw
   $localFirstOperatingModelDoc = Get-Content (Resolve-ProjectPath "docs\local-first-operating-model.md") -Raw
   $localGitWorkflowDoc = Get-Content (Resolve-ProjectPath "docs\local-git-workflow.md") -Raw
+  $localGitScopeReviewDoc = Get-Content (Resolve-ProjectPath "docs\local-git-scope-review-2026-05-07.md") -Raw
   $portfolioReleaseBranchHandoffDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-release-branch-handoff.md") -Raw
+  $portfolioSafeReleaseGateSummaryDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-safe-release-gate-summary.md") -Raw
   $portfolioSafeReleaseScopeDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-safe-release-scope.md") -Raw
+  $portfolioSafeReleaseValidationLogDoc = Get-Content (Resolve-ProjectPath "docs\portfolio-safe-release-validation-log.md") -Raw
+  $publicationPushReviewDoc = Get-Content (Resolve-ProjectPath "docs\publication-push-review-2026-05-07.md") -Raw
+  $publishedCommentaryDoc = Get-Content (Resolve-ProjectPath "docs\published-commentary.md") -Raw
+  $researchReadinessBriefDoc = Get-Content (Resolve-ProjectPath "docs\research-readiness-brief.md") -Raw
+  $screenshotOnlyPortfolioPacketDoc = Get-Content (Resolve-ProjectPath "docs\screenshot-only-portfolio-packet.md") -Raw
   $caseStudyDoc = Get-Content (Resolve-ProjectPath "docs\clear_lake_watch_portfolio_case_study.md") -Raw
   $internshipShareBriefDoc = Get-Content (Resolve-ProjectPath "docs\internship-share-brief.md") -Raw
   $internshipRoleFitMapDoc = Get-Content (Resolve-ProjectPath "docs\internship-role-fit-map.md") -Raw
@@ -707,6 +728,9 @@ try {
   $siteReviewDecisionWorkflowDoc = Get-Content (Resolve-ProjectPath "docs\site-registry-decision-workflow.md") -Raw
   $siteReviewDoc = Get-Content (Resolve-ProjectPath "docs\site-registry-review.md") -Raw
   $highPrioritySiteReviewDoc = Get-Content (Resolve-ProjectPath "docs\site-registry-high-priority.md") -Raw
+  $siteRegistryTrustReviewPass001Doc = Get-Content (Resolve-ProjectPath "docs\site-registry-trust-review-pass-001.md") -Raw
+  $siteRegistryTrustReviewPass002Doc = Get-Content (Resolve-ProjectPath "docs\site-registry-trust-review-pass-002.md") -Raw
+  $siteRegistryUnresolvedDecisionDoc = Get-Content (Resolve-ProjectPath "docs\site-registry-unresolved-decision.md") -Raw
   $refreshScript = Get-Content (Resolve-ProjectPath "scripts\refresh-live-data.ps1") -Raw
   $writeWeatherContextUnavailableScript = Get-Content (Resolve-ProjectPath "scripts\write-weather-context-unavailable.ps1") -Raw
   $decisionPreviewScript = Get-Content (Resolve-ProjectPath "scripts\preview-site-review-decisions.ps1") -Raw
@@ -834,11 +858,45 @@ try {
   Assert-TextContains -Text $localGitWorkflowDoc -Needle "Git availability is not a publication decision" -Message "docs/local-git-workflow.md must separate Git availability from publication."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Portfolio Release Branch Handoff" -Message "docs/portfolio-release-branch-handoff.md must define the branch handoff note."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "codex/portfolio-safe-release-prep" -Message "docs/portfolio-release-branch-handoff.md must document the current branch."
-  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "9ff94e3 Add portfolio release branch handoff" -Message "docs/portfolio-release-branch-handoff.md must document the latest local commit."
-  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "has not been pushed" -Message "docs/portfolio-release-branch-handoff.md must document that the branch is local/unpushed."
-  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Intentionally Uncommitted" -Message "docs/portfolio-release-branch-handoff.md must document intentionally uncommitted files."
-  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "docs/Project_Brief_DRAFT_1.docx" -Message "docs/portfolio-release-branch-handoff.md must document the uncommitted docx artifact."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "Publication/push review started on 2026-05-07" -Message "docs/portfolio-release-branch-handoff.md must document the publication/push review update."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "shareable review branch" -Message "docs/portfolio-release-branch-handoff.md must document the shareable branch state."
+  Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "not promoted to the public mirror" -Message "docs/portfolio-release-branch-handoff.md must preserve the public mirror boundary."
   Assert-TextContains -Text $portfolioReleaseBranchHandoffDoc -Needle "docs/publication-review-checklist.md" -Message "docs/portfolio-release-branch-handoff.md must point to the publication checklist."
+  Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "Portfolio-Safe Release Gate Summary" -Message "docs/portfolio-safe-release-gate-summary.md must define the release gate summary."
+  Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "Public promotion decision" -Message "docs/portfolio-safe-release-gate-summary.md must keep public promotion as a separate decision."
+  Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "not a launch decision" -Message "docs/portfolio-safe-release-gate-summary.md must preserve the no-launch boundary."
+  Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "Portfolio-Safe Release Validation Log" -Message "docs/portfolio-safe-release-validation-log.md must define the validation log."
+  Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "all current map markers still need local review" -Message "docs/portfolio-safe-release-validation-log.md must preserve the expected map-review warning."
+  Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "not authorize a public push" -Message "docs/portfolio-safe-release-validation-log.md must preserve the publication boundary."
+  Assert-TextContains -Text $localGitScopeReviewDoc -Needle "historical local staging/publishing scope note" -Message "docs/local-git-scope-review-2026-05-07.md must mark itself as historical process evidence."
+  Assert-TextContains -Text $localGitScopeReviewDoc -Needle "does not describe the current clean branch state" -Message "docs/local-git-scope-review-2026-05-07.md must avoid claiming to be the current branch state."
+  Assert-TextContains -Text $publicationPushReviewDoc -Needle "branch pushed as shareable/draft review branch; public mirror not promoted" -Message "docs/publication-push-review-2026-05-07.md must document the pushed review-branch state."
+  Assert-TextContains -Text $publicationPushReviewDoc -Needle "This does not promote the public mirror" -Message "docs/publication-push-review-2026-05-07.md must preserve the no-public-promotion boundary."
+  Assert-TextContains -Text $publicationPushReviewDoc -Needle "draft/shareable review" -Message "docs/publication-push-review-2026-05-07.md must keep the review-surface framing."
+  Assert-TextContains -Text $publishedCommentaryDoc -Needle "Published commentary in Lake County News on May 7, 2026." -Message "docs/published-commentary.md must track the published Lake County News commentary."
+  Assert-TextContains -Text $publishedCommentaryDoc -Needle "not an official policy document, public-health advisory, or monitoring authority statement" -Message "docs/published-commentary.md must preserve the commentary boundary."
+  Assert-True -Condition (-not ($publishedCommentaryDoc -match "C:\\Users")) -Message "docs/published-commentary.md must not expose local Windows file paths."
+  Assert-TextContains -Text $researchReadinessBriefDoc -Needle "Clear Lake Watch Research Readiness Brief" -Message "docs/research-readiness-brief.md must define the research-readiness brief."
+  Assert-TextContains -Text $researchReadinessBriefDoc -Needle "not an official public-health tool" -Message "docs/research-readiness-brief.md must preserve the official-guidance boundary."
+  Assert-TextContains -Text $researchReadinessBriefDoc -Needle "does not issue advisories" -Message "docs/research-readiness-brief.md must preserve the no-advisory boundary."
+  Assert-TextContains -Text $researchReadinessBriefDoc -Needle "deployed research-grade monitoring network" -Message "docs/research-readiness-brief.md must avoid deployed-network overclaiming."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "not a public release" -Message "docs/screenshot-only-portfolio-packet.md must preserve the screenshot-only boundary."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "official public-health guidance" -Message "docs/screenshot-only-portfolio-packet.md must include claims to avoid."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "clear-lake-watch-homepage-current-2026-05-07.png" -Message "docs/screenshot-only-portfolio-packet.md must reference the homepage screenshot."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "clear-lake-watch-map-trust-2026-05-07.png" -Message "docs/screenshot-only-portfolio-packet.md must reference the map trust screenshot."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "clear-lake-watch-methodology-boundary-2026-05-07.png" -Message "docs/screenshot-only-portfolio-packet.md must reference the methodology screenshot."
+  Assert-TextContains -Text $screenshotOnlyPortfolioPacketDoc -Needle "clear-lake-watch-project-page-2026-05-07.png" -Message "docs/screenshot-only-portfolio-packet.md must reference the project page screenshot."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "No registry coordinates were moved" -Message "docs/site-registry-trust-review-pass-001.md must preserve the no-coordinate-change boundary."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "needs-local-review" -Message "docs/site-registry-trust-review-pass-001.md must keep current markers unresolved."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "Clear Lake Keys near Ketch Court" -Message "docs/site-registry-trust-review-pass-001.md must include the Clear Lake Keys review item."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "Jago Bay" -Message "docs/site-registry-trust-review-pass-001.md must include the Jago Bay review item."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "Soda Bay" -Message "docs/site-registry-trust-review-pass-001.md must include the Soda Bay review item."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass002Doc -Needle "No registry coordinates were moved" -Message "docs/site-registry-trust-review-pass-002.md must preserve the no-coordinate-change boundary."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass002Doc -Needle "needs-local-review" -Message "docs/site-registry-trust-review-pass-002.md must keep current markers unresolved."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass002Doc -Needle "Clearlake Oaks west of Blue Heron Ct." -Message "docs/site-registry-trust-review-pass-002.md must include the Clearlake Oaks review item."
+  Assert-TextContains -Text $siteRegistryTrustReviewPass002Doc -Needle "Wheeler Point, Kelseyville" -Message "docs/site-registry-trust-review-pass-002.md must include the Wheeler Point review item."
+  Assert-TextContains -Text $siteRegistryUnresolvedDecisionDoc -Needle "Keep all current FHABS map markers" -Message "docs/site-registry-unresolved-decision.md must preserve the active unresolved-marker decision."
+  Assert-TextContains -Text $siteRegistryUnresolvedDecisionDoc -Needle "The dashboard warning that all current map markers still need local review is accurate" -Message "docs/site-registry-unresolved-decision.md must preserve the public dashboard warning."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "Portfolio-Safe Release Scope" -Message "docs/portfolio-safe-release-scope.md must define the portfolio-safe release scope."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "late prototype / early MVP" -Message "docs/portfolio-safe-release-scope.md must preserve maturity status."
   Assert-TextContains -Text $portfolioSafeReleaseScopeDoc -Needle "official monitoring authority" -Message "docs/portfolio-safe-release-scope.md must avoid authority claims."
