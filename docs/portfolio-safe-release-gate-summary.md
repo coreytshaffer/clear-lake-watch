@@ -27,10 +27,11 @@ This summary records where the portfolio-safe release pass currently stands. It 
 | Final current screenshot | Complete for screenshot-only packet | Local screenshots captured and indexed in `docs/screenshot-only-portfolio-packet.md`. |
 | Screenshot/trust-review commit | Complete locally | `db903db Add portfolio-safe screenshot review packet` |
 | Published commentary portfolio commit | Complete locally | `c7b73a7 Record published commentary portfolio update` |
+| Validation-hardening commit | Complete and pushed | `6da57f2 Add validation checks for portfolio review docs` |
 | Public mirror confirmation | Pending | Branch docs are pushed for review, but not promoted to the public mirror/main branch in this pass. |
 | Git scope review | Complete locally | `docs/local-git-scope-review-2026-05-07.md` groups portfolio docs, trust-review docs, and separate local artifacts before staging. |
 | Git staging decision | Complete for reviewed packet and publication-status docs | Reviewed screenshot/trust-review files and published-commentary portfolio docs are committed; local binary/draft artifacts remain unstaged. |
-| Publication/push review | Complete for draft/shareable branch | `docs/publication-push-review-2026-05-07.md` records that the branch is pushed for review; public mirror promotion remains separate. |
+| Publication/push review | Complete for draft/shareable branch | `docs/publication-push-review-2026-05-07.md` records that the branch is pushed for review and current through `6da57f2`; public mirror promotion remains separate. |
 | Public promotion decision | Pending | This pass is local review evidence, not a launch decision. |
 
 ## Current Decision Point

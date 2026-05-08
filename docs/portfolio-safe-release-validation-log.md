@@ -24,6 +24,22 @@ Results:
 | Field/microscopy SQLite validation | Passed | 1 private record checked; 0 publishable records. |
 | Site-review SQLite validation | Passed | Latest run 2; 8 detailed queue records; 8 marker-by-site records; 11 review decision records after the medium-priority trust-review import. |
 
+## Validation-Hardening Pass
+
+Validation hardening continued on 2026-05-07.
+
+Artifact:
+
+- `scripts/validate-dashboard.ps1`
+
+Commit:
+
+```text
+6da57f2 Add validation checks for portfolio review docs
+```
+
+Result: the dashboard validator now checks that the portfolio-safe screenshot packet, site-registry trust-review notes, unresolved-marker decision, publication/push review, research-readiness brief, and published-commentary boundary language remain present and conservative.
+
 ## Site-Registry Trust Review Pass
 
 Trust review started on 2026-05-07.

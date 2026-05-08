@@ -6,7 +6,7 @@ Date prepared: 2026-05-06
 
 Last updated: 2026-05-07
 
-This note summarizes the local portfolio-safe release prep branch. It is for review and handoff before any push, pull request, public mirror update, or broad promotion.
+This note summarizes the portfolio-safe release prep branch. It is for review and handoff before any pull request, public mirror update, merge to `main`, or broad promotion.
 
 ## Current Branch
 
@@ -19,14 +19,17 @@ codex/portfolio-safe-release-prep
 Latest committed portfolio milestone:
 
 ```text
-c7b73a7 Record published commentary portfolio update
+6da57f2 Add validation checks for portfolio review docs
 ```
 
-The branch has not been pushed.
+The branch is pushed and aligned with `origin/codex/portfolio-safe-release-prep`. It has not been promoted to the public mirror or merged to `main`.
 
 ## Local Commit Stack
 
 ```text
+6da57f2 Add validation checks for portfolio review docs
+af284f9 Update publication review handoff state
+b7de805 Refresh handoff after publication update
 c7b73a7 Record published commentary portfolio update
 73cb57b Add community writing to career packet
 db903db Add portfolio-safe screenshot review packet
@@ -66,12 +69,14 @@ fea08a8 Prepare portfolio-safe release checkpoint
 - local Git scope review for the current uncommitted artifacts
 - published commentary tracker for the Lake County News Robin Lane article
 - publication-ready resume, LinkedIn, and internship share language
+- validation checks for the portfolio review docs, screenshot packet, trust-review decisions, publication/push review, and published-commentary boundary language
 
 ## Latest Validation
 
-Latest local checks passed on May 7, 2026 after `c7b73a7`:
+Latest local checks passed on May 7, 2026 after `6da57f2`:
 
 - `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp`
+- `python .\scripts\field_microscopy_db.py validate`
 - `python .\scripts\site_review_db.py validate`
 
 Expected dashboard validation warning:
@@ -80,19 +85,11 @@ Expected dashboard validation warning:
 All current map markers still need local review; public map trust cues should remain conservative.
 ```
 
-## Intentionally Uncommitted
+## Local Artifact Status
 
-These files remain outside the branch commits:
+Current worktree status: clean.
 
-- `docs/Project_Brief_DRAFT_1.docx`
-- `shortcuts/Clear Lake Watch.lnk`
-- `shortcuts/Clear Lake Watch test.lnk`
-
-Reason:
-
-- publication-status portfolio docs are committed in `c7b73a7`
-- shortcut binaries are local convenience artifacts
-- the `.docx` is a separate draft artifact and should be reviewed before deciding whether it belongs in the repo
+Previous `.docx` and shortcut artifacts have been handled outside the current committed branch state. Do not reintroduce local binary or draft artifacts without a separate scope review.
 
 ## Before Pushing Or Publishing
 
@@ -103,14 +100,12 @@ Minimum next review:
 1. Re-run validation.
 2. Review `git status --short`.
 3. Confirm private local files remain ignored.
-4. Decide whether to push this branch as-is, squash/reorder commits, or use a clean-clone publish path.
+4. Decide whether to keep the pushed branch as review-only, open a draft pull request, squash/reorder commits, or use a clean-clone publish path.
 5. Do not treat this branch as a public launch without a final publication decision.
 
 ## Suggested Next Decision
 
-The reviewed screenshot/trust-review packet is now committed locally. Keep the branch local unless there is a clear reason to push it.
-
-If a shareable GitHub branch or pull request becomes useful, push the branch after reviewing the publication checklist and open it as a draft.
+The reviewed screenshot/trust-review packet and validation-hardening slice are now committed and pushed to the shareable review branch.
 
 Publication/push review started on 2026-05-07. The branch is pushed as a shareable review branch, but not promoted to the public mirror or `main`. See `docs/publication-push-review-2026-05-07.md`.
 
