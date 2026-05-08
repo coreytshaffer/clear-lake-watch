@@ -33,6 +33,7 @@ This summary records where the portfolio-safe release pass currently stands. It 
 | Git staging decision | Complete for reviewed packet and publication-status docs | Reviewed screenshot/trust-review files and published-commentary portfolio docs are committed; local binary/draft artifacts remain unstaged. |
 | Draft PR review surface | Complete for review-only branch | Draft PR #2 targets `codex/portfolio-safe-release-base`, not `main`; public mirror promotion remains separate. |
 | Trusted review request | Drafted | `docs/trusted-review-request.md` provides a private mentor/advisor feedback path. |
+| Trusted feedback log | Drafted | `docs/trusted-review-feedback-log.md` records private feedback without implying endorsement. |
 | Public promotion decision | Pending | This pass is local review evidence, not a launch decision. |
 
 ## Current Decision Point

@@ -63,6 +63,10 @@ Fifteen-minute review:
 4. Which artifact is the strongest first read for a mentor, scholarship reviewer, internship advisor, or research contact?
 5. What should be corrected before any broader public mirror/main-branch promotion review?
 
+## Feedback Capture
+
+Feedback should be recorded in `docs/trusted-review-feedback-log.md` before it is converted into project changes, public claims, or portfolio language.
+
 ## Safe Language
 
 Use:

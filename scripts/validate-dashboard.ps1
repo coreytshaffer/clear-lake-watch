@@ -398,6 +398,7 @@ try {
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
     "docs\screenshot-only-portfolio-packet.md",
+    "docs\trusted-review-feedback-log.md",
     "docs\trusted-review-request.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\internship-share-brief.md",
@@ -712,6 +713,7 @@ try {
   $publishedCommentaryDoc = Get-Content (Resolve-ProjectPath "docs\published-commentary.md") -Raw
   $researchReadinessBriefDoc = Get-Content (Resolve-ProjectPath "docs\research-readiness-brief.md") -Raw
   $screenshotOnlyPortfolioPacketDoc = Get-Content (Resolve-ProjectPath "docs\screenshot-only-portfolio-packet.md") -Raw
+  $trustedReviewFeedbackLogDoc = Get-Content (Resolve-ProjectPath "docs\trusted-review-feedback-log.md") -Raw
   $trustedReviewRequestDoc = Get-Content (Resolve-ProjectPath "docs\trusted-review-request.md") -Raw
   $caseStudyDoc = Get-Content (Resolve-ProjectPath "docs\clear_lake_watch_portfolio_case_study.md") -Raw
   $internshipShareBriefDoc = Get-Content (Resolve-ProjectPath "docs\internship-share-brief.md") -Raw
@@ -870,6 +872,7 @@ try {
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "Public promotion decision" -Message "docs/portfolio-safe-release-gate-summary.md must keep public promotion as a separate decision."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "Draft PR #2 targets" -Message "docs/portfolio-safe-release-gate-summary.md must preserve the review-only PR base boundary."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/trusted-review-request.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the trusted review request."
+  Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "docs/trusted-review-feedback-log.md" -Message "docs/portfolio-safe-release-gate-summary.md must point to the trusted feedback log."
   Assert-TextContains -Text $portfolioSafeReleaseGateSummaryDoc -Needle "not a launch decision" -Message "docs/portfolio-safe-release-gate-summary.md must preserve the no-launch boundary."
   Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "Portfolio-Safe Release Validation Log" -Message "docs/portfolio-safe-release-validation-log.md must define the validation log."
   Assert-TextContains -Text $portfolioSafeReleaseValidationLogDoc -Needle "all current map markers still need local review" -Message "docs/portfolio-safe-release-validation-log.md must preserve the expected map-review warning."
@@ -897,10 +900,17 @@ try {
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "Trusted Review Request" -Message "docs/trusted-review-request.md must define the trusted review request."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "private feedback only" -Message "docs/trusted-review-request.md must preserve the private feedback boundary."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "https://github.com/coreytshaffer/clear-lake-watch/pull/2" -Message "docs/trusted-review-request.md must link the draft PR review surface."
+  Assert-TextContains -Text $trustedReviewRequestDoc -Needle "docs/trusted-review-feedback-log.md" -Message "docs/trusted-review-request.md must point reviewers toward the feedback log."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "not official public-health guidance" -Message "docs/trusted-review-request.md must preserve the public-health boundary."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "needs-local-review" -Message "docs/trusted-review-request.md must ask reviewers to check site-registry boundaries."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "validated forecast" -Message "docs/trusted-review-request.md must preserve the no-validated-forecast boundary."
   Assert-TextContains -Text $trustedReviewRequestDoc -Needle "locally certified FHABS site assignments" -Message "docs/trusted-review-request.md must preserve the site-certification boundary."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "Trusted Review Feedback Log" -Message "docs/trusted-review-feedback-log.md must define the feedback log."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "not a public endorsement log" -Message "docs/trusted-review-feedback-log.md must preserve the no-endorsement boundary."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "Permission to reference?" -Message "docs/trusted-review-feedback-log.md must track reference permission."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "Do not quote reviewer feedback publicly" -Message "docs/trusted-review-feedback-log.md must preserve the quoting rule."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "official approval" -Message "docs/trusted-review-feedback-log.md must avoid official approval claims."
+  Assert-TextContains -Text $trustedReviewFeedbackLogDoc -Needle "locally certified FHABS site assignments" -Message "docs/trusted-review-feedback-log.md must preserve the site-certification boundary."
   Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "No registry coordinates were moved" -Message "docs/site-registry-trust-review-pass-001.md must preserve the no-coordinate-change boundary."
   Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "needs-local-review" -Message "docs/site-registry-trust-review-pass-001.md must keep current markers unresolved."
   Assert-TextContains -Text $siteRegistryTrustReviewPass001Doc -Needle "Clear Lake Keys near Ketch Court" -Message "docs/site-registry-trust-review-pass-001.md must include the Clear Lake Keys review item."
