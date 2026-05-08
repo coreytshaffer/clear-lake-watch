@@ -109,4 +109,6 @@ The reviewed screenshot/trust-review packet and validation-hardening slice are n
 
 Publication/push review started on 2026-05-07. The branch is pushed as a shareable review branch, but not promoted to the public mirror or `main`. See `docs/publication-push-review-2026-05-07.md`.
 
-Next local decision: keep the pushed branch as the review surface, open a draft pull request, start public mirror/main-branch promotion review, or return to implementation work.
+Draft PR #2 is open at `https://github.com/coreytshaffer/clear-lake-watch/pull/2`. It targets review-only base branch `codex/portfolio-safe-release-base`, not `main`, to avoid starting public mirror/main promotion review.
+
+Next local decision: keep draft PR #2 as the review surface, request trusted feedback, start public mirror/main-branch promotion review, or return to implementation work.
