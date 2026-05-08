@@ -1,0 +1,273 @@
+{
+  "arms": [
+    {
+      "name": "Upper Arm",
+      "monitoringProfile": "Broad Open-Water Signal",
+      "summary": "The Upper Arm is a strong anchor for whole-lake context, especially for long-term clarity, nutrient, and open-water bloom trends.",
+      "focus": [
+        "long-term trends",
+        "open-water conditions",
+        "satellite alignment"
+      ],
+      "primarySignals": [
+        "temperature",
+        "chlorophyll-a",
+        "Secchi depth",
+        "nutrients",
+        "cyanobacteria imagery"
+      ],
+      "priorityQuestions": [
+        "Are basin-wide bloom drivers intensifying before shoreline impacts emerge?",
+        "How closely do satellite signals match in-water measurements here?"
+      ]
+    },
+    {
+      "name": "Lower Arm",
+      "monitoringProfile": "Community Exposure Signal",
+      "summary": "The Lower Arm should emphasize recreation, nearshore exposure, and public communication because it matters most for day-to-day community use.",
+      "focus": [
+        "public-facing risk",
+        "shoreline hotspots",
+        "advisory communication"
+      ],
+      "primarySignals": [
+        "microcystin",
+        "shoreline sampling",
+        "FHABS reports",
+        "lake level",
+        "weather context"
+      ],
+      "priorityQuestions": [
+        "Which shoreline sites are repeatedly crossing health-relevant thresholds?",
+        "How quickly do public-facing conditions change after heat, wind, or inflow events?"
+      ]
+    },
+    {
+      "name": "Oaks Arm",
+      "monitoringProfile": "High-Complexity Risk Signal",
+      "summary": "The Oaks Arm deserves special treatment because it combines narrow geometry, shoreline use, cyanotoxin concerns, and distinct water-quality pressures.",
+      "focus": [
+        "toxins",
+        "localized severity",
+        "sensitive-use areas"
+      ],
+      "primarySignals": [
+        "cyanotoxins",
+        "interior vs shoreline contrast",
+        "tributary influence",
+        "research-grade profiles",
+        "historical comparisons"
+      ],
+      "priorityQuestions": [
+        "Can the dashboard distinguish between persistent local severity and lake-wide episodes?",
+        "Which upstream or seasonal factors appear most predictive for extreme toxin conditions?"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "CLAMP Monthly Monitoring",
+      "owner": "Lake County Water Resources",
+      "summary": "Monthly physical, chemical, and biological lake monitoring that continues the older DWR ambient record across the three Clear Lake arms.",
+      "cadence": "Monthly",
+      "coverage": "Upper, Lower, and Oaks arms",
+      "mvpUsage": "Core trend charts and arm comparison",
+      "machineReadableStatus": "Portal + CEDEN path",
+      "automationNote": "Likely feasible through CEDEN extracts and portal downloads, but the county portal needs contract validation.",
+      "historicalStartYear": 1960,
+      "url": "https://lakecountyca.gov/1504/Clear-Lake-Water-Quality"
+    },
+    {
+      "name": "Tribal Cyanotoxin Monitoring",
+      "owner": "Big Valley Band of Pomo Indians",
+      "summary": "Shoreline and interior toxin monitoring focused on cyanobacteria impacts, with current results plus historical material from 2014 through 2024.",
+      "cadence": "Roughly biweekly in summer",
+      "coverage": "More than 20 Clear Lake sites",
+      "mvpUsage": "Risk map, toxin severity panel, historical hotspots",
+      "machineReadableStatus": "Public but semi-structured",
+      "automationNote": "Very valuable source. We should expect some custom extraction or partnership work for reliable automation.",
+      "historicalStartYear": 2014,
+      "url": "https://www.bvrancheria.com/clearlakecyanotoxins"
+    },
+    {
+      "name": "FHABS Incident And Results Data",
+      "owner": "California Water Boards",
+      "summary": "Statewide freshwater harmful algal bloom reports, cases, responses, and results in California Open Data with advisory context.",
+      "cadence": "Frequent state updates",
+      "coverage": "Statewide, including Clear Lake",
+      "mvpUsage": "Advisories, incident history, external corroboration",
+      "machineReadableStatus": "Open data API likely available",
+      "automationNote": "Strong candidate for scheduled ETL once the CKAN resource endpoints are confirmed directly.",
+      "historicalStartYear": 2016,
+      "url": "https://lab.data.ca.gov/dataset/surface-water-freshwater-harmful-algal-blooms"
+    },
+    {
+      "name": "California Satellite HAB Map",
+      "owner": "California Water Boards and SFEI",
+      "summary": "Satellite-derived cyanobacteria and chlorophyll-a estimates that help add lake-wide spatial context between field samples.",
+      "cadence": "Remote sensing updates",
+      "coverage": "Large California waterbodies",
+      "mvpUsage": "Spatial map layer and trend overlays",
+      "machineReadableStatus": "Tool available, API path to confirm",
+      "automationNote": "Useful for map overlays and model features, but should remain clearly labeled as supplemental rather than definitive.",
+      "historicalStartYear": 2014,
+      "url": "https://mywaterquality.ca.gov/habs/resources/satellite-map.html"
+    },
+    {
+      "name": "OpenStreetMap Clear Lake Geometry",
+      "owner": "OpenStreetMap contributors",
+      "summary": "Public OSM multipolygon geometry for the Clear Lake shoreline, used as a geographic context layer under monitoring pins.",
+      "cadence": "Occasional manual refresh",
+      "coverage": "Clear Lake shoreline and islands",
+      "mvpUsage": "Map shoreline geometry and public spatial context",
+      "machineReadableStatus": "Overpass API extract cached as static JSON",
+      "automationNote": "Use cached extracts and visible OSM/ODbL attribution; do not call Overpass from every public page view.",
+      "historicalStartYear": 2026,
+      "url": "https://www.openstreetmap.org/relation/4046481"
+    },
+    {
+      "name": "USGS Tributaries And Lake Levels",
+      "owner": "U.S. Geological Survey",
+      "summary": "Hydrology and watershed-monitoring resources that can supply inflow, streamflow, and lake-level drivers for both the dashboard and the future model.",
+      "cadence": "Station dependent",
+      "coverage": "Clear Lake and tributary network",
+      "mvpUsage": "Driver context and hydrologic overlays",
+      "machineReadableStatus": "API-friendly",
+      "automationNote": "Best early live feed candidate because the service surface is mature and designed for automation.",
+      "historicalStartYear": 2000,
+      "url": "https://www.usgs.gov/tools/watershed-monitoring-clear-lake-tributaries"
+    },
+    {
+      "name": "Local Weather Backbone",
+      "owner": "Community Environmental Monitoring Platform",
+      "summary": "Planned local-first weather and soil sensing backbone that can provide reviewed hyperlocal context for rainfall, wind, heat, and station health near Clear Lake.",
+      "cadence": "Local sensor dependent",
+      "coverage": "Private/local stations first; public context exports later",
+      "mvpUsage": "Weather context for lake-condition interpretation, not direct lake-health determination",
+      "machineReadableStatus": "Planned local-backbone export",
+      "automationNote": "Target a schema-governed weather-context.json export with explicit units, staleness thresholds, station metadata, and public/private field boundaries.",
+      "historicalStartYear": 2026,
+      "url": "./docs/backbone-integration.md"
+    },
+    {
+      "name": "CEDEN Chemistry Data",
+      "owner": "California Water Boards",
+      "summary": "State environmental exchange network with chemistry results that can support historical trends, parameter selection, and arm-level backfill.",
+      "cadence": "Periodic loads",
+      "coverage": "California surface waters",
+      "mvpUsage": "Backfill, QA checks, and long historical context",
+      "machineReadableStatus": "Open data API available",
+      "automationNote": "Excellent for durable ingestion, though filtering and data quality handling need care.",
+      "historicalStartYear": 2000,
+      "url": "https://lab.data.ca.gov/dataset/surface-water-chemistry-results"
+    }
+  ],
+  "modules": [
+    {
+      "title": "Lake Overview",
+      "body": "Show the three arms as distinct monitoring zones with quick summaries of coverage, latest known update windows, and source confidence."
+    },
+    {
+      "title": "Monitoring Map",
+      "body": "Plot shoreline and open-water sites, then layer current toxin context, satellite context, and advisory history without blending unlike signals."
+    },
+    {
+      "title": "Trend Explorer",
+      "body": "Let the public compare temperature, chlorophyll-a, nutrients, toxin results, and seasonal behavior by arm and by source."
+    },
+    {
+      "title": "Data Notebook",
+      "body": "Document every source, cadence, caveat, and retrieval method so the dashboard is useful to residents, journalists, and researchers."
+    },
+    {
+      "title": "Field And Microscopy Intake",
+      "body": "Future authenticated entry for lakeside observations, sample metadata, and freshwater phytoplankton identifications from light microscopy, with QA review before public display or model training."
+    }
+  ],
+  "guardrails": [
+    {
+      "title": "Do Not Overstate Freshness",
+      "body": "Every chart and map should show the observation date, not just the publication date, because these feeds update on different schedules."
+    },
+    {
+      "title": "Keep Satellite Data Supplemental",
+      "body": "Satellite-derived cyanobacteria and chlorophyll-a estimates add spatial reach, but they should not be presented as direct public-health determinations."
+    },
+    {
+      "title": "Separate Conditions From Forecasts",
+      "body": "Observed toxin measurements, public advisories, and model-generated bloom outlooks should stay visibly distinct to avoid false precision."
+    },
+    {
+      "title": "Preserve Community Trust",
+      "body": "Tribal monitoring and local county monitoring should be credited clearly and represented without flattening away their different purposes."
+    },
+    {
+      "title": "Review Field Data Before Publication",
+      "body": "Student, volunteer, or NOAA-associated field and microscopy records should remain in a reviewed intake layer until sample custody, location precision, taxonomic confidence, and permission-to-publish status are documented."
+    }
+  ],
+  "phases": [
+    {
+      "name": "Phase 1",
+      "window": "1 to 2 weeks",
+      "goal": "Ship a public MVP with a source catalog, lake map shell, and trend views powered by cleaned static extracts.",
+      "deliverables": [
+        "Landing page and dashboard layout",
+        "Unified source manifest",
+        "Arm-level charts using seed data extracts",
+        "Methodology and disclaimer page"
+      ]
+    },
+    {
+      "name": "Phase 2",
+      "window": "2 to 4 weeks",
+      "goal": "Automate ingestion for the most stable public feeds and add source freshness indicators to the site.",
+      "deliverables": [
+        "Scheduled ETL jobs",
+        "Normalized lake sites table",
+        "Source freshness status",
+        "Advisory and incident history views"
+      ]
+    },
+    {
+      "name": "Phase 3",
+      "window": "4 to 8 weeks",
+      "goal": "Stand up an internal forecasting pipeline that predicts arm-level bloom severity while keeping uncertainty explicit.",
+      "deliverables": [
+        "Target definition for bloom severity",
+        "Baseline gradient-boosted model",
+        "Time-based validation notebook",
+        "Public-facing forecast explanation"
+      ]
+    },
+    {
+      "name": "Stretch Goal",
+      "window": "Later",
+      "goal": "Add a reviewed field-data intake workflow for lakeside sampling and freshwater phytoplankton microscopy records.",
+      "deliverables": [
+        "Authenticated field entry form",
+        "Sample and microscope identification schema",
+        "QA review queue before public release",
+        "Export path for approved observations and future ML features"
+      ]
+    }
+  ],
+  "mlRoadmap": [
+    {
+      "title": "Prediction Target",
+      "body": "Start with weekly Low, Moderate, and High severity labels by arm, based on toxin concentrations and advisory-relevant thresholds rather than trying to predict every raw measurement."
+    },
+    {
+      "title": "Feature Families",
+      "body": "Use lagged toxin values, chlorophyll-a, nutrients, temperature, dissolved oxygen, lake level, tributary inflow, weather, seasonality, and satellite signals when they are aligned in time."
+    },
+    {
+      "title": "Modeling Discipline",
+      "body": "Validate with rolling time splits, compare against a simple seasonal baseline, and publish uncertainty notes so the model is framed as decision support rather than certainty."
+    },
+    {
+      "title": "Responsible Release",
+      "body": "Expose early forecasts only as experimental outputs with model date, training window, input summary, uncertainty notes, and public-health disclaimer language."
+    }
+  ]
+}

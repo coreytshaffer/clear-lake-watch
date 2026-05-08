@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3efe2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Clear Lake Watch">
+    <title>Project | Clear Lake Watch</title>
+    <meta
+      name="description"
+      content="Project roadmap, source inventory, and implementation guardrails for the Clear Lake Watch dashboard prototype."
+    >
+    <link rel="icon" href="./assets/clear-lake-watch.ico">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to project content</a>
+    <div class="page-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand-link" href="./index.html">Clear Lake Watch</a>
+        <div class="nav-links">
+          <a href="./index.html#live">Snapshot</a>
+          <a href="./index.html#map">Map</a>
+          <a href="./index.html#analytics">Analytics</a>
+          <a href="./index.html#data-products">Data</a>
+          <a href="./project.html" aria-current="page">Project</a>
+          <a href="./methodology.html">Methodology</a>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+            Dark Mode
+          </button>
+        </div>
+      </nav>
+
+      <header class="hero methodology-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Project And Roadmap</p>
+          <h1>Clear Lake Watch Project Plan</h1>
+          <p class="hero-text">
+            This page keeps the implementation roadmap, source inventory, MVP
+            modules, guardrails, and future forecasting work separate from the
+            public situational-awareness dashboard. Clear Lake Watch is a
+            late prototype / early MVP and is not official public-health guidance,
+            an official advisory, a validated forecast, or a deployed sensor
+            network.
+          </p>
+          <div class="hero-actions">
+            <a href="./index.html" class="button button-primary">Back To Dashboard</a>
+            <a href="./methodology.html" class="button button-secondary">Read Methodology</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <p class="panel-label">Project Rule</p>
+          <ul class="hero-list">
+            <li>Public dashboard stays focused on current reviewed outputs.</li>
+            <li>Roadmap, sources, and implementation notes live here.</li>
+            <li>Experimental analytics remain labeled and bounded.</li>
+            <li>Unresolved markers remain in local review before promotion.</li>
+          </ul>
+        </aside>
+      </header>
+
+      <main id="main-content" tabindex="-1">
+        <section class="stats-grid" id="summary"></section>
+
+        <section class="section" id="arms">
+          <div class="section-heading">
+            <p class="eyebrow">Monitoring Strategy</p>
+            <h2>Clear Lake By Arm</h2>
+            <p>
+              Clear Lake Watch is organized around lake-arm differences so the
+              dashboard can show spatial context without collapsing the lake into
+              one over-simplified condition label.
+            </p>
+          </div>
+          <div class="arm-grid" id="arm-grid"></div>
+        </section>
+
+        <section class="section split-section">
+          <div>
+            <div class="section-heading compact">
+              <p class="eyebrow">MVP Scope</p>
+              <h2>Initial Dashboard Modules</h2>
+            </div>
+            <div class="module-list" id="module-list"></div>
+          </div>
+          <div>
+            <div class="section-heading compact">
+              <p class="eyebrow">Trust Guardrails</p>
+              <h2>Public Communication Rules</h2>
+            </div>
+            <div class="guardrail-list" id="guardrail-list"></div>
+          </div>
+        </section>
+
+        <section class="section" id="sources">
+          <div class="section-heading">
+            <p class="eyebrow">Source Inventory</p>
+            <h2>Public Data Sources To Integrate</h2>
+            <p>
+              This inventory tracks candidate source owners, coverage, cadence,
+              and intended use so the public dashboard can stay transparent about
+              what is observed, reported, derived, or still planned.
+            </p>
+          </div>
+          <div class="source-grid" id="source-grid"></div>
+        </section>
+
+        <section class="section split-section" id="pipeline">
+          <div>
+            <div class="section-heading compact">
+              <p class="eyebrow">Delivery Path</p>
+              <h2>Implementation Phases</h2>
+            </div>
+            <div class="phase-list" id="phase-list"></div>
+          </div>
+          <div>
+            <div class="section-heading compact">
+              <p class="eyebrow">Forecasting</p>
+              <h2>ML And Edge AI Roadmap</h2>
+              <p>
+                Forecasting and local AI remain experimental layers on top of
+                deterministic, reviewable data products. Future outputs must
+                follow the forecast boundary contract before they appear on any
+                public surface.
+              </p>
+              <p>
+                <a href="./docs/forecast-boundary.md">Read forecast boundary</a>
+              </p>
+            </div>
+            <div class="ml-grid" id="ml-grid"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="stat-template">
+      <article class="stat-card">
+        <p class="stat-label"></p>
+        <strong class="stat-value"></strong>
+        <p class="stat-note"></p>
+      </article>
+    </template>
+
+    <template id="arm-template">
+      <article class="arm-card">
+        <div class="arm-card-top">
+          <p class="arm-name"></p>
+          <span class="arm-badge"></span>
+        </div>
+        <p class="arm-summary"></p>
+        <div class="chip-row arm-focus"></div>
+        <div class="arm-details">
+          <div>
+            <p class="detail-label">Primary signals</p>
+            <div class="chip-row arm-signals"></div>
+          </div>
+          <div>
+            <p class="detail-label">Priority questions</p>
+            <ul class="mini-list arm-questions"></ul>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="source-template">
+      <article class="source-card">
+        <div class="source-top">
+          <div>
+            <p class="source-name"></p>
+            <p class="source-owner"></p>
+          </div>
+          <span class="source-status"></span>
+        </div>
+        <p class="source-summary"></p>
+        <div class="meta-grid">
+          <div>
+            <p class="detail-label">Cadence</p>
+            <p class="meta-value source-cadence"></p>
+          </div>
+          <div>
+            <p class="detail-label">Coverage</p>
+            <p class="meta-value source-coverage"></p>
+          </div>
+          <div>
+            <p class="detail-label">Use in MVP</p>
+            <p class="meta-value source-usage"></p>
+          </div>
+          <div>
+            <p class="detail-label">Automation</p>
+            <p class="meta-value source-automation"></p>
+          </div>
+        </div>
+        <a class="source-link" target="_blank" rel="noreferrer">Open Source</a>
+      </article>
+    </template>
+
+    <template id="simple-card-template">
+      <article class="simple-card">
+        <p class="simple-title"></p>
+        <p class="simple-body"></p>
+      </article>
+    </template>
+
+    <template id="phase-template">
+      <article class="phase-card">
+        <div class="phase-top">
+          <p class="phase-name"></p>
+          <span class="phase-window"></span>
+        </div>
+        <p class="phase-goal"></p>
+        <ul class="mini-list phase-deliverables"></ul>
+      </article>
+    </template>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

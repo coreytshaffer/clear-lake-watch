@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "assignmentNote": "Starter registry for reviewed or review-needed public monitoring/report locations. FHABS coordinates in live.json remain source observations; this registry is the maintained place for stable site IDs and arm overrides.",
+  "sites": [
+    {
+      "siteId": "usgs-11450000",
+      "name": "Clear Lake at Lakeport",
+      "source": "USGS",
+      "sourceId": "11450000",
+      "siteType": "lake-level station",
+      "aliases": [
+        "Clear Lake at Lakeport",
+        "CLEAR LK A LAKEPORT CA"
+      ],
+      "latitude": 39.0390283,
+      "longitude": -122.9132977,
+      "arm": "Upper Arm",
+      "assignmentStatus": "reviewed-starter",
+      "matchRadiusKm": 0.35
+    },
+    {
+      "siteId": "usgs-11449820",
+      "name": "Cole Creek at Kelseyville",
+      "source": "USGS",
+      "sourceId": "11449820",
+      "siteType": "tributary flow station",
+      "aliases": [
+        "Cole Creek at Kelseyville",
+        "COLE C A KELSEYVILLE CA",
+        "Cole Creek"
+      ],
+      "latitude": 38.97932778,
+      "longitude": -122.8305778,
+      "arm": "Lower Arm",
+      "assignmentStatus": "reviewed-starter",
+      "matchRadiusKm": 0.35
+    },
+    {
+      "siteId": "fhabs-henderson-point",
+      "name": "Henderson Point / Riviera Point Launch",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Henderson Point",
+        "Riviera Point",
+        "Riviera Point Launch",
+        "Riviera Point Launch at Henderson Point in Soda Bay",
+        "Riveria Point Launch at Henderson Point in Soda Bay"
+      ],
+      "latitude": 39.0110072,
+      "longitude": -122.7766572,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 0.75
+    },
+    {
+      "siteId": "fhabs-soda-bay",
+      "name": "Soda Bay",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Soda Bay"
+      ],
+      "latitude": 39.0028,
+      "longitude": -122.7977,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2.5
+    },
+    {
+      "siteId": "fhabs-jago-bay",
+      "name": "Jago Bay",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Jago Bay"
+      ],
+      "latitude": 38.948856,
+      "longitude": -122.66023,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 3
+    },
+    {
+      "siteId": "fhabs-jones-bay",
+      "name": "Jones Bay",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Jones Bay",
+        "Jones bay"
+      ],
+      "latitude": 38.9479537,
+      "longitude": -122.6613745,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 1
+    },
+    {
+      "siteId": "fhabs-clearlake-keys",
+      "name": "Clear Lake Keys",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Clear Lake Keys",
+        "Clearlake Keys",
+        "Keys"
+      ],
+      "latitude": 39.0239133,
+      "longitude": -122.67175,
+      "arm": "Oaks Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2
+    },
+    {
+      "siteId": "fhabs-clearlake-oaks",
+      "name": "Clearlake Oaks",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Clearlake Oaks",
+        "Clear Lake Oaks",
+        "Blue Heron"
+      ],
+      "latitude": 39.021693,
+      "longitude": -122.67152,
+      "arm": "Oaks Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2.5
+    },
+    {
+      "siteId": "fhabs-rocky-point",
+      "name": "Rocky Point",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Rocky Point"
+      ],
+      "latitude": 39.085997,
+      "longitude": -122.90221,
+      "arm": "Upper Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2
+    },
+    {
+      "siteId": "fhabs-konocti-shores",
+      "name": "Konocti Shores",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Konocti Shores"
+      ],
+      "latitude": 38.975761,
+      "longitude": -122.74123,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2
+    },
+    {
+      "siteId": "fhabs-wheeler-point",
+      "name": "Wheeler Point",
+      "source": "FHABS",
+      "siteType": "report landmark",
+      "aliases": [
+        "Wheeler Point",
+        "Wheeler Point, Kelseyville"
+      ],
+      "latitude": 38.967479,
+      "longitude": -122.71152,
+      "arm": "Lower Arm",
+      "assignmentStatus": "needs-local-review",
+      "matchRadiusKm": 2
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+    "schemaVersion":  "weather-context-v1",
+    "generatedAt":  "2026-05-05T09:22:32.1524242-07:00",
+    "sourceName":  "Environmental Monitoring Backbone",
+    "machineReadableStatus":  "unavailable",
+    "staleAfterHours":  6,
+    "stations":  [
+
+                 ],
+    "summaryCards":  [
+                         {
+                             "label":  "Weather context",
+                             "value":  "Not connected",
+                             "note":  "No reviewed public weather export has been generated from live telemetry yet.",
+                             "status":  "unavailable"
+                         }
+                     ],
+    "contextWindows":  [
+
+                       ],
+    "qualityNotes":  [
+                         "Weather context is currently unavailable.",
+                         "The Clear Lake Watch dashboard is using public lake-source snapshots only.",
+                         "Weather context must remain separate from lake-health interpretation and public-health guidance.",
+                         "This file is a public-safe unavailable placeholder, not a live telemetry export."
+                     ]
+}

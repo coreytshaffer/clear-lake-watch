@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "site-review-summary-v0",
+  "generatedAt": "2026-05-05T01:45:02.4806075-07:00",
+  "source": "sanitized aggregate from local SQLite site-review store",
+  "summary": {
+    "registrySites": 11,
+    "reviewedRegistrySites": 2,
+    "needsReviewRegistrySites": 9,
+    "currentMapMarkers": 8,
+    "reviewedCurrentMapMarkers": 0,
+    "needsReviewCurrentMapMarkers": 8,
+    "matchedButUnreviewedCurrentMapMarkers": 8,
+    "highPriorityReviewItems": 0,
+    "mediumPriorityReviewItems": 3,
+    "lowPriorityReviewItems": 5
+  },
+  "priorityCounts": {
+    "high": 0,
+    "medium": 3,
+    "low": 5
+  },
+  "publicNotes": [
+    "This public summary reports aggregate site-registry review status only.",
+    "Detailed review queues, reviewer notes, draft corrections, and unpublished decisions belong in private review artifacts.",
+    "Counts do not certify site locations, arm assignments, or public-health status."
+  ],
+  "links": {
+    "publicMethodology": ".\\methodology.html",
+    "reviewWorkflow": ".\\docs\\site-registry-decision-workflow.md"
+  }
+}

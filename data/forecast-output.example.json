@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "forecast-output-v0",
+  "status": "example-only",
+  "generatedAt": "2026-04-23T00:00:00-07:00",
+  "modelName": "Clear Lake Watch Example Forecast",
+  "modelVersion": "not-live",
+  "modelRunDate": "2026-04-23",
+  "trainingWindow": {
+    "startDate": "YYYY-MM-DD",
+    "endDate": "YYYY-MM-DD",
+    "notes": "Example only. A real export must document the training period used for model fitting."
+  },
+  "forecastWindow": {
+    "startDate": "YYYY-MM-DD",
+    "endDate": "YYYY-MM-DD",
+    "cadence": "weekly"
+  },
+  "inputSummary": [
+    "Reviewed historical observations only",
+    "Reviewed site-to-arm assignments only",
+    "Weather and hydrology context only when source-dated and quality-flagged"
+  ],
+  "excludedInputs": [
+    "unreviewed field observations",
+    "private reviewer notes",
+    "unresolved site-registry assignments",
+    "unpublished microscopy records"
+  ],
+  "uncertaintySummary": "Example only. A real export must describe confidence, known limitations, and what conditions reduce reliability.",
+  "publicHealthDisclaimer": "Experimental forecast only. Not official public-health guidance.",
+  "outputs": [
+    {
+      "arm": "Upper Arm",
+      "forecastDate": "YYYY-MM-DD",
+      "severityClass": "example",
+      "confidence": "low",
+      "uncertainty": "Example output only; no model is currently live.",
+      "explanation": "Placeholder showing the required shape for a future reviewed forecast output.",
+      "experimental": true
+    }
+  ]
+}

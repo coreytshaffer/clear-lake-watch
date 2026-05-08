@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "weather-context-v1",
+  "generatedAt": "2026-04-22T12:00:00-07:00",
+  "sourceName": "Environmental Monitoring Backbone",
+  "machineReadableStatus": "unavailable",
+  "staleAfterHours": 6,
+  "stations": [],
+  "summaryCards": [
+    {
+      "label": "Weather context",
+      "value": "Not connected",
+      "note": "No reviewed public weather export has been generated yet.",
+      "status": "unavailable"
+    }
+  ],
+  "contextWindows": [],
+  "qualityNotes": [
+    "This example documents the public export shape only.",
+    "Weather context is separate from lake-health interpretation.",
+    "Weather context is not public-health guidance.",
+    "Do not publish raw private telemetry or internal gateway details."
+  ]
+}
