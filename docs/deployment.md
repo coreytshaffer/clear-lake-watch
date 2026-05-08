@@ -81,6 +81,12 @@ Pinning note: Windows generally requires pinning from the user interface. After 
 
 The launcher writes runtime PID and log files under `%LOCALAPPDATA%\ClearLakeWatch\runtime` when possible. Those files are local diagnostics only and should not be copied into the static web root.
 
+## Local Portfolio Materials Shortcut
+
+For portfolio review, `portfolio-materials.html` is the local one-file index for the README, dashboard, project brief, case study, Draft PR #2, trusted-review docs, screenshots, career materials, and boundary evidence.
+
+A desktop shortcut named `Clear Lake Watch Portfolio Materials` may point directly to this local index. A taskbar pinned-copy can be placed under the Windows pinned-items folder as a convenience, but Windows may still require an Explorer refresh, sign-out/sign-in, or manual pinning before it appears. These shortcuts are local navigation aids only; they do not publish the project, update the public mirror, retarget Draft PR #2, or approve a public release.
+
 ## Local Git Diagnostics
 
 Git is currently available on `PATH` in this project shell, and this folder is a Git work tree. For local review, run:

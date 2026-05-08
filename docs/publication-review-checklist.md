@@ -12,12 +12,26 @@ Before publishing, choose the scope:
 
 - local review only
 - commit to private repository only
+- request private trusted review on a review-only PR
 - update public static mirror
 - promote as flagship portfolio artifact
 
 If the scope is only local review, stop before staging.
 
 For the recommended portfolio-safe release scope, see `docs/portfolio-safe-release-scope.md`. That scope favors evidence, screenshots, case study polish, and conservative claims before any live weather telemetry or public field-intake expansion.
+
+## Draft PR Review Surface Gate
+
+The current review surface is Draft PR #2:
+
+- `https://github.com/coreytshaffer/clear-lake-watch/pull/2`
+- head branch: `codex/portfolio-safe-release-prep`
+- review-only base branch: `codex/portfolio-safe-release-base`
+- target boundary: not `main`
+
+This draft PR is for private/trusted review and does not publish, promote, or refresh the public mirror. Use `docs/trusted-review-request.md` for the review ask, `docs/trusted-review-feedback-log.md` for private feedback capture, and `portfolio-materials.html` as the local index for the current review packet.
+
+Do not retarget Draft PR #2 to `main` or treat it as a public release without starting a separate public mirror/main-branch promotion review.
 
 ## Freshness Gate
 
@@ -115,3 +129,5 @@ If any item is uncertain, keep the work local.
 Before broad promotion, consider a private review with an SNHU advisor, career services, or one trusted environmental/water-quality contact.
 
 Ask whether the project is clear, professional, appropriately scoped, and careful enough around public-health wording.
+
+Use the Draft PR Review Surface Gate above for the current trusted-review route. Keep reviewer feedback private unless the reviewer explicitly grants permission to quote or reference it.
