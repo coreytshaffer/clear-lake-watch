@@ -195,6 +195,10 @@ try {
   Assert-TextContains -Text $readme -Needle "not official public-health guidance" -Message "README must preserve public-health boundary."
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
+  Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
+  Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
+  Assert-TextContains -Text $index -Needle "Best First Reads" -Message "Homepage must include reviewer entry points."
+  Assert-TextContains -Text $index -Needle "map-review-status" -Message "Homepage must include the map review status callout."
   Assert-TextContains -Text $methodology -Needle "not official public-health direction" -Message "Methodology page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "not official public-health guidance" -Message "Project page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "late prototype / early MVP" -Message "Project page must preserve maturity language."
@@ -202,6 +206,10 @@ try {
   Assert-TextContains -Text $index -Needle "not background emergency alerts or official public-health notifications" -Message "Dashboard must preserve alert boundary."
   Assert-TextContains -Text $project -Needle "docs/forecast-boundary.md" -Message "Project page must link forecast boundary."
   Assert-TextContains -Text $app -Needle "site-review-summary.json" -Message "App must consume public site-review summary."
+  Assert-TextContains -Text $app -Needle "renderSnapshotStatusStrip" -Message "App must render the snapshot status strip."
+  Assert-TextContains -Text $app -Needle "Latest Clear Lake FHABS report" -Message "App must expose FHABS report freshness in the status strip."
+  Assert-TextContains -Text $app -Needle "Latest FHABS lab-linked sample" -Message "App must expose FHABS lab-result freshness in the status strip."
+  Assert-TextContains -Text $app -Needle "before site or arm assignments should be treated as authoritative" -Message "App must preserve map-review caution language."
 
   $jsonFiles = @(
     "data\sources.json",

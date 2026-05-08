@@ -45,7 +45,7 @@
             snapshot files.
           </p>
           <div class="hero-actions">
-            <a href="#live" class="button button-primary">View Live Snapshot</a>
+            <a href="#live" class="button button-primary">View Public Snapshot</a>
             <a href="./methodology.html" class="button button-secondary">Read Methodology</a>
           </div>
         </div>
@@ -64,6 +64,39 @@
       </header>
 
       <main id="main-content" tabindex="-1">
+        <section class="section status-strip-section" aria-labelledby="status-strip-heading">
+          <div class="section-heading compact">
+            <p class="eyebrow">Snapshot Status</p>
+            <h2 id="status-strip-heading">Public Data Snapshot, Not Advisory Guidance</h2>
+            <p>
+              This dashboard summarizes reviewed public snapshot files for research
+              and situational awareness. It is not recreation, emergency, regulatory,
+              or public-health guidance.
+            </p>
+          </div>
+          <div class="snapshot-status-grid" id="snapshot-status-grid" aria-live="polite">
+            <p class="empty-state">Snapshot status loading.</p>
+          </div>
+        </section>
+
+        <section class="section reviewer-section" aria-labelledby="reviewer-heading">
+          <div class="section-heading compact">
+            <p class="eyebrow">For Reviewers</p>
+            <h2 id="reviewer-heading">Best First Reads</h2>
+            <p>
+              Start with the methodology, data products, site-registry QA, and
+              portfolio case study to review scope, uncertainty, and public/private
+              boundaries.
+            </p>
+          </div>
+          <div class="reviewer-link-grid">
+            <a href="./methodology.html">Methodology</a>
+            <a href="#data-products">Data Products</a>
+            <a href="#map">Site Registry QA</a>
+            <a href="./docs/clear_lake_watch_portfolio_case_study.md">Portfolio Case Study</a>
+          </div>
+        </section>
+
         <section
           class="section"
           id="live"
@@ -73,7 +106,7 @@
         >
           <div class="section-heading">
             <p class="eyebrow">Latest Public Snapshot</p>
-            <h2 id="live-heading">What The Current Feeds Are Showing</h2>
+            <h2 id="live-heading">What The Public Snapshot Files Are Showing</h2>
             <div class="freshness-row" id="freshness-row" aria-live="polite"></div>
             <div class="notification-panel" id="notification-panel" aria-live="polite">
               <div>
@@ -192,6 +225,9 @@
               Markers are pulled from FHABS report coordinates, matched to the
               starter site registry when possible, and grouped to arms with
               reviewed assignments or documented fallbacks.
+            </p>
+            <p class="map-review-status" id="map-review-status" aria-live="polite">
+              Map review status loading.
             </p>
             <p id="registry-summary"></p>
             <p class="sr-only" id="map-sr-summary" aria-live="polite">
