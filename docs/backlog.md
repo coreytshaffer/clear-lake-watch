@@ -156,7 +156,7 @@ Acceptance criteria:
 
 Priority: P1
 
-Status: At decision point for portfolio-safe release scope; static portfolio maturity plan is drafted, linked, public snapshot was refreshed on 2026-05-05, local mobile-width screenshot review was captured, publication checklist exists, case-study release framing is documented, internship share materials are drafted, the README now includes a short "What works now / What is planned" maturity summary, and a local validation log records the current dashboard, field/microscopy, and site-review validation pass
+Status: Portfolio-safe release prep is in draft PR review; static portfolio maturity plan is drafted, linked, public snapshot was refreshed on 2026-05-05, local mobile-width screenshot review was captured, publication checklist exists, case-study release framing is documented, internship share materials are drafted, the README now includes a short "What works now / What is planned" maturity summary, and local validation docs record the current dashboard, field/microscopy, site-review, trusted-review, and draft-PR review-surface pass
 
 Why it matters:
 
@@ -176,7 +176,10 @@ Acceptance criteria:
 - `docs/portfolio-safe-release-validation-log.md` records the latest dashboard, field/microscopy, and site-review validation evidence for portfolio-safe review.
 - `docs/clear_lake_watch_portfolio_case_study.md` now includes publication-readiness and validation framing.
 - `docs/career-services-day-of-checklist.md`, `docs/career-services-follow-up-tracker.md`, `docs/career-services-share-packet.md`, `docs/internship-share-brief.md`, `docs/career-services-call-notes.md`, `docs/internship-role-fit-map.md`, and `docs/resume-linkedin-snippets.md` provide a shareable internship packet for SNHU career services and similar conversations.
-- Current decision point: choose whether to proceed with the portfolio-safe release pass. Do not promote a fresh public screenshot until that pass confirms the full UI and wording.
+- Draft PR #2 provides a GitHub review surface against review-only base branch `codex/portfolio-safe-release-base`, not `main`.
+- `docs/trusted-review-request.md` and `docs/trusted-review-feedback-log.md` provide a private feedback request and feedback-capture path.
+- Current decision point: choose whether to keep PR #2 as an internal review surface, request trusted private feedback, return to implementation work, or begin a separate public mirror/main promotion review.
+- Do not promote a fresh public screenshot or public mirror update until a separate promotion pass confirms the full UI, wording, history path, and publication target.
 
 ## P2-01 Expand Validation From Structure To Trust Checks
 
@@ -195,7 +198,7 @@ Acceptance criteria:
 - Validation output is understandable to collaborators.
 - Current validation checks required public files, JSON shape, source/output manifest data, OSM attribution, weather-context guardrails, stale FHABS URL pinning, and runtime-file placement.
 - Current validation checks that site-review outputs include high-priority review counts and per-marker review reasons.
-- Current validation also checks portfolio-safe screenshot packet, site-registry trust-review decision docs, publication/push review status, and published-commentary boundary language.
+- Current validation also checks portfolio-safe screenshot packet, site-registry trust-review decision docs, publication/push review status, draft PR boundary, trusted-review docs, and published-commentary boundary language.
 - `scripts/validate-dashboard.ps1` now fails when `data/live.json` is older than `-MaxSnapshotAgeDays` unless `-AllowStaleSnapshot` is passed for intentional archival or portfolio review.
 - Current decision: refreshed public snapshot data on 2026-05-05, but keep publication as a separate decision from local refresh.
 - Next decision point: before any fresh public publish, run validation without stale-snapshot allowance and capture a current screenshot.
