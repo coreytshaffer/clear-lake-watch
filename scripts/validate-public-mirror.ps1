@@ -134,6 +134,9 @@ try {
     "docs\local-first-operating-model.md",
     "docs\public-mirror-boundary.md",
     "docs\public-backlog.md",
+    "docs\public-snapshot-release-note-2026-05-13.md",
+    "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
+    "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
     "docs\publication-review-checklist.md",
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
@@ -196,6 +199,7 @@ try {
   Assert-TextContains -Text $readme -Needle "not official public-health guidance" -Message "README must preserve public-health boundary."
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
   Assert-TextContains -Text $readme -Needle "docs/public-backlog.md" -Message "README must link the public backlog."
+  Assert-TextContains -Text $readme -Needle "docs/public-snapshot-release-note-2026-05-13.md" -Message "README must link the public snapshot release note."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
   Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
@@ -219,6 +223,18 @@ try {
   Assert-TextContains -Text $publicBacklog -Needle "not official public-health guidance" -Message "Public backlog must preserve public-health boundary."
   Assert-TextContains -Text $publicBacklog -Needle "issues/5" -Message "Public backlog must link the screenshot/release-note issue."
   Assert-TextContains -Text $publicBacklog -Needle "issues/11" -Message "Public backlog must link the reviewer screenshot issue."
+
+  $releaseNote = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-snapshot-release-note-2026-05-13.md") -Raw
+  Assert-TextContains -Text $releaseNote -Needle "Public Snapshot Release Note - 2026-05-13" -Message "Release note must include its title."
+  Assert-TextContains -Text $releaseNote -Needle "late prototype / early MVP" -Message "Release note must preserve maturity language."
+  Assert-TextContains -Text $releaseNote -Needle "not official public-health guidance" -Message "Release note must preserve public-health boundary."
+  Assert-TextContains -Text $releaseNote -Needle "Snapshot generated: May 5, 2026" -Message "Release note must include snapshot generation date."
+  Assert-TextContains -Text $releaseNote -Needle "USGS observations through: May 3, 2026" -Message "Release note must include USGS freshness date."
+  Assert-TextContains -Text $releaseNote -Needle "September 7, 2025" -Message "Release note must include FHABS report freshness date."
+  Assert-TextContains -Text $releaseNote -Needle "January 11, 2024" -Message "Release note must include FHABS lab-linked sample freshness date."
+  Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-desktop-2026-05-13.png" -Message "Release note must link the desktop screenshot."
+  Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-mobile-2026-05-13.png" -Message "Release note must link the mobile-width screenshot."
+  Assert-TextContains -Text $releaseNote -Needle "before site or arm assignments should be treated as authoritative" -Message "Release note must preserve map-review caution language."
 
   $jsonFiles = @(
     "data\sources.json",
