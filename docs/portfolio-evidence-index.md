@@ -14,6 +14,7 @@ It is not official public-health guidance, an official advisory, recreation guid
 | --- | --- | --- |
 | See the working public artifact | [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/) | Shows the public dashboard, snapshot status strip, map QA cues, and source-boundary language. |
 | Share a concise Career Services summary | [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md) | Provides one-page reviewer-friendly evidence, role fit, resume language, and limitations. |
+| Prepare for a Career Services appointment | [Career Services handoff packet](career-services-handoff-packet.md) | Provides a short email, follow-up note, resume placement guidance, and review questions. |
 | Walk through the dashboard interface | [Dashboard anatomy review guide](dashboard-anatomy-review-guide.md) | Explains what each major dashboard area demonstrates for reviewers. |
 | Understand the project quickly | [Project page](../project.html) | Explains MVP scope, trust guardrails, source inventory, and forecast boundary. |
 | Review methods and limitations | [Methodology](../methodology.html) | Documents source categories, public-health boundary, and cautious interpretation rules. |
@@ -110,6 +111,7 @@ Do not claim:
 | --- | --- | --- | --- |
 | [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/) | Public artifact | The prototype can present public source context, snapshot status, map QA, and limitations in a usable web interface. | It does not prove live monitoring, official review, field validation, or advisory authority. |
 | [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md) | Public review handout | Career Services and reviewers have a concise summary of evidence, role fit, skills, links, and limitations. | It does not replace deeper technical review of the dashboard, methods, or source files. |
+| [Career Services handoff packet](career-services-handoff-packet.md) | Public review handout | Career Services has appointment-ready language, resume placement guidance, and conservative framing questions. | It does not replace a tailored resume or internship-specific cover letter. |
 | [Dashboard anatomy review guide](dashboard-anatomy-review-guide.md) | Public review guide | Reviewers have a guided interface walkthrough that maps dashboard areas to portfolio evidence. | It does not create new data, validation, or official review authority. |
 | [README](../README.md) | Public source documentation | The repo clearly states purpose, public files, validation command, and known limitations. | It does not certify data freshness beyond the current snapshot metadata. |
 | [Methodology](../methodology.html) | Public methods page | The project separates observed, reported, derived, experimental, planning, and needs-review signals. | It does not validate environmental conditions or health risk. |

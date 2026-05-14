@@ -39,6 +39,10 @@ These remain candidates for later work:
 | [#23 Mobile reviewer path and sticky navigation review](https://github.com/coreytshaffer/clear-lake-watch/issues/23) | Mobile review | Check whether the reviewer path remains usable on narrow screens after adding the Portfolio link. |
 | [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24) | Career Services | Prepare a short handoff note and link path for Career Services or internship-review conversations. |
 
+## In Progress
+
+- [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24): adding an appointment-ready handoff note, follow-up message, resume-placement guidance, and conservative link path.
+
 ## Boundary
 
 Completed backlog items do not make this an operational system. Future work should preserve the public/private boundary and avoid claims of official monitoring authority, recreation safety, emergency guidance, or public-health advice.

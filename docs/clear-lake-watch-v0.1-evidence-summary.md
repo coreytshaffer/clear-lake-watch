@@ -17,6 +17,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Portfolio evidence index: [portfolio-evidence-index.md](portfolio-evidence-index.md)
 - Reviewer demo notes: [reviewer-demo-notes.md](reviewer-demo-notes.md)
 - Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
+- Career Services handoff packet: [career-services-handoff-packet.md](career-services-handoff-packet.md)
 
 ## What Exists Now
 
@@ -81,9 +82,10 @@ Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, inte
 1. Open the live dashboard and inspect the snapshot status strip.
 2. Open the methodology page and confirm the public-health boundary.
 3. Open the dashboard anatomy review guide for a guided read of the main interface zones.
-4. Open the reviewer demo notes for screenshots and captions.
-5. Open the resume and LinkedIn snippets for copy-ready application language.
-6. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
+4. Open the Career Services handoff packet for appointment email language and review questions.
+5. Open the reviewer demo notes for screenshots and captions.
+6. Open the resume and LinkedIn snippets for copy-ready application language.
+7. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
 
 ## Next Development Steps
 

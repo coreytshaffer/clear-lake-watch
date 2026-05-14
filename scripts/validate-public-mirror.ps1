@@ -419,6 +419,7 @@ try {
     "data\reviewed-field-observations.json",
     "data\weather-context.json",
     "data\weather-context.example.json",
+    "docs\career-services-handoff-packet.md",
     "docs\project-brief.md",
     "docs\Clear-Lake-Watch-Project-Brief.pdf",
     "docs\clear-lake-watch-v0.1-evidence-summary.md",
@@ -615,12 +616,20 @@ try {
 
   $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Dashboard anatomy review guide" -Message "Portfolio evidence index must link the dashboard anatomy guide."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Career Services handoff packet" -Message "Portfolio evidence index must link the Career Services handoff packet."
 
   $dashboardAnatomyGuide = Get-Content -LiteralPath (Resolve-ProjectPath "docs\dashboard-anatomy-review-guide.md") -Raw
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Dashboard Anatomy Review Guide" -Message "Dashboard anatomy guide must include its title."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "What This Project Demonstrates" -Message "Dashboard anatomy guide must explain the portfolio demonstration section."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Open-App Data QA Notices" -Message "Dashboard anatomy guide must explain data QA notices."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "not official public-health guidance" -Message "Dashboard anatomy guide must preserve public-health boundary."
+
+  $careerServicesHandoff = Get-Content -LiteralPath (Resolve-ProjectPath "docs\career-services-handoff-packet.md") -Raw
+  Assert-TextContains -Text $careerServicesHandoff -Needle "Career Services Handoff Packet" -Message "Career Services handoff packet must include its title."
+  Assert-TextContains -Text $careerServicesHandoff -Needle "Short Email Before An Appointment" -Message "Career Services handoff packet must include pre-appointment email language."
+  Assert-TextContains -Text $careerServicesHandoff -Needle "Dashboard anatomy review guide" -Message "Career Services handoff packet must point to the dashboard anatomy guide."
+  Assert-TextContains -Text $careerServicesHandoff -Needle "Resume Placement" -Message "Career Services handoff packet must include resume placement guidance."
+  Assert-TextContains -Text $careerServicesHandoff -Needle "not official public-health guidance" -Message "Career Services handoff packet must preserve public-health boundary."
 
   $jsonFiles = @(
     "data\sources.json",
