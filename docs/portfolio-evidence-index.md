@@ -13,9 +13,12 @@ It is not official public-health guidance, an official advisory, recreation guid
 | Reviewer goal | Open first | Why it matters |
 | --- | --- | --- |
 | See the working public artifact | [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/) | Shows the public dashboard, snapshot status strip, map QA cues, and source-boundary language. |
+| Review for internships | [Internship review start here](internship-review-start-here.md) | Gives the three-link reviewer path, project summary, and copy-paste outreach blurb. |
 | Share a concise Career Services summary | [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md) | Provides one-page reviewer-friendly evidence, role fit, resume language, and limitations. |
 | Prepare for a Career Services appointment | [Career Services handoff packet](career-services-handoff-packet.md) | Provides a short email, follow-up note, resume placement guidance, and review questions. |
 | Walk through the dashboard interface | [Dashboard anatomy review guide](dashboard-anatomy-review-guide.md) | Explains what each major dashboard area demonstrates for reviewers. |
+| Check reviewer-path accessibility | [Accessibility review](accessibility-review.md) | Records the narrow pass on descriptive links, screenshot captions, and reviewer-path clarity. |
+| Check mobile reviewer flow | [Mobile reviewer path review](mobile-reviewer-path-review.md) | Records the narrow pass on sticky navigation, link wrapping, and narrow-screen reviewer flow. |
 | Understand the project quickly | [Project page](../project.html) | Explains MVP scope, trust guardrails, source inventory, and forecast boundary. |
 | Review methods and limitations | [Methodology](../methodology.html) | Documents source categories, public-health boundary, and cautious interpretation rules. |
 | Inspect the reviewer path | [Reviewer demo notes](reviewer-demo-notes.md) | Provides screenshots, captions, review cues, and a short demo script. |
@@ -28,6 +31,7 @@ It is not official public-health guidance, an official advisory, recreation guid
 Open these first:
 
 - [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/)
+- [Internship review start here](internship-review-start-here.md)
 - [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md)
 - [Reviewer demo notes](reviewer-demo-notes.md)
 - [Resume and LinkedIn snippets](resume-linkedin-snippets.md)
@@ -110,9 +114,12 @@ Do not claim:
 | Artifact | Status | What it proves | What it does not prove |
 | --- | --- | --- | --- |
 | [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/) | Public artifact | The prototype can present public source context, snapshot status, map QA, and limitations in a usable web interface. | It does not prove live monitoring, official review, field validation, or advisory authority. |
+| [Internship review start here](internship-review-start-here.md) | Public review handout | Internship reviewers have a concise three-link route, summary, and outreach blurb. | It does not replace tailored application materials for a specific role. |
 | [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md) | Public review handout | Career Services and reviewers have a concise summary of evidence, role fit, skills, links, and limitations. | It does not replace deeper technical review of the dashboard, methods, or source files. |
 | [Career Services handoff packet](career-services-handoff-packet.md) | Public review handout | Career Services has appointment-ready language, resume placement guidance, and conservative framing questions. | It does not replace a tailored resume or internship-specific cover letter. |
 | [Dashboard anatomy review guide](dashboard-anatomy-review-guide.md) | Public review guide | Reviewers have a guided interface walkthrough that maps dashboard areas to portfolio evidence. | It does not create new data, validation, or official review authority. |
+| [Accessibility review](accessibility-review.md) | Public review note | Reviewer links, screenshot captions, and review-path clarity have a narrow accessibility check. | It does not certify full WCAG conformance or replace manual assistive-technology testing. |
+| [Mobile reviewer path review](mobile-reviewer-path-review.md) | Public review note | The mobile reviewer path has been checked at 390px, 360px, and 320px widths. | It does not replace physical-device, mobile screen-reader, or full responsive-design testing. |
 | [README](../README.md) | Public source documentation | The repo clearly states purpose, public files, validation command, and known limitations. | It does not certify data freshness beyond the current snapshot metadata. |
 | [Methodology](../methodology.html) | Public methods page | The project separates observed, reported, derived, experimental, planning, and needs-review signals. | It does not validate environmental conditions or health risk. |
 | [Reviewer demo notes](reviewer-demo-notes.md) | Public review aid | Reviewers have a short path, captions, and screenshots for evaluating the artifact. | It does not imply official approval or operational readiness. |
@@ -126,12 +133,15 @@ Do not claim:
 ## Current Strengths
 
 - Working static public dashboard with GitHub Pages deployment.
+- Internship-facing three-link start-here path.
 - Conservative public-health and forecast boundary language.
 - Source freshness and stale-source warnings treated as visible outputs.
 - Site-registry uncertainty preserved instead of hidden.
 - Weather context separated from lake-health interpretation.
 - Private field and microscopy workflow design before public intake.
 - Reviewer screenshots and demo notes available for portfolio review.
+- Reviewer-path accessibility note available for descriptive links and screenshot-caption coverage.
+- Mobile reviewer path note available for sticky navigation and narrow-screen review.
 
 ## Current Gaps
 

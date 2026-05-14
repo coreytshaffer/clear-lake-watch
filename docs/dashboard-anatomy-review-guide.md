@@ -10,7 +10,7 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 
 ## Primary Screenshot
 
-![Clear Lake Watch dashboard overview showing the public prototype header, maturity framing, reviewer links, source status area, and dashboard layout.](public-screenshots/clear-lake-watch-dashboard-overview-2026-05-14.png)
+![Clear Lake Watch dashboard overview showing the public prototype header, maturity framing, snapshot status strip, reviewer links, and the start of the portfolio signal section.](public-screenshots/clear-lake-watch-dashboard-overview-2026-05-14.png)
 
 ## What To Inspect First
 
@@ -34,6 +34,7 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 5. Review the Open-App Data QA Notices wording and confirm it does not imply emergency or public-health alerting.
 6. Open the map section and confirm unresolved markers remain labeled for local review.
 7. Open the methodology page and confirm the project separates public reports, observations, derived summaries, and limitations.
+8. Open the accessibility review note and confirm reviewer links and screenshot captions are descriptive enough to evaluate without relying on layout alone.
 
 ## Best Interview Talking Points
 
@@ -56,6 +57,10 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 - [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md)
 - [Portfolio evidence index](portfolio-evidence-index.md)
 - [Reviewer demo notes](reviewer-demo-notes.md)
+- [Accessibility review](accessibility-review.md)
+- [Mobile reviewer path review](mobile-reviewer-path-review.md)
+- [Homepage desktop screenshot](public-screenshots/clear-lake-watch-homepage-desktop-2026-05-14.png)
+- [Portfolio signal screenshot](public-screenshots/clear-lake-watch-portfolio-signal-2026-05-14.png)
+- [Open-App Data QA Notices screenshot](public-screenshots/clear-lake-watch-data-qa-notices-2026-05-14.png)
 - [Methodology](../methodology.html)
 - [Project page](../project.html)
-

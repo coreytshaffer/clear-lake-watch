@@ -6,7 +6,7 @@ Clear Lake Watch remains a late prototype / early MVP. It is not official public
 
 ## Current Checkpoint
 
-The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, and a dashboard anatomy review guide.
+The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, a Career Services handoff packet, a dashboard anatomy review guide, an accessibility review note, refreshed reviewer screenshots for the current homepage, and a mobile reviewer path review.
 
 The current phase is reviewer readiness: make the public packet easier for Career Services, internship reviewers, mentors, and scholarship reviewers to inspect without weakening the public-health, recreation, emergency, forecasting, or official-advisory boundaries.
 
@@ -21,6 +21,15 @@ The current phase is reviewer readiness: make the public packet easier for Caree
 | [#9 Build reviewed weather-context export from proven telemetry](https://github.com/coreytshaffer/clear-lake-watch/issues/9) | Weather context | Added reviewed NOAA/National Weather Service public-source context marked `partial`, not `live`. |
 | [#10 Design private field and microscopy intake review workflow](https://github.com/coreytshaffer/clear-lake-watch/issues/10) | Private QA | Documented private intake, QA, permission, and sanitized export gates. |
 | [#11 Prepare reviewer-friendly portfolio screenshots and demo notes](https://github.com/coreytshaffer/clear-lake-watch/issues/11) | Portfolio review | Added reviewer screenshots, captions, and demo notes. |
+| [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24) | Career Services | Added an appointment-ready handoff packet with outreach text, resume-placement guidance, review questions, and conservative link path. |
+
+## Completed Reviewer-Readiness Issues
+
+| Issue | Focus | Result |
+| --- | --- | --- |
+| [#21 Accessibility pass for reviewer-facing docs and screenshots](https://github.com/coreytshaffer/clear-lake-watch/issues/21) | Accessibility | Added a narrow accessibility review note and linked it into the reviewer path. |
+| [#22 Refresh reviewer screenshots after homepage portfolio update](https://github.com/coreytshaffer/clear-lake-watch/issues/22) | Screenshots | Refreshed homepage, portfolio signal, Data QA notice, and dashboard overview screenshots for the current reviewer packet. |
+| [#23 Mobile reviewer path and sticky navigation review](https://github.com/coreytshaffer/clear-lake-watch/issues/23) | Mobile review | Documented the narrow-screen reviewer path and decided no mobile disclosure menu is needed for the current link set. |
 
 ## Next Optional Candidates
 
@@ -32,16 +41,11 @@ These remain candidates for later work:
 
 ## Open Reviewer-Readiness Issues
 
-| Issue | Focus | Intended outcome |
-| --- | --- | --- |
-| [#21 Accessibility pass for reviewer-facing docs and screenshots](https://github.com/coreytshaffer/clear-lake-watch/issues/21) | Accessibility | Confirm reviewer docs, screenshot captions, and link labels are usable and descriptive. |
-| [#22 Refresh reviewer screenshots after homepage portfolio update](https://github.com/coreytshaffer/clear-lake-watch/issues/22) | Screenshots | Capture the current homepage state with the portfolio signal section and data QA notice wording. |
-| [#23 Mobile reviewer path and sticky navigation review](https://github.com/coreytshaffer/clear-lake-watch/issues/23) | Mobile review | Check whether the reviewer path remains usable on narrow screens after adding the Portfolio link. |
-| [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24) | Career Services | Prepare a short handoff note and link path for Career Services or internship-review conversations. |
+No reviewer-readiness issues are currently open in the public backlog snapshot.
 
-## In Progress
+## Next Active Candidate
 
-- [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24): adding an appointment-ready handoff note, follow-up message, resume-placement guidance, and conservative link path.
+- Decide whether to keep moving into a new reviewer-support issue or pause for commit, publication, and GitHub issue cleanup.
 
 ## Boundary
 

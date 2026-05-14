@@ -420,6 +420,9 @@ try {
     "data\weather-context.json",
     "data\weather-context.example.json",
     "docs\career-services-handoff-packet.md",
+    "docs\accessibility-review.md",
+    "docs\mobile-reviewer-path-review.md",
+    "docs\internship-review-start-here.md",
     "docs\project-brief.md",
     "docs\Clear-Lake-Watch-Project-Brief.pdf",
     "docs\clear-lake-watch-v0.1-evidence-summary.md",
@@ -437,8 +440,12 @@ try {
     "docs\portfolio-evidence-index.md",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
+    "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-14.png",
     "docs\public-screenshots\clear-lake-watch-dashboard-overview-2026-05-14.png",
     "docs\public-screenshots\clear-lake-watch-snapshot-status-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-portfolio-signal-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-data-qa-notices-2026-05-14.png",
     "docs\public-screenshots\clear-lake-watch-map-qa-2026-05-14.png",
     "docs\public-screenshots\clear-lake-watch-methodology-2026-05-14.png",
     "docs\public-screenshots\clear-lake-watch-project-page-2026-05-14.png",
@@ -606,8 +613,12 @@ try {
   $reviewerDemoNotes = Get-Content -LiteralPath (Resolve-ProjectPath "docs\reviewer-demo-notes.md") -Raw
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Reviewer Demo Notes" -Message "Reviewer demo notes must include their title."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Suggested Review Path" -Message "Reviewer demo notes must include a review path."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Homepage desktop" -Message "Reviewer demo notes must caption the refreshed desktop homepage screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Homepage mobile" -Message "Reviewer demo notes must caption the refreshed mobile homepage screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Dashboard overview" -Message "Reviewer demo notes must caption the dashboard screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Snapshot status strip" -Message "Reviewer demo notes must caption the snapshot-status screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Portfolio signal" -Message "Reviewer demo notes must caption the portfolio signal screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Open-App Data QA Notices" -Message "Reviewer demo notes must caption the data QA notices screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Map QA" -Message "Reviewer demo notes must caption the map QA screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Methodology page" -Message "Reviewer demo notes must caption the methodology screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Project page" -Message "Reviewer demo notes must caption the project-page screenshot."
@@ -617,12 +628,34 @@ try {
   $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Dashboard anatomy review guide" -Message "Portfolio evidence index must link the dashboard anatomy guide."
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Career Services handoff packet" -Message "Portfolio evidence index must link the Career Services handoff packet."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Internship review start here" -Message "Portfolio evidence index must link the internship start-here path."
+
+  $internshipReviewStartHere = Get-Content -LiteralPath (Resolve-ProjectPath "docs\internship-review-start-here.md") -Raw
+  Assert-TextContains -Text $internshipReviewStartHere -Needle "Internship Review Start Here" -Message "Internship review start-here doc must include its title."
+  Assert-TextContains -Text $internshipReviewStartHere -Needle "Open These 3 Links First" -Message "Internship review start-here doc must include the three-link path."
+  Assert-TextContains -Text $internshipReviewStartHere -Needle "Copy-Paste Internship Outreach Blurb" -Message "Internship review start-here doc must include outreach language."
+  Assert-TextContains -Text $internshipReviewStartHere -Needle "not official public-health guidance" -Message "Internship review start-here doc must preserve public-health boundary."
+  Assert-TextContains -Text $internshipReviewStartHere -Needle "water quality, GIS, watershed planning, environmental monitoring, climate resilience, or environmental data systems" -Message "Internship review start-here doc must state target internship areas."
 
   $dashboardAnatomyGuide = Get-Content -LiteralPath (Resolve-ProjectPath "docs\dashboard-anatomy-review-guide.md") -Raw
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Dashboard Anatomy Review Guide" -Message "Dashboard anatomy guide must include its title."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "What This Project Demonstrates" -Message "Dashboard anatomy guide must explain the portfolio demonstration section."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Open-App Data QA Notices" -Message "Dashboard anatomy guide must explain data QA notices."
   Assert-TextContains -Text $dashboardAnatomyGuide -Needle "not official public-health guidance" -Message "Dashboard anatomy guide must preserve public-health boundary."
+
+  $accessibilityReview = Get-Content -LiteralPath (Resolve-ProjectPath "docs\accessibility-review.md") -Raw
+  Assert-TextContains -Text $accessibilityReview -Needle "Accessibility Review" -Message "Accessibility review must include its title."
+  Assert-TextContains -Text $accessibilityReview -Needle "reviewer-readiness pass" -Message "Accessibility review must preserve narrow pass status."
+  Assert-TextContains -Text $accessibilityReview -Needle "descriptive link text" -Message "Accessibility review must discuss descriptive link text."
+  Assert-TextContains -Text $accessibilityReview -Needle "Screenshot descriptions" -Message "Accessibility review must discuss screenshot descriptions."
+  Assert-TextContains -Text $accessibilityReview -Needle "not official public-health guidance" -Message "Accessibility review must preserve public-health boundary."
+
+  $mobileReviewerPathReview = Get-Content -LiteralPath (Resolve-ProjectPath "docs\mobile-reviewer-path-review.md") -Raw
+  Assert-TextContains -Text $mobileReviewerPathReview -Needle "Mobile Reviewer Path Review" -Message "Mobile reviewer path review must include its title."
+  Assert-TextContains -Text $mobileReviewerPathReview -Needle "sticky primary navigation" -Message "Mobile reviewer path review must discuss sticky navigation."
+  Assert-TextContains -Text $mobileReviewerPathReview -Needle "390px, 360px, and 320px" -Message "Mobile reviewer path review must record checked viewport widths."
+  Assert-TextContains -Text $mobileReviewerPathReview -Needle "No mobile navigation redesign is needed" -Message "Mobile reviewer path review must record the disclosure-menu decision."
+  Assert-TextContains -Text $mobileReviewerPathReview -Needle "not official public-health guidance" -Message "Mobile reviewer path review must preserve public-health boundary."
 
   $careerServicesHandoff = Get-Content -LiteralPath (Resolve-ProjectPath "docs\career-services-handoff-packet.md") -Raw
   Assert-TextContains -Text $careerServicesHandoff -Needle "Career Services Handoff Packet" -Message "Career Services handoff packet must include its title."

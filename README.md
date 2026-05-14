@@ -12,6 +12,16 @@ It is not official public-health guidance, an official advisory, a validated for
 
 ![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
 
+## For Internship Reviewers
+
+Open these first:
+
+1. [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/)
+2. [Clear Lake Watch v0.1 evidence summary](docs/clear-lake-watch-v0.1-evidence-summary.md)
+3. [Reviewer demo notes](docs/reviewer-demo-notes.md)
+
+For copy-paste outreach language, see [Internship review start here](docs/internship-review-start-here.md).
+
 ## What This Public Mirror Shows
 
 - Public environmental data integration across FHABS, USGS, and OpenStreetMap.
@@ -33,8 +43,11 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Project page](project.html)
 - [Methodology](methodology.html)
 - [Portfolio evidence index](docs/portfolio-evidence-index.md)
+- [Internship review start here](docs/internship-review-start-here.md)
 - [Clear Lake Watch v0.1 evidence summary](docs/clear-lake-watch-v0.1-evidence-summary.md)
 - [Career Services handoff packet](docs/career-services-handoff-packet.md)
+- [Accessibility review](docs/accessibility-review.md)
+- [Mobile reviewer path review](docs/mobile-reviewer-path-review.md)
 - [Dashboard anatomy review guide](docs/dashboard-anatomy-review-guide.md)
 - [Project brief](docs/project-brief.md)
 - [Project brief PDF](docs/Clear-Lake-Watch-Project-Brief.pdf)
@@ -57,8 +70,11 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
 - [Portfolio evidence index](docs/portfolio-evidence-index.md)
+- [Internship review start here](docs/internship-review-start-here.md)
 - [Clear Lake Watch v0.1 evidence summary](docs/clear-lake-watch-v0.1-evidence-summary.md)
 - [Career Services handoff packet](docs/career-services-handoff-packet.md)
+- [Accessibility review](docs/accessibility-review.md)
+- [Mobile reviewer path review](docs/mobile-reviewer-path-review.md)
 - [Dashboard anatomy review guide](docs/dashboard-anatomy-review-guide.md)
 - [Reviewer demo notes](docs/reviewer-demo-notes.md)
 - [Site registry decision workflow](docs/site-registry-decision-workflow.md)

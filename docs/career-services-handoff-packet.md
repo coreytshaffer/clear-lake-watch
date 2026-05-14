@@ -11,10 +11,12 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 ## Best 5 Links
 
 1. Live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>
-2. Evidence summary: [clear-lake-watch-v0.1-evidence-summary.md](clear-lake-watch-v0.1-evidence-summary.md)
-3. Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
-4. Resume and LinkedIn snippets: [resume-linkedin-snippets.md](resume-linkedin-snippets.md)
-5. GitHub repository: <https://github.com/coreytshaffer/clear-lake-watch>
+2. Internship review start here: [internship-review-start-here.md](internship-review-start-here.md)
+3. Evidence summary: [clear-lake-watch-v0.1-evidence-summary.md](clear-lake-watch-v0.1-evidence-summary.md)
+4. Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
+5. Resume and LinkedIn snippets: [resume-linkedin-snippets.md](resume-linkedin-snippets.md)
+
+For screenshot-backed reviewer context, also use [reviewer-demo-notes.md](reviewer-demo-notes.md).
 
 ## Short Email Before An Appointment
 
@@ -28,6 +30,9 @@ The project demonstrates public data integration, GIS/spatial review, source-fre
 
 The best starting point is the evidence summary:
 https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md
+
+For internship reviewers, I also prepared a three-link start-here page:
+https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/internship-review-start-here.md
 
 I would especially appreciate feedback on how to present this project on my resume, LinkedIn, Handshake profile, and internship applications without overstating what it does. It is a portfolio prototype and public-data snapshot, not official public-health guidance, a recreation-safety tool, a validated forecast, or a deployed sensor network.
 
@@ -102,4 +107,3 @@ Avoid:
 - Environmental science research assistant
 - Climate resilience or community science intern
 - Technical writing or public-interest data communication role
-

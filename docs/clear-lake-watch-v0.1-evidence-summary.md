@@ -11,6 +11,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 ## Best Links To Review
 
 - Live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>
+- Internship review start here: [internship-review-start-here.md](internship-review-start-here.md)
 - GitHub repository: <https://github.com/coreytshaffer/clear-lake-watch>
 - Methodology: <https://coreytshaffer.github.io/clear-lake-watch/methodology.html>
 - Project page: <https://coreytshaffer.github.io/clear-lake-watch/project.html>
@@ -18,15 +19,20 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Reviewer demo notes: [reviewer-demo-notes.md](reviewer-demo-notes.md)
 - Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
 - Career Services handoff packet: [career-services-handoff-packet.md](career-services-handoff-packet.md)
+- Accessibility review: [accessibility-review.md](accessibility-review.md)
+- Mobile reviewer path review: [mobile-reviewer-path-review.md](mobile-reviewer-path-review.md)
 
 ## What Exists Now
 
 - Static public dashboard deployed with GitHub Pages.
+- Internship-facing start-here path with the three best reviewer links and outreach language.
 - Public data products for FHABS reports, USGS observations, site registry, shoreline geometry, analytics, source manifest, weather context, and reviewed-field-observation placeholder data.
 - Source-freshness and stale-source warnings that distinguish dashboard generation time from underlying source observation dates.
 - Map QA cues that keep unresolved site assignments visible instead of silently treating them as authoritative.
 - Reviewed public-source weather context kept separate from lake-health interpretation.
 - Methodology, project, reviewer-demo, public-backlog, and evidence-index documentation.
+- Accessibility review note for descriptive reviewer links, screenshot captions, and reviewer-path clarity.
+- Mobile reviewer path review note for sticky navigation, link wrapping, and narrow-screen reviewer flow.
 - PowerShell validation script for checking required public mirror files, JSON shape, and publication guardrails.
 
 ## What This Demonstrates
@@ -86,6 +92,13 @@ Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, inte
 5. Open the reviewer demo notes for screenshots and captions.
 6. Open the resume and LinkedIn snippets for copy-ready application language.
 7. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
+
+## Best Review Path For Internship Reviewers
+
+1. Open the live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>.
+2. Read the internship review start-here note: [internship-review-start-here.md](internship-review-start-here.md).
+3. Open the reviewer demo notes for screenshot-backed evidence: [reviewer-demo-notes.md](reviewer-demo-notes.md).
+4. Use the resume and LinkedIn snippets for copy-ready application language: [resume-linkedin-snippets.md](resume-linkedin-snippets.md).
 
 ## Next Development Steps
 

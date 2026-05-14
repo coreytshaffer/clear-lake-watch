@@ -17,6 +17,10 @@ These snippets translate Clear Lake Watch into application-ready language. They 
 
 Clear Lake Watch - Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, integrating public hydrology and harmful-algal-bloom report data, GIS map context, reviewed public-source weather context, source-freshness metadata, site-registry QA, and conservative public methodology guardrails.
 
+## Internship Reviewer Version
+
+Clear Lake Watch is a late-prototype environmental data dashboard and public-data snapshot for Clear Lake, California. It demonstrates environmental data integration, GIS/spatial QA, source-freshness validation, static GitHub Pages deployment, and responsible public communication without claiming to be an official advisory, public-health tool, live monitoring network, or validated forecast.
+
 ## Resume Bullet Options
 
 Environmental data:
@@ -65,6 +69,23 @@ Published here: https://lakeconews.com/news/community/commentary/84368-after-rob
 ## Short Email Blurb
 
 One project I would like to share is Clear Lake Watch, a late-prototype watershed intelligence dashboard for Clear Lake, California. It combines public environmental data, GIS context, reviewed public-source weather context, source-freshness metadata, site-registry review cues, and public methodology guardrails into a static dashboard prototype. I am using it as a portfolio artifact to show my fit for internships involving water quality, GIS, watershed planning, environmental monitoring, climate resilience, or environmental data systems.
+
+## Internship Outreach Blurb
+
+Hello,
+
+I would like to share Clear Lake Watch, my late-prototype environmental data dashboard for Clear Lake, California. It integrates public hydrology and harmful-algal-bloom report data, GIS/spatial QA, source-freshness validation, reviewed public-source weather context, and conservative public methodology language into a static GitHub Pages portfolio artifact.
+
+The best starting links are:
+
+- Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
+- Evidence summary: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md
+- Reviewer demo notes: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/reviewer-demo-notes.md
+
+I am looking for internships involving water quality, GIS, watershed planning, environmental monitoring, climate resilience, or environmental data systems.
+
+Thank you,
+Corey Shaffer
 
 ## Handshake / Portfolio Summary
 
@@ -116,6 +137,7 @@ Avoid these terms:
 
 - Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
 - Repository: https://github.com/coreytshaffer/clear-lake-watch
+- Internship review start here: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/internship-review-start-here.md
 - Methodology: https://coreytshaffer.github.io/clear-lake-watch/methodology.html
 - Project page: https://coreytshaffer.github.io/clear-lake-watch/project.html
 - Published commentary: https://lakeconews.com/news/community/commentary/84368-after-robin-lane-clearlake-needs-more-than-cleanup
