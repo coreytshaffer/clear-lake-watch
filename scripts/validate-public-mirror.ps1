@@ -354,6 +354,39 @@ function Test-WeatherContext {
   }
 }
 
+function Test-ReviewedFieldObservations {
+  param([object]$ReviewedFieldObservations)
+
+  if ($null -eq $ReviewedFieldObservations) {
+    return
+  }
+
+  if ($ReviewedFieldObservations.sourceFamily -ne "field-microscopy") {
+    Add-Failure "Reviewed field observations must use sourceFamily field-microscopy."
+  }
+
+  $qualityNotes = (@($ReviewedFieldObservations.qualityNotes) -join " ")
+  Assert-TextContains -Text $qualityNotes -Needle "approved-public and permissionToPublish true" -Message "Reviewed field observations must preserve approval and permission rule."
+  Assert-TextContains -Text $qualityNotes -Needle "Private collector identity details" -Message "Reviewed field observations must preserve private collector exclusion."
+  Assert-TextContains -Text $qualityNotes -Needle "separate source family" -Message "Reviewed field observations must remain separate from other source families."
+
+  foreach ($record in @($ReviewedFieldObservations.records)) {
+    if ($record.qaStatus -ne "approved-public") {
+      Add-Failure "Reviewed public field observation $($record.recordId) is not approved-public."
+    }
+    if ($record.permissionToPublish -ne $true) {
+      Add-Failure "Reviewed public field observation $($record.recordId) lacks permissionToPublish true."
+    }
+
+    $serialized = $record | ConvertTo-Json -Depth 12
+    foreach ($privateNeedle in @("collectorName", "qaNotes", "custodyNotes", "photoOrVoucherReference", "latitude", "longitude")) {
+      if ($serialized.Contains($privateNeedle)) {
+        Add-Failure "Reviewed public field observation $($record.recordId) includes private or sensitive field: $privateNeedle"
+      }
+    }
+  }
+}
+
 Push-Location $projectRoot
 try {
   $requiredFiles = @(
@@ -391,6 +424,7 @@ try {
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\deployment.md",
     "docs\field-microscopy-intake-contract.md",
+    "docs\field-microscopy-review-workflow.md",
     "docs\flagship-maturity-plan.md",
     "docs\forecast-boundary.md",
     "docs\local-first-operating-model.md",
@@ -539,6 +573,18 @@ try {
   Assert-TextContains -Text $weatherContextContract -Needle "not live telemetry" -Message "Weather context contract must preserve non-live boundary."
   Assert-TextContains -Text $weatherContextContract -Needle 'Use `partial` for a reviewed public-source snapshot' -Message "Weather context contract must explain partial public-source status."
 
+  $fieldMicroscopyContract = Get-Content -LiteralPath (Resolve-ProjectPath "docs\field-microscopy-intake-contract.md") -Raw
+  Assert-TextContains -Text $fieldMicroscopyContract -Needle "field-microscopy-review-workflow.md" -Message "Field microscopy contract must link the review workflow."
+  Assert-TextContains -Text $fieldMicroscopyContract -Needle 'Only `approved-public` records with `permissionToPublish: true`' -Message "Field microscopy contract must preserve public export permission rule."
+
+  $fieldMicroscopyWorkflow = Get-Content -LiteralPath (Resolve-ProjectPath "docs\field-microscopy-review-workflow.md") -Raw
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "No public submission form is enabled" -Message "Field microscopy workflow must preserve no-public-form boundary."
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "collector name or contact details" -Message "Field microscopy workflow must identify private collector details."
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle 'Only `approved-public` records with `permissionToPublish: true`' -Message "Field microscopy workflow must preserve approved-public export gate."
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It must not include" -Message "Field microscopy workflow must define public export exclusions."
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle 'The current public export is `not-connected`' -Message "Field microscopy workflow must preserve current public export state."
+  Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It is not public-health guidance" -Message "Field microscopy workflow must preserve public-health boundary."
+
   $jsonFiles = @(
     "data\sources.json",
     "data\sites.json",
@@ -577,6 +623,9 @@ try {
 
   $weatherContext = Read-JsonFile "data\weather-context.json"
   Test-WeatherContext -WeatherContext $weatherContext
+
+  $reviewedFieldObservations = Read-JsonFile "data\reviewed-field-observations.json"
+  Test-ReviewedFieldObservations -ReviewedFieldObservations $reviewedFieldObservations
 
   $siteReviewSummary = Read-JsonFile "data\site-review-summary.json"
   if ($siteReviewSummary -and $siteReviewSummary.summary) {

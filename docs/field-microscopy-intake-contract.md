@@ -23,6 +23,9 @@ They must not be blended into:
 private intake -> QA review -> publish decision -> sanitized public export -> static dashboard
 ```
 
+The public-safe review workflow is documented in
+[field-microscopy-review-workflow.md](field-microscopy-review-workflow.md).
+
 The public dashboard should consume only a sanitized export such as `data/reviewed-field-observations.json`. The private intake file, reviewer notes, raw photo paths, collector identity details, and unpublished QA comments should stay outside the public static site.
 
 The first private surface is documented in `docs/private-surface.md`. It uses ignored local JSON files under `data/private/` plus an export script that writes only reviewed public-safe records.
