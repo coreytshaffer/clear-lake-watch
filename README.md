@@ -35,6 +35,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Project brief](docs/project-brief.md)
 - [Project brief PDF](docs/Clear-Lake-Watch-Project-Brief.pdf)
 - [Portfolio case study](docs/clear_lake_watch_portfolio_case_study.md)
+- [Public backlog](docs/public-backlog.md)
 
 ## Public Documentation
 
@@ -45,6 +46,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)
+- [Public backlog](docs/public-backlog.md)
 - [Research readiness brief](docs/research-readiness-brief.md)
 - [Published commentary tracker](docs/published-commentary.md)
 - [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md)

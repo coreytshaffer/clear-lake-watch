@@ -133,6 +133,7 @@ try {
     "docs\forecast-boundary.md",
     "docs\local-first-operating-model.md",
     "docs\public-mirror-boundary.md",
+    "docs\public-backlog.md",
     "docs\publication-review-checklist.md",
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
@@ -194,6 +195,7 @@ try {
   Assert-TextContains -Text $readme -Needle "late-prototype / early-MVP" -Message "README must preserve maturity language."
   Assert-TextContains -Text $readme -Needle "not official public-health guidance" -Message "README must preserve public-health boundary."
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
+  Assert-TextContains -Text $readme -Needle "docs/public-backlog.md" -Message "README must link the public backlog."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
   Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
@@ -210,6 +212,13 @@ try {
   Assert-TextContains -Text $app -Needle "Latest Clear Lake FHABS report" -Message "App must expose FHABS report freshness in the status strip."
   Assert-TextContains -Text $app -Needle "Latest FHABS lab-linked sample" -Message "App must expose FHABS lab-result freshness in the status strip."
   Assert-TextContains -Text $app -Needle "before site or arm assignments should be treated as authoritative" -Message "App must preserve map-review caution language."
+
+  $publicBacklog = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-backlog.md") -Raw
+  Assert-TextContains -Text $publicBacklog -Needle "Public Backlog" -Message "Public backlog must define the roadmap index."
+  Assert-TextContains -Text $publicBacklog -Needle "late prototype / early MVP" -Message "Public backlog must preserve maturity language."
+  Assert-TextContains -Text $publicBacklog -Needle "not official public-health guidance" -Message "Public backlog must preserve public-health boundary."
+  Assert-TextContains -Text $publicBacklog -Needle "issues/5" -Message "Public backlog must link the screenshot/release-note issue."
+  Assert-TextContains -Text $publicBacklog -Needle "issues/11" -Message "Public backlog must link the reviewer screenshot issue."
 
   $jsonFiles = @(
     "data\sources.json",
