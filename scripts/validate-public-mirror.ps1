@@ -92,6 +92,212 @@ function Test-HttpEndpoint {
   }
 }
 
+function ConvertTo-DateTimeOffsetOrNull {
+  param(
+    [object]$Value,
+    [string]$Label
+  )
+
+  if ($null -eq $Value -or [string]::IsNullOrWhiteSpace([string]$Value)) {
+    Add-Failure "$Label is missing or blank."
+    return $null
+  }
+
+  try {
+    return [datetimeoffset]::Parse([string]$Value, [Globalization.CultureInfo]::InvariantCulture)
+  } catch {
+    Add-Failure "$Label is not a parseable date/time: $Value"
+    return $null
+  }
+}
+
+function Get-ArrayCount {
+  param([object]$Value)
+  if ($null -eq $Value) {
+    return 0
+  }
+  return @($Value).Count
+}
+
+function Assert-PositiveNumber {
+  param(
+    [object]$Value,
+    [string]$Message
+  )
+
+  if ($null -eq $Value) {
+    Add-Failure $Message
+    return
+  }
+
+  try {
+    if ([double]$Value -le 0) {
+      Add-Failure $Message
+    }
+  } catch {
+    Add-Failure $Message
+  }
+}
+
+function Assert-GapWithinMinutes {
+  param(
+    [datetimeoffset]$Left,
+    [datetimeoffset]$Right,
+    [int]$MaxMinutes,
+    [string]$Message
+  )
+
+  $gapMinutes = [math]::Abs(($Left - $Right).TotalMinutes)
+  if ($gapMinutes -gt $MaxMinutes) {
+    Add-Failure "$Message Gap: $([math]::Round($gapMinutes, 2)) minutes."
+  }
+}
+
+function Get-OutputRecordCount {
+  param(
+    [string]$File,
+    [object]$Data
+  )
+
+  switch ($File) {
+    "data/live.json" {
+      return (Get-ArrayCount $Data.liveCards) + (Get-ArrayCount $Data.mapMarkers)
+    }
+    "data/reports.json" {
+      return Get-ArrayCount $Data.records
+    }
+    "data/observations.json" {
+      return Get-ArrayCount $Data.records
+    }
+    "data/sites-normalized.json" {
+      return Get-ArrayCount $Data.sites
+    }
+    "data/analytics.json" {
+      return (Get-ArrayCount $Data.reportTrendByYear) + (Get-ArrayCount $Data.advisoryDistributionByArm) + (Get-ArrayCount $Data.observationCoverage)
+    }
+    default {
+      return $null
+    }
+  }
+}
+
+function Test-ManifestFreshness {
+  param(
+    [object]$Manifest,
+    [object]$LiveData
+  )
+
+  if ($null -eq $Manifest -or $null -eq $LiveData) {
+    return
+  }
+
+  $manifestGeneratedAt = ConvertTo-DateTimeOffsetOrNull $Manifest.generatedAt "Manifest generatedAt"
+  $liveGeneratedAt = ConvertTo-DateTimeOffsetOrNull $LiveData.generatedAt "Live snapshot generatedAt"
+
+  if ($manifestGeneratedAt -and $liveGeneratedAt) {
+    Assert-GapWithinMinutes -Left $manifestGeneratedAt -Right $liveGeneratedAt -MaxMinutes 5 -Message "Manifest and live snapshot appear to come from different refresh passes."
+  }
+
+  $expectedSourceIds = @(
+    "usgs-lake-level",
+    "usgs-cole-creek-discharge",
+    "fhabs-bloom-reports",
+    "fhabs-results"
+  )
+  $sourceIds = @($Manifest.sources | ForEach-Object { $_.id })
+
+  foreach ($expectedSourceId in $expectedSourceIds) {
+    if ($sourceIds -notcontains $expectedSourceId) {
+      Add-Failure "Manifest is missing expected source: $expectedSourceId"
+    }
+  }
+
+  if ($Manifest.status -eq "ok") {
+    $nonOkSources = @($Manifest.sources | Where-Object { $_.status -ne "ok" })
+    if ($nonOkSources.Count -gt 0) {
+      Add-Failure "Manifest status is ok, but one or more sources are not ok."
+    }
+  }
+
+  $maxSourceAgeDays = if ($Manifest.sourceFreshnessMaxAgeDays) { [int]$Manifest.sourceFreshnessMaxAgeDays } else { 14 }
+
+  foreach ($source in @($Manifest.sources)) {
+    if ([string]::IsNullOrWhiteSpace($source.id)) {
+      Add-Failure "Manifest source is missing id."
+      continue
+    }
+
+    if ([string]::IsNullOrWhiteSpace($source.status)) {
+      Add-Failure "Manifest source $($source.id) is missing status."
+    }
+
+    Assert-PositiveNumber -Value $source.rowCount -Message "Manifest source $($source.id) must have a positive rowCount."
+
+    $latestObservation = ConvertTo-DateTimeOffsetOrNull $source.latestObservationDate "Manifest source $($source.id) latestObservationDate"
+    if ($manifestGeneratedAt -and $latestObservation) {
+      $ageDays = ($manifestGeneratedAt.Date - $latestObservation.Date).TotalDays
+      if ($ageDays -lt 0) {
+        Add-Failure "Manifest source $($source.id) has a latestObservationDate after the manifest generatedAt."
+      } elseif ($ageDays -gt $maxSourceAgeDays) {
+        Add-Warning "Manifest source $($source.id) latest observation is $([int]$ageDays) days older than the dashboard snapshot; keep stale-source language visible."
+      }
+    }
+
+    if ($source.id -like "fhabs-*") {
+      Assert-PositiveNumber -Value $source.clearLakeRowCount -Message "Manifest source $($source.id) must have a positive clearLakeRowCount."
+      if ($null -ne $source.resourceDate) {
+        $resourceDate = ConvertTo-DateTimeOffsetOrNull $source.resourceDate "Manifest source $($source.id) resourceDate"
+        if ($manifestGeneratedAt -and $resourceDate -and $resourceDate.Date -gt $manifestGeneratedAt.Date) {
+          Add-Failure "Manifest source $($source.id) resourceDate is after manifest generatedAt."
+        }
+      }
+      if ($null -ne $source.resourceAgeDays -and [int]$source.resourceAgeDays -lt 0) {
+        Add-Failure "Manifest source $($source.id) resourceAgeDays cannot be negative."
+      }
+    }
+  }
+
+  $expectedOutputFiles = @(
+    "data/live.json",
+    "data/reports.json",
+    "data/observations.json",
+    "data/sites-normalized.json",
+    "data/analytics.json"
+  )
+  $manifestOutputFiles = @($Manifest.outputs | ForEach-Object { $_.file })
+
+  foreach ($expectedOutputFile in $expectedOutputFiles) {
+    if ($manifestOutputFiles -notcontains $expectedOutputFile) {
+      Add-Failure "Manifest is missing expected output entry: $expectedOutputFile"
+    }
+  }
+
+  foreach ($output in @($Manifest.outputs)) {
+    if ([string]::IsNullOrWhiteSpace($output.file)) {
+      Add-Failure "Manifest output is missing file."
+      continue
+    }
+
+    Assert-PositiveNumber -Value $output.recordCount -Message "Manifest output $($output.file) must have a positive recordCount."
+
+    $outputData = Read-JsonFile ($output.file -replace '/', '\')
+    if ($null -ne $outputData) {
+      $outputGeneratedAt = ConvertTo-DateTimeOffsetOrNull $outputData.generatedAt "Manifest output $($output.file) generatedAt"
+      if ($manifestGeneratedAt -and $outputGeneratedAt) {
+        Assert-GapWithinMinutes -Left $manifestGeneratedAt -Right $outputGeneratedAt -MaxMinutes 5 -Message "Manifest output $($output.file) appears to come from a different refresh pass."
+      }
+
+      $computedCount = Get-OutputRecordCount -File $output.file -Data $outputData
+      if ($null -ne $computedCount -and [int]$output.recordCount -ne [int]$computedCount) {
+        Add-Failure "Manifest output $($output.file) recordCount $($output.recordCount) does not match computed count $computedCount."
+      }
+    }
+  }
+
+  $notesText = (@($Manifest.notes) -join " ")
+  Assert-TextContains -Text $notesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
+}
+
 Push-Location $projectRoot
 try {
   $requiredFiles = @(
@@ -144,6 +350,7 @@ try {
     "docs\research-readiness-brief.md",
     "docs\resume-linkedin-snippets.md",
     "docs\source-audit.md",
+    "docs\source-freshness-validation.md",
     "docs\weather-context-contract.md",
     "scripts\refresh-live-data.ps1",
     "scripts\refresh-osm-shoreline.ps1",
@@ -254,6 +461,12 @@ try {
   Assert-TextContains -Text $siteReviewPass -Needle 'Keep `needs-local-review`' -Message "Site review pass must preserve unresolved assignment status."
   Assert-TextContains -Text $siteReviewPass -Needle "not public-health, recreation, emergency, regulatory, or forecasting guidance" -Message "Site review pass must preserve guidance boundary."
 
+  $sourceFreshnessValidation = Get-Content -LiteralPath (Resolve-ProjectPath "docs\source-freshness-validation.md") -Raw
+  Assert-TextContains -Text $sourceFreshnessValidation -Needle "Source Freshness Validation" -Message "Source freshness validation doc must include its title."
+  Assert-TextContains -Text $sourceFreshnessValidation -Needle "not live monitoring" -Message "Source freshness validation doc must preserve non-operational boundary."
+  Assert-TextContains -Text $sourceFreshnessValidation -Needle "dashboard refresh time and source observation dates" -Message "Source freshness validation doc must preserve freshness distinction."
+  Assert-TextContains -Text $sourceFreshnessValidation -Needle "Warning Versus Failure" -Message "Source freshness validation doc must explain warning versus failure behavior."
+
   $jsonFiles = @(
     "data\sources.json",
     "data\sites.json",
@@ -282,6 +495,13 @@ try {
     $joinedNotes = ($manifest.interpretationNotes -join " ")
     Assert-TextContains -Text $joinedNotes -Needle "not official public-health guidance" -Message "Manifest must preserve public-health boundary."
   }
+  if ($manifest -and $manifest.notes) {
+    $joinedNotes = ($manifest.notes -join " ")
+    Assert-TextContains -Text $joinedNotes -Needle "not official public-health guidance" -Message "Manifest must preserve public-health boundary."
+  }
+
+  $liveData = Read-JsonFile "data\live.json"
+  Test-ManifestFreshness -Manifest $manifest -LiveData $liveData
 
   $siteReviewSummary = Read-JsonFile "data\site-review-summary.json"
   if ($siteReviewSummary -and $siteReviewSummary.summary) {
