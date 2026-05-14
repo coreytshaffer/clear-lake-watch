@@ -137,6 +137,8 @@ try {
     "docs\public-snapshot-release-note-2026-05-13.md",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
+    "docs\site-registry-decision-workflow.md",
+    "docs\site-registry-trust-review-pass-001.md",
     "docs\publication-review-checklist.md",
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
@@ -200,6 +202,7 @@ try {
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
   Assert-TextContains -Text $readme -Needle "docs/public-backlog.md" -Message "README must link the public backlog."
   Assert-TextContains -Text $readme -Needle "docs/public-snapshot-release-note-2026-05-13.md" -Message "README must link the public snapshot release note."
+  Assert-TextContains -Text $readme -Needle "docs/site-registry-trust-review-pass-001.md" -Message "README must link the site-registry review pass."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
   Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
@@ -235,6 +238,21 @@ try {
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-desktop-2026-05-13.png" -Message "Release note must link the desktop screenshot."
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-mobile-2026-05-13.png" -Message "Release note must link the mobile-width screenshot."
   Assert-TextContains -Text $releaseNote -Needle "before site or arm assignments should be treated as authoritative" -Message "Release note must preserve map-review caution language."
+
+  $siteDecisionWorkflow = Get-Content -LiteralPath (Resolve-ProjectPath "docs\site-registry-decision-workflow.md") -Raw
+  Assert-TextContains -Text $siteDecisionWorkflow -Needle "Site Registry Decision Workflow" -Message "Site decision workflow must include its title."
+  Assert-TextContains -Text $siteDecisionWorkflow -Needle "not an official source of public-health" -Message "Site decision workflow must preserve public-health boundary."
+  Assert-TextContains -Text $siteDecisionWorkflow -Needle "Keep private reviewer notes" -Message "Site decision workflow must preserve private-review boundary."
+  Assert-TextContains -Text $siteDecisionWorkflow -Needle "site-registry-trust-review-pass-001.md" -Message "Site decision workflow must link the current review pass."
+
+  $siteReviewPass = Get-Content -LiteralPath (Resolve-ProjectPath "docs\site-registry-trust-review-pass-001.md") -Raw
+  Assert-TextContains -Text $siteReviewPass -Needle "Site Registry Trust Review Pass 001" -Message "Site review pass must include its title."
+  Assert-TextContains -Text $siteReviewPass -Needle "no current FHABS marker is promoted" -Message "Site review pass must record the no-promotion decision."
+  Assert-TextContains -Text $siteReviewPass -Needle "Clear Lake Keys near Ketch Court" -Message "Site review pass must identify the Clear Lake Keys medium-priority check."
+  Assert-TextContains -Text $siteReviewPass -Needle "Jago Bay" -Message "Site review pass must identify the Jago Bay medium-priority check."
+  Assert-TextContains -Text $siteReviewPass -Needle "Soda Bay" -Message "Site review pass must identify the Soda Bay medium-priority check."
+  Assert-TextContains -Text $siteReviewPass -Needle 'Keep `needs-local-review`' -Message "Site review pass must preserve unresolved assignment status."
+  Assert-TextContains -Text $siteReviewPass -Needle "not public-health, recreation, emergency, regulatory, or forecasting guidance" -Message "Site review pass must preserve guidance boundary."
 
   $jsonFiles = @(
     "data\sources.json",
