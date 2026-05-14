@@ -1,27 +1,86 @@
 {
     "schemaVersion":  "weather-context-v1",
-    "generatedAt":  "2026-05-05T09:22:32.1524242-07:00",
-    "sourceName":  "Environmental Monitoring Backbone",
-    "machineReadableStatus":  "unavailable",
+    "generatedAt":  "2026-05-13T23:17:06.3490220-07:00",
+    "sourceName":  "NOAA/National Weather Service API",
+    "sourceUrl":  "https://api.weather.gov/stations/KELC1/observations/latest",
+    "machineReadableStatus":  "partial",
     "staleAfterHours":  6,
     "stations":  [
-
+                     {
+                         "stationId":  "KELC1",
+                         "displayName":  "KONOCTI",
+                         "visibility":  "public-source-generalized",
+                         "latitude":  null,
+                         "longitude":  null,
+                         "observedAt":  "2026-05-14T05:57:00.0000000+00:00",
+                         "healthLabel":  "partial",
+                         "metrics":  [
+                                         {
+                                             "label":  "Air temperature",
+                                             "value":  13.33,
+                                             "unit":  "C",
+                                             "status":  "reviewed-public-source"
+                                         },
+                                         {
+                                             "label":  "Relative humidity",
+                                             "value":  65.016,
+                                             "unit":  "%",
+                                             "status":  "reviewed-public-source"
+                                         },
+                                         {
+                                             "label":  "Wind speed",
+                                             "value":  6.444,
+                                             "unit":  "m/s",
+                                             "status":  "reviewed-public-source"
+                                         },
+                                         {
+                                             "label":  "Wind direction",
+                                             "value":  294,
+                                             "unit":  "degrees",
+                                             "status":  "reviewed-public-source"
+                                         }
+                                     ]
+                     }
                  ],
     "summaryCards":  [
                          {
-                             "label":  "Weather context",
-                             "value":  "Not connected",
-                             "note":  "No reviewed public weather export has been generated from live telemetry yet.",
-                             "status":  "unavailable"
+                             "label":  "Weather source",
+                             "value":  "KELC1 / KONOCTI",
+                             "note":  "Reviewed public weather.gov station snapshot; generalized for public context.",
+                             "status":  "context-only"
+                         },
+                         {
+                             "label":  "Air temperature",
+                             "value":  "13.3 C",
+                             "note":  "Latest reviewed public-source station observation, not a lake-water measurement.",
+                             "status":  "partial"
+                         },
+                         {
+                             "label":  "Relative humidity",
+                             "value":  "65%",
+                             "note":  "Weather-driver context only.",
+                             "status":  "partial"
+                         },
+                         {
+                             "label":  "Wind speed",
+                             "value":  "6.4 m/s",
+                             "note":  "Wind context is not a bloom-severity estimate.",
+                             "status":  "partial"
                          }
                      ],
     "contextWindows":  [
-
+                           {
+                               "label":  "Latest weather observation",
+                               "windowHours":  6,
+                               "summary":  "Public weather.gov station observation reviewed as environmental-driver context only.",
+                               "status":  "context-only"
+                           }
                        ],
     "qualityNotes":  [
-                         "Weather context is currently unavailable.",
-                         "The Clear Lake Watch dashboard is using public lake-source snapshots only.",
-                         "Weather context must remain separate from lake-health interpretation and public-health guidance.",
-                         "This file is a public-safe unavailable placeholder, not a live telemetry export."
+                         "Weather context is generated from a reviewed public NOAA/National Weather Service API station observation.",
+                         "Station coordinates are not published in this public export; the station ID is included for source transparency.",
+                         "Weather context is separate from lake-health interpretation and public-health guidance.",
+                         "This is not MQTT, Grafana, InfluxDB, raw local telemetry, or a private gateway export.",
+                         "Weather context is not a bloom-severity estimate, cyanotoxin advisory, or recreation-safety recommendation."
                      ]
 }

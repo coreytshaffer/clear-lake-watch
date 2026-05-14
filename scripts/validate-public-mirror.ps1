@@ -298,6 +298,62 @@ function Test-ManifestFreshness {
   Assert-TextContains -Text $notesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
 }
 
+function Test-WeatherContext {
+  param([object]$WeatherContext)
+
+  if ($null -eq $WeatherContext) {
+    return
+  }
+
+  $allowedStatuses = @("live", "stale", "partial", "unavailable")
+  if ($allowedStatuses -notcontains $WeatherContext.machineReadableStatus) {
+    Add-Failure "Weather context has unexpected machineReadableStatus: $($WeatherContext.machineReadableStatus)"
+  }
+
+  [void](ConvertTo-DateTimeOffsetOrNull $WeatherContext.generatedAt "Weather context generatedAt")
+
+  if ([string]::IsNullOrWhiteSpace($WeatherContext.sourceName)) {
+    Add-Failure "Weather context must include sourceName."
+  }
+
+  Assert-PositiveNumber -Value $WeatherContext.staleAfterHours -Message "Weather context staleAfterHours must be positive."
+
+  $qualityNotes = (@($WeatherContext.qualityNotes) -join " ")
+  Assert-TextContains -Text $qualityNotes -Needle "separate from lake-health interpretation" -Message "Weather context must preserve lake-health separation."
+  Assert-TextContains -Text $qualityNotes -Needle "not a bloom-severity estimate" -Message "Weather context must preserve bloom-severity boundary."
+  Assert-TextContains -Text $qualityNotes -Needle "not MQTT, Grafana, InfluxDB, raw local telemetry, or a private gateway export" -Message "Weather context must keep private telemetry systems out of the public export."
+
+  if ($WeatherContext.machineReadableStatus -ne "unavailable") {
+    if (-not $WeatherContext.sourceName.Contains("NOAA") -and -not $WeatherContext.sourceName.Contains("National Weather Service")) {
+      Add-Failure "Available weather context must use a reviewed public source name."
+    }
+
+    if ((Get-ArrayCount $WeatherContext.stations) -le 0) {
+      Add-Failure "Available weather context must include at least one public-safe station record."
+    }
+
+    if ((Get-ArrayCount $WeatherContext.summaryCards) -le 0) {
+      Add-Failure "Available weather context must include summary cards."
+    }
+  }
+
+  foreach ($station in @($WeatherContext.stations)) {
+    if ([string]::IsNullOrWhiteSpace($station.stationId)) {
+      Add-Failure "Weather station record is missing stationId."
+    }
+    if ([string]::IsNullOrWhiteSpace($station.visibility)) {
+      Add-Failure "Weather station $($station.stationId) is missing visibility."
+    }
+    [void](ConvertTo-DateTimeOffsetOrNull $station.observedAt "Weather station $($station.stationId) observedAt")
+
+    foreach ($metric in @($station.metrics)) {
+      if ([string]::IsNullOrWhiteSpace($metric.label) -or [string]::IsNullOrWhiteSpace($metric.unit)) {
+        Add-Failure "Weather station $($station.stationId) has a metric without label or unit."
+      }
+    }
+  }
+}
+
 Push-Location $projectRoot
 try {
   $requiredFiles = @(
@@ -355,6 +411,7 @@ try {
     "docs\weather-context-contract.md",
     "scripts\refresh-live-data.ps1",
     "scripts\refresh-osm-shoreline.ps1",
+    "scripts\write-weather-context-public-source.ps1",
     "scripts\write-weather-context-unavailable.ps1"
   )
 
@@ -475,6 +532,12 @@ try {
   Assert-TextContains -Text $scheduledRefreshDesign -Needle "Fail closed if validation fails" -Message "Scheduled refresh design must define fail-closed behavior."
   Assert-TextContains -Text $scheduledRefreshDesign -Needle "The scheduled workflow must never publish" -Message "Scheduled refresh design must protect private/local files."
   Assert-TextContains -Text $scheduledRefreshDesign -Needle "not live monitoring" -Message "Scheduled refresh design must preserve non-operational boundary."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "write-weather-context-public-source.ps1" -Message "Scheduled refresh design must reference the reviewed public-source weather writer."
+
+  $weatherContextContract = Get-Content -LiteralPath (Resolve-ProjectPath "docs\weather-context-contract.md") -Raw
+  Assert-TextContains -Text $weatherContextContract -Needle "write-weather-context-public-source.ps1" -Message "Weather context contract must document the public-source writer."
+  Assert-TextContains -Text $weatherContextContract -Needle "not live telemetry" -Message "Weather context contract must preserve non-live boundary."
+  Assert-TextContains -Text $weatherContextContract -Needle 'Use `partial` for a reviewed public-source snapshot' -Message "Weather context contract must explain partial public-source status."
 
   $jsonFiles = @(
     "data\sources.json",
@@ -511,6 +574,9 @@ try {
 
   $liveData = Read-JsonFile "data\live.json"
   Test-ManifestFreshness -Manifest $manifest -LiveData $liveData
+
+  $weatherContext = Read-JsonFile "data\weather-context.json"
+  Test-WeatherContext -WeatherContext $weatherContext
 
   $siteReviewSummary = Read-JsonFile "data\site-review-summary.json"
   if ($siteReviewSummary -and $siteReviewSummary.summary) {

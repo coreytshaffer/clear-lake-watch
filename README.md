@@ -70,7 +70,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - `data/analytics.json`: generated historical summaries for dashboard charts
 - `data/manifest.json`: source-status manifest
 - `data/lake-shoreline.json`: OpenStreetMap-derived Clear Lake shoreline geometry
-- `data/weather-context.json`: public weather-context status, currently unavailable
+- `data/weather-context.json`: reviewed public-source weather context, separate from lake-health interpretation
 - `data/reviewed-field-observations.json`: reviewed-public field/microscopy placeholder
 
 ## Validate This Mirror
