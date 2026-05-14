@@ -218,7 +218,7 @@ const renderNotificationHistory = () => {
 
   if (!history.length) {
     const emptyItem = document.createElement("li");
-    emptyItem.textContent = "No recent alerts yet.";
+    emptyItem.textContent = "No recent data QA notices yet.";
     notificationHistoryElement.append(emptyItem);
     return;
   }
@@ -283,7 +283,7 @@ const updateNotificationPanel = () => {
   if (!notificationsSupported()) {
     notificationPanelElement.hidden = false;
     notificationStatusElement.textContent =
-      "This browser does not support notifications for this dashboard.";
+      "This browser does not support local notices for this dashboard.";
     notificationToggleElement.disabled = true;
     notificationToggleElement.textContent = "Not Supported";
     if (notificationClearHistoryElement) {
@@ -377,14 +377,14 @@ const updateNotificationPanel = () => {
 
   if (optedIn && permission === "granted") {
     notificationStatusElement.textContent =
-      "Local alerts are on. You can receive alerts while this app is open for stale data, source issues, and caution-report increases.";
-    notificationToggleElement.textContent = "Disable Alerts";
+      "Data QA notices are on. You can receive local notices while this app is open for stale data, source refresh issues, and FHABS caution-label count changes.";
+    notificationToggleElement.textContent = "Disable Notices";
     return;
   }
 
   notificationStatusElement.textContent =
-    "Local alerts are off. Enable alerts to receive snapshot change alerts while this app is open.";
-  notificationToggleElement.textContent = permission === "granted" ? "Enable Alerts" : "Allow Alerts";
+    "Data QA notices are off. Enable notices to receive local snapshot-change notices while this app is open.";
+  notificationToggleElement.textContent = permission === "granted" ? "Enable Notices" : "Allow Notices";
 };
 
 const notify = ({ title, body, tag }) => {
@@ -422,7 +422,7 @@ const evaluateSnapshotNotifications = (liveData, manifestData) => {
 
   if (rules.stale && ageDays !== null && ageDays > staleAfterDays && !events[staleEventId]) {
     notify({
-      title: "Clear Lake Watch: Snapshot Stale",
+      title: "Clear Lake Watch: Snapshot Freshness Notice",
       body: `The current snapshot is ${ageDays} days old.`,
       tag: "snapshot-stale",
     });
@@ -433,7 +433,7 @@ const evaluateSnapshotNotifications = (liveData, manifestData) => {
   const sourceIssueEventId = `sources-${generatedAt}-${sourceIssues.length}`;
   if (rules.sources && sourceIssues.length > 0 && !events[sourceIssueEventId]) {
     notify({
-      title: "Clear Lake Watch: Source Attention Needed",
+      title: "Clear Lake Watch: Source Refresh Issue Notice",
       body: `${sourceIssues.length} source feed${sourceIssues.length === 1 ? "" : "s"} need attention in the latest manifest.`,
       tag: "source-attention",
     });
@@ -452,8 +452,8 @@ const evaluateSnapshotNotifications = (liveData, manifestData) => {
     !events[`caution-${generatedAt}`]
   ) {
     notify({
-      title: "Clear Lake Watch: Caution Reports Increased",
-      body: `Caution-labeled reports increased from ${previousCautionCount} to ${cautionCount}.`,
+      title: "Clear Lake Watch: FHABS Caution-Label Count Changed",
+      body: `Caution-labeled reports changed from ${previousCautionCount} to ${cautionCount}.`,
       tag: "caution-increase",
     });
     events[`caution-${generatedAt}`] = true;
@@ -493,8 +493,8 @@ const setupNotificationControls = () => {
     if (Notification.permission === "granted") {
       setStoredBoolean(notificationSettingsKey, true);
       notify({
-        title: "Clear Lake Watch Open-App Alerts Enabled",
-        body: "You can now receive local snapshot alerts while this app is open.",
+        title: "Clear Lake Watch Open-App Data QA Notices Enabled",
+        body: "You can now receive local snapshot-change notices while this app is open.",
         tag: "alerts-enabled",
       });
     }
@@ -515,7 +515,7 @@ const setupNotificationControls = () => {
     setStoredJson(notificationEventStateKey, {});
     setStoredJson(cautionCountStateKey, null);
     notificationStatusElement.textContent =
-      "Notification settings reset. Alerts are off until you enable them again.";
+      "Notification settings reset. Data QA notices are off until you enable them again.";
     updateNotificationPanel();
   });
 
@@ -536,31 +536,31 @@ const setupNotificationControls = () => {
     const rules = getNotificationRules();
     const messages = {
       stale: {
-        title: "Clear Lake Watch: Test Stale Snapshot Alert",
-        body: "Test only: this simulates a stale snapshot notification.",
+        title: "Clear Lake Watch: Test Snapshot Freshness Notice",
+        body: "Test only: this simulates a stale snapshot notice.",
         tag: "test-stale",
       },
       sources: {
-        title: "Clear Lake Watch: Test Source Alert",
-        body: "Test only: this simulates a source-status attention notification.",
+        title: "Clear Lake Watch: Test Source Refresh Issue Notice",
+        body: "Test only: this simulates a source-refresh issue notice.",
         tag: "test-sources",
       },
       caution: {
-        title: "Clear Lake Watch: Test Caution Alert",
-        body: "Test only: this simulates a caution-report increase notification.",
+        title: "Clear Lake Watch: Test FHABS Caution-Label Count Notice",
+        body: "Test only: this simulates a FHABS caution-label count-change notice.",
         tag: "test-caution",
       },
     };
 
     if (!rules[ruleKey]) {
       notificationStatusElement.textContent =
-        "Enable this alert rule first, then test again.";
+        "Enable this notice rule first, then test again.";
       return;
     }
 
     if (!notificationsEnabled()) {
       notificationStatusElement.textContent =
-        "Enable alerts and grant notification permission before sending test alerts.";
+        "Enable notices and grant browser notification permission before sending test notices.";
       return;
     }
 

@@ -421,6 +421,7 @@ try {
     "data\weather-context.example.json",
     "docs\project-brief.md",
     "docs\Clear-Lake-Watch-Project-Brief.pdf",
+    "docs\clear-lake-watch-v0.1-evidence-summary.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
     "docs\deployment.md",
     "docs\field-microscopy-intake-contract.md",
@@ -431,6 +432,7 @@ try {
     "docs\public-mirror-boundary.md",
     "docs\public-backlog.md",
     "docs\public-snapshot-release-note-2026-05-13.md",
+    "docs\portfolio-evidence-index.md",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-dashboard-overview-2026-05-14.png",
@@ -514,12 +516,13 @@ try {
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
   Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
   Assert-TextContains -Text $index -Needle "Best First Reads" -Message "Homepage must include reviewer entry points."
+  Assert-TextContains -Text $index -Needle "What This Project Demonstrates" -Message "Homepage must include a portfolio demonstration section."
   Assert-TextContains -Text $index -Needle "map-review-status" -Message "Homepage must include the map review status callout."
   Assert-TextContains -Text $methodology -Needle "not official public-health direction" -Message "Methodology page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "not official public-health guidance" -Message "Project page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "late prototype / early MVP" -Message "Project page must preserve maturity language."
   Assert-TextContains -Text $project -Needle "Unresolved markers remain in local review" -Message "Project page must preserve site-review caution language."
-  Assert-TextContains -Text $index -Needle "not background emergency alerts or official public-health notifications" -Message "Dashboard must preserve alert boundary."
+  Assert-TextContains -Text $index -Needle "local browser notices only, not background emergency or official public-health notifications" -Message "Dashboard must preserve data-QA notice boundary."
   Assert-TextContains -Text $project -Needle "docs/forecast-boundary.md" -Message "Project page must link forecast boundary."
   Assert-TextContains -Text $app -Needle "site-review-summary.json" -Message "App must consume public site-review summary."
   Assert-TextContains -Text $app -Needle "renderSnapshotStatusStrip" -Message "App must render the snapshot status strip."

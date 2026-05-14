@@ -418,7 +418,8 @@ h2 {
 }
 
 .status-strip-section,
-.reviewer-section {
+.reviewer-section,
+.demonstrates-section {
   border: 1px solid rgba(47, 111, 95, 0.16);
 }
 
@@ -467,6 +468,31 @@ h2 {
 
 .reviewer-link-grid a:hover {
   background: rgba(15, 108, 115, 0.12);
+}
+
+.demonstrates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.demonstrates-card {
+  min-height: 190px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.demonstrates-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.demonstrates-card p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
 }
 
 .freshness-row {
@@ -1661,6 +1687,7 @@ h2 {
   .split-section,
   .arm-grid,
   .stats-grid,
+  .demonstrates-grid,
   .source-grid,
   .product-grid,
   .source-status-grid,

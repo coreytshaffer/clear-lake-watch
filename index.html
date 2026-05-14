@@ -28,6 +28,7 @@
           <a href="#data-products" data-section-link="data-products">Data</a>
           <a href="./project.html">Project</a>
           <a href="./methodology.html">Methodology</a>
+          <a href="./docs/clear-lake-watch-v0.1-evidence-summary.md">Portfolio</a>
           <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
             Dark Mode
           </button>
@@ -93,7 +94,52 @@
             <a href="./methodology.html">Methodology</a>
             <a href="#data-products">Data Products</a>
             <a href="#map">Site Registry QA</a>
+            <a href="./docs/clear-lake-watch-v0.1-evidence-summary.md">Evidence Summary</a>
             <a href="./docs/clear_lake_watch_portfolio_case_study.md">Portfolio Case Study</a>
+          </div>
+        </section>
+
+        <section class="section demonstrates-section" aria-labelledby="demonstrates-heading">
+          <div class="section-heading compact">
+            <p class="eyebrow">Portfolio Signal</p>
+            <h2 id="demonstrates-heading">What This Project Demonstrates</h2>
+            <p>
+              Clear Lake Watch is best reviewed as evidence of environmental
+              data systems work: integrating public sources, preserving spatial
+              uncertainty, and communicating limits clearly.
+            </p>
+          </div>
+          <div class="demonstrates-grid">
+            <article class="demonstrates-card">
+              <h3>Environmental Data Integration</h3>
+              <p>
+                Combines FHABS, USGS, OpenStreetMap, public snapshot files, and
+                reviewed public-source weather context into one static review surface.
+              </p>
+            </article>
+            <article class="demonstrates-card">
+              <h3>GIS And Spatial Review</h3>
+              <p>
+                Uses shoreline geometry, lake-arm grouping, site-registry
+                records, map trust filters, and needs-review status to keep
+                spatial uncertainty visible.
+              </p>
+            </article>
+            <article class="demonstrates-card">
+              <h3>Responsible Public Communication</h3>
+              <p>
+                Separates reports, observations, derived summaries, source
+                freshness, and public-health boundaries so the dashboard does
+                not read as official guidance.
+              </p>
+            </article>
+            <article class="demonstrates-card">
+              <h3>Research-To-Product Workflow</h3>
+              <p>
+                Shows normalized exports, static deployment, validation checks,
+                documentation, reviewer notes, and a bounded public backlog.
+              </p>
+            </article>
           </div>
         </section>
 
@@ -110,19 +156,19 @@
             <div class="freshness-row" id="freshness-row" aria-live="polite"></div>
             <div class="notification-panel" id="notification-panel" aria-live="polite">
               <div>
-                <p class="eyebrow">Local Snapshot Alerts</p>
+                <p class="eyebrow">Open-App Data QA Notices</p>
                 <p id="notification-status">
-                  Local alerts are off. Enable alerts to receive snapshot change alerts while this app is open.
+                  Data QA notices are off. Enable notices to receive local snapshot-change notices while this app is open.
                 </p>
                 <p class="notification-last-tested">
-                  These are not background emergency alerts or official public-health notifications.
+                  These are local browser notices only, not background emergency or official public-health notifications.
                 </p>
                 <div class="notification-rule-grid" id="notification-rule-grid">
                   <div class="notification-rule-row">
                     <div>
                       <label class="notification-rule">
                         <input type="checkbox" id="notification-rule-stale">
-                        <span>Stale snapshot alerts</span>
+                        <span>Snapshot freshness notice</span>
                       </label>
                       <p class="notification-last-tested" id="notification-last-tested-stale"></p>
                     </div>
@@ -134,7 +180,7 @@
                     <div>
                       <label class="notification-rule">
                         <input type="checkbox" id="notification-rule-sources">
-                        <span>Source status alerts</span>
+                        <span>Source refresh issue notice</span>
                       </label>
                       <p class="notification-last-tested" id="notification-last-tested-sources"></p>
                     </div>
@@ -146,7 +192,7 @@
                     <div>
                       <label class="notification-rule">
                         <input type="checkbox" id="notification-rule-caution">
-                        <span>Caution increase alerts</span>
+                        <span>FHABS caution-label count changed</span>
                       </label>
                       <p class="notification-last-tested" id="notification-last-tested-caution"></p>
                     </div>
@@ -159,7 +205,7 @@
               </div>
               <div class="notification-actions">
                 <button class="button button-secondary" id="notification-toggle" type="button">
-                  Enable Alerts
+                  Enable Notices
                 </button>
                 <button class="button button-secondary" id="notification-clear-history" type="button">
                   Clear History
