@@ -53,6 +53,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Site registry decision workflow](docs/site-registry-decision-workflow.md)
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Source freshness validation](docs/source-freshness-validation.md)
+- [Scheduled public refresh design](docs/scheduled-public-refresh-design.md)
 - [Research readiness brief](docs/research-readiness-brief.md)
 - [Published commentary tracker](docs/published-commentary.md)
 - [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md)
