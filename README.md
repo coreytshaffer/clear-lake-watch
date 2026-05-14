@@ -45,6 +45,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Forecast boundary](docs/forecast-boundary.md)
 - [Weather context contract](docs/weather-context-contract.md)
 - [Field/microscopy intake contract](docs/field-microscopy-intake-contract.md)
+- [Field/microscopy review workflow](docs/field-microscopy-review-workflow.md)
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)
