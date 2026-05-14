@@ -56,6 +56,8 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Reviewer demo notes](docs/reviewer-demo-notes.md)
+- [Variable register](docs/variable-register.md)
+- [Field validation plan](docs/field-validation-plan.md)
 
 ## Public Documentation
 
@@ -64,6 +66,8 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Weather context contract](docs/weather-context-contract.md)
 - [Field/microscopy intake contract](docs/field-microscopy-intake-contract.md)
 - [Field/microscopy review workflow](docs/field-microscopy-review-workflow.md)
+- [Variable register](docs/variable-register.md)
+- [Field validation plan](docs/field-validation-plan.md)
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)

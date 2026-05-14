@@ -23,6 +23,7 @@ It is not official public-health guidance, an official advisory, recreation guid
 | Review methods and limitations | [Methodology](../methodology.html) | Documents source categories, public-health boundary, and cautious interpretation rules. |
 | Inspect the reviewer path | [Reviewer demo notes](reviewer-demo-notes.md) | Provides screenshots, captions, review cues, and a short demo script. |
 | Check current implementation status | [Public backlog](public-backlog.md) | Summarizes completed trust-hardening work and optional next candidates. |
+| Review scientific credibility setup | [Variable register](variable-register.md) and [Field validation plan](field-validation-plan.md) | Shows the next planning layer before any field, lab, microscopy, or sensor claims. |
 
 ## Audience-Specific Review Paths
 
@@ -52,6 +53,8 @@ Do not claim:
 Open these first:
 
 - [Research readiness brief](research-readiness-brief.md)
+- [Variable register](variable-register.md)
+- [Field validation plan](field-validation-plan.md)
 - [Project brief](project-brief.md)
 - [Source audit](source-audit.md)
 - [Forecast boundary](forecast-boundary.md)
@@ -129,6 +132,8 @@ Do not claim:
 | [Site registry trust review pass 001](site-registry-trust-review-pass-001.md) | Public QA note | Current map assignments remain reviewable rather than silently authoritative. | It does not resolve all site locations or local arm assignments. |
 | [Weather context contract](weather-context-contract.md) | Public scope contract | Weather context is separate from lake-health interpretation and marked as partial when appropriate. | It does not provide live weather telemetry or health-risk conclusions. |
 | [Field/microscopy review workflow](field-microscopy-review-workflow.md) | Public workflow design | Private intake, review, permission, and sanitized export gates are planned before public release. | It does not mean field or microscopy submissions are active. |
+| [Variable register](variable-register.md) | Public planning artifact | Future variables are separated by readiness and source family. | It does not prove any future field or sensor measurement has occurred. |
+| [Field validation plan](field-validation-plan.md) | Public planning artifact | Calibration, sample handling, QA/QC, and publication gates are defined before field claims. | It does not create a deployed monitoring program or official guidance. |
 
 ## Current Strengths
 
@@ -142,6 +147,7 @@ Do not claim:
 - Reviewer screenshots and demo notes available for portfolio review.
 - Reviewer-path accessibility note available for descriptive links and screenshot-caption coverage.
 - Mobile reviewer path note available for sticky navigation and narrow-screen review.
+- Variable register and field-validation plan available for scientific credibility review.
 
 ## Current Gaps
 
@@ -150,7 +156,7 @@ Do not claim:
 - Some site-registry assignments still need local review.
 - Public-source reports may be stale relative to the dashboard snapshot date.
 - The project has not been validated as a public-health, recreation, regulatory, or emergency tool.
-- Portfolio-facing documents still need a refresh pass after the completed public trust-hardening work.
+- Future field variables still need mentor review, method selection, calibration planning, and QA/QC before public use.
 
 ## Recommended Next Review Sequence
 

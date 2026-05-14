@@ -31,6 +31,12 @@ The current phase is reviewer readiness: make the public packet easier for Caree
 | [#22 Refresh reviewer screenshots after homepage portfolio update](https://github.com/coreytshaffer/clear-lake-watch/issues/22) | Screenshots | Refreshed homepage, portfolio signal, Data QA notice, and dashboard overview screenshots for the current reviewer packet. |
 | [#23 Mobile reviewer path and sticky navigation review](https://github.com/coreytshaffer/clear-lake-watch/issues/23) | Mobile review | Documented the narrow-screen reviewer path and decided no mobile disclosure menu is needed for the current link set. |
 
+## Completed Scientific Credibility Issues
+
+| Issue | Focus | Result |
+| --- | --- | --- |
+| [#25 Draft variable register and field-validation plan](https://github.com/coreytshaffer/clear-lake-watch/issues/25) | Field validation planning | Added a variable register and field-validation plan that separate public-source context from future field, lab, microscopy, and sensor measurements. |
+
 ## Next Optional Candidates
 
 These remain candidates for later work:
@@ -45,7 +51,7 @@ No reviewer-readiness issues are currently open in the public backlog snapshot.
 
 ## Next Active Candidate
 
-- [#25 Draft variable register and field-validation plan](https://github.com/coreytshaffer/clear-lake-watch/issues/25): define priority variables for future field validation, separate public-source context from future field or sensor measurements, and document calibration, sample-handling, QA/QC, and uncertainty questions before any deployed monitoring or forecasting claims.
+- Choose one bounded mentor-review pilot protocol from the variable register and field-validation plan before any field deployment, forecasting, or new data ingestion.
 
 ## Boundary
 

@@ -431,6 +431,8 @@ try {
     "docs\deployment.md",
     "docs\field-microscopy-intake-contract.md",
     "docs\field-microscopy-review-workflow.md",
+    "docs\variable-register.md",
+    "docs\field-validation-plan.md",
     "docs\flagship-maturity-plan.md",
     "docs\forecast-boundary.md",
     "docs\local-first-operating-model.md",
@@ -610,6 +612,22 @@ try {
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It must not include" -Message "Field microscopy workflow must define public export exclusions."
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle 'The current public export is `not-connected`' -Message "Field microscopy workflow must preserve current public export state."
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It is not public-health guidance" -Message "Field microscopy workflow must preserve public-health boundary."
+
+  $variableRegister = Get-Content -LiteralPath (Resolve-ProjectPath "docs\variable-register.md") -Raw
+  Assert-TextContains -Text $variableRegister -Needle "Variable Register" -Message "Variable register must include its title."
+  Assert-TextContains -Text $variableRegister -Needle "future-field-validation" -Message "Variable register must distinguish future field-validation variables."
+  Assert-TextContains -Text $variableRegister -Needle "future-lab-or-microscopy" -Message "Variable register must distinguish future lab or microscopy variables."
+  Assert-TextContains -Text $variableRegister -Needle "future-sensor-or-backbone" -Message "Variable register must distinguish future sensor or backbone variables."
+  Assert-TextContains -Text $variableRegister -Needle "do-not-use-as-label" -Message "Variable register must define variables that should not become public labels."
+  Assert-TextContains -Text $variableRegister -Needle "not official public-health guidance" -Message "Variable register must preserve public-health boundary."
+
+  $fieldValidationPlan = Get-Content -LiteralPath (Resolve-ProjectPath "docs\field-validation-plan.md") -Raw
+  Assert-TextContains -Text $fieldValidationPlan -Needle "Field Validation Plan" -Message "Field validation plan must include its title."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "Calibration And QA/QC Questions" -Message "Field validation plan must document calibration and QA/QC questions."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "Public Export Gate" -Message "Field validation plan must define a public export gate."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "field-microscopy-review-workflow.md" -Message "Field validation plan must link the field/microscopy review workflow."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "weather-context-contract.md" -Message "Field validation plan must link the weather context contract."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "not official public-health guidance" -Message "Field validation plan must preserve public-health boundary."
 
   $reviewerDemoNotes = Get-Content -LiteralPath (Resolve-ProjectPath "docs\reviewer-demo-notes.md") -Raw
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Reviewer Demo Notes" -Message "Reviewer demo notes must include their title."

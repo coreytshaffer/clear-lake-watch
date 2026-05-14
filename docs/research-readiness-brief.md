@@ -34,6 +34,7 @@ Clear Lake Watch addresses that problem as a cautious integration layer. It does
 - Public methodology and disclaimer page.
 - Validation script for required files, JSON shape, and public/private guardrails.
 - Private-review design for future field and microscopy records, with public-safe placeholder export.
+- Variable register and field-validation plan for future field, lab, microscopy, and sensor credibility.
 - Reviewer screenshots, demo notes, and a portfolio evidence index for scholarship, internship, mentor, and community review.
 
 ## Current Limitations
@@ -66,7 +67,7 @@ The most useful first review is narrow:
 1. Keep the dashboard validator passing and preserve stale-source warnings as visible trust cues.
 2. Refresh portfolio-facing documents so they match the current public mirror and trust-hardening pass.
 3. Review the site-registry location-verification notes and leave unresolved items unresolved unless better evidence exists.
-4. Draft a variable register for future field or sensor data, separate from the current public-source dashboard.
+4. Use the variable register and field-validation plan to choose one bounded future pilot protocol.
 5. Ask one environmental science, water-quality, or GIS mentor for feedback on the review labels and validation pathway.
 
 ## Claim Boundary
