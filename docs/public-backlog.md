@@ -1,14 +1,14 @@
 # Public Backlog
 
-Status: completed trust-hardening pass with next optional candidates.
+Status: completed trust-hardening pass; reviewer-readiness phase open.
 
 Clear Lake Watch remains a late prototype / early MVP. It is not official public-health guidance, an official advisory, a validated forecast, or a deployed sensor network.
 
 ## Current Checkpoint
 
-The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, and reviewer demo notes.
+The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, and a dashboard anatomy review guide.
 
-The next work should expand only after a new issue or review target is chosen.
+The current phase is reviewer readiness: make the public packet easier for Career Services, internship reviewers, mentors, and scholarship reviewers to inspect without weakening the public-health, recreation, emergency, forecasting, or official-advisory boundaries.
 
 ## Completed Public Trust-Hardening Issues
 
@@ -24,13 +24,20 @@ The next work should expand only after a new issue or review target is chosen.
 
 ## Next Optional Candidates
 
-These should become new GitHub Issues before implementation:
+These remain candidates for later work:
 
 - Manual-only refresh workflow dry run, with no scheduled automation.
 - Public page refresh after the next reviewed data snapshot.
-- Accessibility pass on reviewer screenshots and public docs.
 - Site-registry local review for Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay.
-- A portfolio-facing release summary that points to the dashboard, methodology, demo notes, and trust-boundary docs.
+
+## Open Reviewer-Readiness Issues
+
+| Issue | Focus | Intended outcome |
+| --- | --- | --- |
+| [#21 Accessibility pass for reviewer-facing docs and screenshots](https://github.com/coreytshaffer/clear-lake-watch/issues/21) | Accessibility | Confirm reviewer docs, screenshot captions, and link labels are usable and descriptive. |
+| [#22 Refresh reviewer screenshots after homepage portfolio update](https://github.com/coreytshaffer/clear-lake-watch/issues/22) | Screenshots | Capture the current homepage state with the portfolio signal section and data QA notice wording. |
+| [#23 Mobile reviewer path and sticky navigation review](https://github.com/coreytshaffer/clear-lake-watch/issues/23) | Mobile review | Check whether the reviewer path remains usable on narrow screens after adding the Portfolio link. |
+| [#24 Career Services handoff review packet](https://github.com/coreytshaffer/clear-lake-watch/issues/24) | Career Services | Prepare a short handoff note and link path for Career Services or internship-review conversations. |
 
 ## Boundary
 

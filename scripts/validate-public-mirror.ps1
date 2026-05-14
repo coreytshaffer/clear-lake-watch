@@ -538,6 +538,9 @@ try {
   Assert-TextContains -Text $publicBacklog -Needle "Completed Public Trust-Hardening Issues" -Message "Public backlog must reflect completed trust-hardening pass."
   Assert-TextContains -Text $publicBacklog -Needle "issues/5" -Message "Public backlog must link the screenshot/release-note issue."
   Assert-TextContains -Text $publicBacklog -Needle "issues/11" -Message "Public backlog must link the reviewer screenshot issue."
+  Assert-TextContains -Text $publicBacklog -Needle "Open Reviewer-Readiness Issues" -Message "Public backlog must define the current reviewer-readiness issue set."
+  Assert-TextContains -Text $publicBacklog -Needle "issues/21" -Message "Public backlog must link the accessibility reviewer-readiness issue."
+  Assert-TextContains -Text $publicBacklog -Needle "issues/24" -Message "Public backlog must link the Career Services handoff issue."
   Assert-TextContains -Text $publicBacklog -Needle "Next Optional Candidates" -Message "Public backlog must define next optional candidates."
 
   $releaseNote = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-snapshot-release-note-2026-05-13.md") -Raw
