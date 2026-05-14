@@ -2,13 +2,13 @@
 
 **Project brief**  
 Corey Shaffer  
-April 2026
+Updated May 14, 2026
 
 ## Summary
 
-Clear Lake Watch is a public-facing environmental dashboard prototype for Clear Lake, California. It brings together lake level, tributary discharge, cyanobacterial bloom reports, shoreline context, and source-status metadata into a single reviewed publication surface.
+Clear Lake Watch is a public-facing environmental dashboard prototype for Clear Lake, California. It brings together lake level, tributary discharge, cyanobacterial bloom reports, shoreline context, reviewed public-source weather context, site-registry review status, and source-freshness metadata into a single reviewed publication surface.
 
-The project is designed as a lake-focused public mirror on top of a broader local-first environmental monitoring backbone. Public-facing outputs stay static, transparent, and publication-safe, while private intake, QA, field observations, and future weather or soil telemetry remain behind explicit review boundaries.
+The project is designed as a lake-focused public mirror on top of a broader local-first environmental monitoring backbone. Public-facing outputs stay static, transparent, and publication-safe, while private intake, QA, field observations, future local telemetry, and sensitive review materials remain behind explicit review boundaries.
 
 ## Problem
 
@@ -19,6 +19,7 @@ Clear Lake Watch addresses that problem by combining:
 - USGS lake-level and streamflow drivers
 - California FHABS bloom reports and results
 - OpenStreetMap shoreline geometry
+- reviewed NOAA/National Weather Service public-source weather context
 - site-registry review status and source-freshness cues
 
 ## Current MVP
@@ -30,7 +31,8 @@ The current late-prototype / early-MVP dashboard includes:
 - recent FHABS-derived bloom report context
 - a shoreline map with registry-backed markers
 - visible trust cues for reviewed versus needs-review site assignments
-- source freshness and unavailable-state handling
+- source freshness, stale-source warnings, and partial-source handling
+- reviewed public-source weather context kept separate from lake-health interpretation
 - a public methodology page and interpretation disclaimers
 
 Live public mirror:  
@@ -54,8 +56,8 @@ Clear Lake Watch is for situational awareness, source discovery, and research pl
 Current limitations include:
 
 - some FHABS landmark assignments still require local review
-- weather context is intentionally not live yet
-- field and microscopy workflows are still planned as reviewed private intake
+- weather context is a reviewed public-source partial snapshot, not local live telemetry
+- field and microscopy workflows are designed as private-reviewed intake pathways, not active public submission features
 - report counts should not be interpreted as bloom severity
 
 ## Collaboration sought

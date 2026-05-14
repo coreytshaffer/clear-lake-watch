@@ -1,0 +1,93 @@
+# Clear Lake Watch v0.1 Evidence Summary
+
+**Audience:** Career Services, internship reviewers, scholarship reviewers, and mentors  
+**Prepared:** 2026-05-14  
+**Project stage:** late prototype / early MVP  
+
+## One-Sentence Summary
+
+Clear Lake Watch is a public watershed intelligence dashboard prototype for Clear Lake, California that integrates public environmental data, GIS context, source-freshness metadata, map-review status, and cautious methodology notes into a static GitHub Pages dashboard.
+
+## Best Links To Review
+
+- Live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>
+- GitHub repository: <https://github.com/coreytshaffer/clear-lake-watch>
+- Methodology: <https://coreytshaffer.github.io/clear-lake-watch/methodology.html>
+- Project page: <https://coreytshaffer.github.io/clear-lake-watch/project.html>
+- Portfolio evidence index: [portfolio-evidence-index.md](portfolio-evidence-index.md)
+- Reviewer demo notes: [reviewer-demo-notes.md](reviewer-demo-notes.md)
+
+## What Exists Now
+
+- Static public dashboard deployed with GitHub Pages.
+- Public data products for FHABS reports, USGS observations, site registry, shoreline geometry, analytics, source manifest, weather context, and reviewed-field-observation placeholder data.
+- Source-freshness and stale-source warnings that distinguish dashboard generation time from underlying source observation dates.
+- Map QA cues that keep unresolved site assignments visible instead of silently treating them as authoritative.
+- Reviewed public-source weather context kept separate from lake-health interpretation.
+- Methodology, project, reviewer-demo, public-backlog, and evidence-index documentation.
+- PowerShell validation script for checking required public mirror files, JSON shape, and publication guardrails.
+
+## What This Demonstrates
+
+- Environmental data integration across multiple public source types.
+- GIS and spatial communication using shoreline context, site registry logic, and map QA status.
+- Data validation and source-provenance thinking.
+- Conservative public communication around sensitive environmental-health data.
+- Static web deployment and documentation discipline.
+- Ability to turn a local environmental problem into a reviewable technical portfolio artifact.
+
+## What It Does Not Claim
+
+Clear Lake Watch is not:
+
+- official public-health guidance,
+- an official advisory,
+- recreation or water-safety guidance,
+- emergency guidance,
+- a validated forecast,
+- a deployed sensor network,
+- a public submission system,
+- or a replacement for official monitoring or advisories.
+
+The project should be presented as a public-data snapshot and research-planning prototype, not an operational lake-safety product.
+
+## Strong Resume Language
+
+Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, integrating public hydrology and harmful-algal-bloom report data, GIS map context, reviewed public-source weather context, source-freshness metadata, site-registry QA, and conservative public methodology guardrails.
+
+## Roles This Supports
+
+- Environmental data intern
+- GIS or watershed planning intern
+- Water quality monitoring assistant
+- Environmental science research assistant
+- Climate resilience or community science intern
+- Technical writing or public-interest data communication role
+
+## Skills Evidence
+
+| Skill area | Evidence |
+| --- | --- |
+| Environmental data systems | Public data products, source manifest, source-freshness validation, and dashboard integration. |
+| GIS / spatial analysis | Shoreline geometry, site registry, lake-arm grouping, and map QA status. |
+| Water quality context | FHABS report context, USGS hydrology, and public-health boundary language. |
+| Software implementation | HTML, CSS, JavaScript, JSON data products, and PowerShell validation workflow. |
+| Public communication | Methodology page, project page, reviewer notes, and claim-boundary language. |
+| Research readiness | Source audit, forecast boundary, evidence index, and mentor-review brief. |
+
+## Best Review Path For Career Services
+
+1. Open the live dashboard and inspect the snapshot status strip.
+2. Open the methodology page and confirm the public-health boundary.
+3. Open the reviewer demo notes for screenshots and captions.
+4. Open the resume and LinkedIn snippets for copy-ready application language.
+5. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
+
+## Next Development Steps
+
+- Refresh remaining public-facing portfolio copy as new review work is completed.
+- Create a short outreach packet for mentors or internship reviewers.
+- Draft a variable register for future field or sensor data.
+- Develop a field validation and calibration plan before claiming any deployed monitoring value.
+- Continue preserving the distinction between public-source context, private review, and future telemetry.
+

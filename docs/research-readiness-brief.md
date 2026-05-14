@@ -3,6 +3,7 @@
 **Status:** mentor-review draft
 **Project stage:** late prototype / early MVP
 **Use case:** scholarship, REU, faculty-advisor, and technical mentor conversations
+**Last refreshed:** 2026-05-14
 
 ## Working Research Identity
 
@@ -26,17 +27,19 @@ Clear Lake Watch addresses that problem as a cautious integration layer. It does
 - USGS hydrology context and lake-level display.
 - FHABS-derived report context.
 - OpenStreetMap shoreline context.
+- Reviewed NOAA/National Weather Service public-source weather context marked as contextual and partial.
 - Site-registry structure for stable site IDs, lake-arm grouping, and review status.
-- Source-status manifest and public data-product inventory.
+- Source-status manifest, source-freshness validation, and public data-product inventory.
 - Visible signal labels for observed, reported, derived, planning, experimental, and needs-review content.
 - Public methodology and disclaimer page.
 - Validation script for required files, JSON shape, and public/private guardrails.
-- Private-review design for future field and microscopy records.
+- Private-review design for future field and microscopy records, with public-safe placeholder export.
+- Reviewer screenshots, demo notes, and a portfolio evidence index for scholarship, internship, mentor, and community review.
 
 ## Current Limitations
 
 - Some site-registry assignments still require local review.
-- Weather context is intentionally unavailable until reviewed public-safe telemetry exists.
+- Weather context is a reviewed public-source partial snapshot, not local live telemetry or lake-health interpretation.
 - Field and microscopy records are not public submission features.
 - Report counts should not be interpreted as bloom severity.
 - The dashboard is not official public-health, regulatory, recreation, or emergency guidance.
@@ -49,7 +52,7 @@ Clear Lake Watch addresses that problem as a cautious integration layer. It does
 | Environmental data integration | Combine public lake, hydrologic, bloom-report, and GIS context in one reviewed dashboard surface. | Source audit, validation logs, reproducible refresh notes. |
 | Data trust and provenance | Show source freshness, signal type, and review status near the point of interpretation. | User/mentor review of trust labels and methodology language. |
 | Site-registry QA | Preserve unresolved or heuristic site assignments instead of hiding uncertainty. | Local review notes, decision log, and documented assignment rules. |
-| Local-first monitoring architecture | Separate public-safe dashboard exports from private intake, QA, and future telemetry. | Field/microscopy review cycle, private/public boundary checks. |
+| Local-first monitoring architecture | Separate public-safe dashboard exports from private intake, QA, reviewed public-source context, and future telemetry. | Field/microscopy review cycle, private/public boundary checks, and future calibration plan. |
 | Research communication | Translate complex environmental data into cautious public-facing summaries. | Accessibility review and mentor feedback. |
 
 ## Mentor Feedback Request
@@ -60,8 +63,8 @@ The most useful first review is narrow:
 
 ## Near-Term Work Plan
 
-1. Run the dashboard validator without stale-snapshot allowance before any broad public promotion.
-2. Confirm that the public mirror reflects the current conservative maturity language.
+1. Keep the dashboard validator passing and preserve stale-source warnings as visible trust cues.
+2. Refresh portfolio-facing documents so they match the current public mirror and trust-hardening pass.
 3. Review the site-registry location-verification notes and leave unresolved items unresolved unless better evidence exists.
 4. Draft a variable register for future field or sensor data, separate from the current public-source dashboard.
 5. Ask one environmental science, water-quality, or GIS mentor for feedback on the review labels and validation pathway.
