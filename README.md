@@ -38,6 +38,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
+- [Reviewer demo notes](docs/reviewer-demo-notes.md)
 
 ## Public Documentation
 
@@ -51,6 +52,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Publication review checklist](docs/publication-review-checklist.md)
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
+- [Reviewer demo notes](docs/reviewer-demo-notes.md)
 - [Site registry decision workflow](docs/site-registry-decision-workflow.md)
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Source freshness validation](docs/source-freshness-validation.md)

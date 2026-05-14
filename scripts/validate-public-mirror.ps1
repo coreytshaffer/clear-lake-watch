@@ -433,11 +433,17 @@ try {
     "docs\public-snapshot-release-note-2026-05-13.md",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
+    "docs\public-screenshots\clear-lake-watch-dashboard-overview-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-snapshot-status-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-map-qa-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-methodology-2026-05-14.png",
+    "docs\public-screenshots\clear-lake-watch-project-page-2026-05-14.png",
     "docs\site-registry-decision-workflow.md",
     "docs\site-registry-trust-review-pass-001.md",
     "docs\publication-review-checklist.md",
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
+    "docs\reviewer-demo-notes.md",
     "docs\resume-linkedin-snippets.md",
     "docs\scheduled-public-refresh-design.md",
     "docs\source-audit.md",
@@ -501,6 +507,7 @@ try {
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
   Assert-TextContains -Text $readme -Needle "docs/public-backlog.md" -Message "README must link the public backlog."
   Assert-TextContains -Text $readme -Needle "docs/public-snapshot-release-note-2026-05-13.md" -Message "README must link the public snapshot release note."
+  Assert-TextContains -Text $readme -Needle "docs/reviewer-demo-notes.md" -Message "README must link the reviewer demo notes."
   Assert-TextContains -Text $readme -Needle "docs/site-registry-trust-review-pass-001.md" -Message "README must link the site-registry review pass."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
@@ -584,6 +591,16 @@ try {
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It must not include" -Message "Field microscopy workflow must define public export exclusions."
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle 'The current public export is `not-connected`' -Message "Field microscopy workflow must preserve current public export state."
   Assert-TextContains -Text $fieldMicroscopyWorkflow -Needle "It is not public-health guidance" -Message "Field microscopy workflow must preserve public-health boundary."
+
+  $reviewerDemoNotes = Get-Content -LiteralPath (Resolve-ProjectPath "docs\reviewer-demo-notes.md") -Raw
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Reviewer Demo Notes" -Message "Reviewer demo notes must include their title."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Suggested Review Path" -Message "Reviewer demo notes must include a review path."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Dashboard overview" -Message "Reviewer demo notes must caption the dashboard screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Snapshot status strip" -Message "Reviewer demo notes must caption the snapshot-status screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Map QA" -Message "Reviewer demo notes must caption the map QA screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Methodology page" -Message "Reviewer demo notes must caption the methodology screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "Project page" -Message "Reviewer demo notes must caption the project-page screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "not official public-health guidance" -Message "Reviewer demo notes must preserve public-health boundary."
 
   $jsonFiles = @(
     "data\sources.json",
