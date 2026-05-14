@@ -24,7 +24,7 @@ It is not official public-health guidance, an official advisory, a validated for
 
 - This dashboard does not issue public-health, recreation, regulatory, or emergency guidance.
 - Some FHABS landmarks still require local review before arm assignments should be treated as authoritative.
-- Weather context is intentionally marked unavailable until reviewed public-safe telemetry exists.
+- Weather context is a reviewed public-source snapshot and remains separate from lake-health interpretation.
 - Field and microscopy workflows are represented as reviewed-public export placeholders, not public submission forms.
 
 ## Open First

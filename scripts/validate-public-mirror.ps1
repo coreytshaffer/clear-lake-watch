@@ -504,6 +504,7 @@ try {
 
   Assert-TextContains -Text $readme -Needle "late-prototype / early-MVP" -Message "README must preserve maturity language."
   Assert-TextContains -Text $readme -Needle "not official public-health guidance" -Message "README must preserve public-health boundary."
+  Assert-TextContains -Text $readme -Needle "Weather context is a reviewed public-source snapshot and remains separate from lake-health interpretation." -Message "README must describe weather context as reviewed public-source context."
   Assert-TextContains -Text $readme -Needle "not part of this public mirror branch" -Message "README must explain that private review materials are excluded."
   Assert-TextContains -Text $readme -Needle "docs/public-backlog.md" -Message "README must link the public backlog."
   Assert-TextContains -Text $readme -Needle "docs/public-snapshot-release-note-2026-05-13.md" -Message "README must link the public snapshot release note."
@@ -530,8 +531,10 @@ try {
   Assert-TextContains -Text $publicBacklog -Needle "Public Backlog" -Message "Public backlog must define the roadmap index."
   Assert-TextContains -Text $publicBacklog -Needle "late prototype / early MVP" -Message "Public backlog must preserve maturity language."
   Assert-TextContains -Text $publicBacklog -Needle "not official public-health guidance" -Message "Public backlog must preserve public-health boundary."
+  Assert-TextContains -Text $publicBacklog -Needle "Completed Public Trust-Hardening Issues" -Message "Public backlog must reflect completed trust-hardening pass."
   Assert-TextContains -Text $publicBacklog -Needle "issues/5" -Message "Public backlog must link the screenshot/release-note issue."
   Assert-TextContains -Text $publicBacklog -Needle "issues/11" -Message "Public backlog must link the reviewer screenshot issue."
+  Assert-TextContains -Text $publicBacklog -Needle "Next Optional Candidates" -Message "Public backlog must define next optional candidates."
 
   $releaseNote = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-snapshot-release-note-2026-05-13.md") -Raw
   Assert-TextContains -Text $releaseNote -Needle "Public Snapshot Release Note - 2026-05-13" -Message "Release note must include its title."
