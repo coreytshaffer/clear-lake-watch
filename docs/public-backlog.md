@@ -45,7 +45,7 @@ No reviewer-readiness issues are currently open in the public backlog snapshot.
 
 ## Next Active Candidate
 
-- Decide whether to keep moving into a new reviewer-support issue or pause for commit, publication, and GitHub issue cleanup.
+- [#25 Draft variable register and field-validation plan](https://github.com/coreytshaffer/clear-lake-watch/issues/25): define priority variables for future field validation, separate public-source context from future field or sensor measurements, and document calibration, sample-handling, QA/QC, and uncertainty questions before any deployed monitoring or forecasting claims.
 
 ## Boundary
 

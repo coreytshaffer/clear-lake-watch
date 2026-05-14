@@ -476,6 +476,7 @@ try {
     "portfolio-materials.html",
     "docs\trusted-review-request.md",
     "docs\trusted-review-feedback-log.md",
+    "docs\communications-log.md",
     "docs\conversation-log.md",
     "docs\review-screenshots",
     "docs\screenshot-only-portfolio-packet.md",

@@ -5,6 +5,8 @@ data/*.local.json
 *.local.sqlite
 docs/private/
 data/private/
+docs/communications-log.md
+portfolio-materials.html
 __pycache__/
 *.pyc
 Thumbs.db
