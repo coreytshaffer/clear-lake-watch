@@ -349,6 +349,7 @@ try {
     "docs\published-commentary.md",
     "docs\research-readiness-brief.md",
     "docs\resume-linkedin-snippets.md",
+    "docs\scheduled-public-refresh-design.md",
     "docs\source-audit.md",
     "docs\source-freshness-validation.md",
     "docs\weather-context-contract.md",
@@ -466,6 +467,14 @@ try {
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "not live monitoring" -Message "Source freshness validation doc must preserve non-operational boundary."
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "dashboard refresh time and source observation dates" -Message "Source freshness validation doc must preserve freshness distinction."
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "Warning Versus Failure" -Message "Source freshness validation doc must explain warning versus failure behavior."
+
+  $scheduledRefreshDesign = Get-Content -LiteralPath (Resolve-ProjectPath "docs\scheduled-public-refresh-design.md") -Raw
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "Scheduled Public Refresh Design" -Message "Scheduled refresh design doc must include its title."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "No unattended publication workflow is enabled" -Message "Scheduled refresh design must preserve design-only status."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle 'Do not let a scheduled run commit directly to `main`' -Message "Scheduled refresh design must require review before main updates."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "Fail closed if validation fails" -Message "Scheduled refresh design must define fail-closed behavior."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "The scheduled workflow must never publish" -Message "Scheduled refresh design must protect private/local files."
+  Assert-TextContains -Text $scheduledRefreshDesign -Needle "not live monitoring" -Message "Scheduled refresh design must preserve non-operational boundary."
 
   $jsonFiles = @(
     "data\sources.json",
