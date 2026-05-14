@@ -11,7 +11,8 @@ These notes provide a short review path for Clear Lake Watch and captions for th
 3. Review the map QA section and confirm unresolved site assignments remain visible.
 4. Open the methodology page to inspect source boundaries and limitations.
 5. Open the project page to inspect MVP scope, trust guardrails, and data-product framing.
-6. Review the public backlog to see which trust-hardening work has already been completed.
+6. Open the dashboard anatomy guide to connect dashboard sections to portfolio evidence.
+7. Review the public backlog to see which trust-hardening work has already been completed.
 
 ## Screenshots And Captions
 
@@ -30,6 +31,8 @@ Clear Lake Watch is a public watershed intelligence prototype for Clear Lake, Ca
 The strongest review points are the trust boundaries: the dashboard shows source freshness, keeps stale-source warnings visible, marks unresolved map assignments, separates weather context from lake-health interpretation, and avoids public-health or recreation guidance.
 
 The project is best reviewed as an environmental data systems portfolio artifact, not as an advisory product or deployed monitoring network.
+
+For a guided read of the dashboard zones, open [Dashboard Anatomy Review Guide](dashboard-anatomy-review-guide.md).
 
 ## Review Boundary
 

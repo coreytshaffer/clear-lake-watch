@@ -16,6 +16,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Project page: <https://coreytshaffer.github.io/clear-lake-watch/project.html>
 - Portfolio evidence index: [portfolio-evidence-index.md](portfolio-evidence-index.md)
 - Reviewer demo notes: [reviewer-demo-notes.md](reviewer-demo-notes.md)
+- Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
 
 ## What Exists Now
 
@@ -79,9 +80,10 @@ Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, inte
 
 1. Open the live dashboard and inspect the snapshot status strip.
 2. Open the methodology page and confirm the public-health boundary.
-3. Open the reviewer demo notes for screenshots and captions.
-4. Open the resume and LinkedIn snippets for copy-ready application language.
-5. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
+3. Open the dashboard anatomy review guide for a guided read of the main interface zones.
+4. Open the reviewer demo notes for screenshots and captions.
+5. Open the resume and LinkedIn snippets for copy-ready application language.
+6. Use the portfolio evidence index to route different reviewers to the most relevant artifacts.
 
 ## Next Development Steps
 
@@ -90,4 +92,3 @@ Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, inte
 - Draft a variable register for future field or sensor data.
 - Develop a field validation and calibration plan before claiming any deployed monitoring value.
 - Continue preserving the distinction between public-source context, private review, and future telemetry.
-

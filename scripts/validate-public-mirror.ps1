@@ -423,6 +423,7 @@ try {
     "docs\Clear-Lake-Watch-Project-Brief.pdf",
     "docs\clear-lake-watch-v0.1-evidence-summary.md",
     "docs\clear_lake_watch_portfolio_case_study.md",
+    "docs\dashboard-anatomy-review-guide.md",
     "docs\deployment.md",
     "docs\field-microscopy-intake-contract.md",
     "docs\field-microscopy-review-workflow.md",
@@ -606,7 +607,17 @@ try {
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Map QA" -Message "Reviewer demo notes must caption the map QA screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Methodology page" -Message "Reviewer demo notes must caption the methodology screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Project page" -Message "Reviewer demo notes must caption the project-page screenshot."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "dashboard-anatomy-review-guide.md" -Message "Reviewer demo notes must link the dashboard anatomy guide."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "not official public-health guidance" -Message "Reviewer demo notes must preserve public-health boundary."
+
+  $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Dashboard anatomy review guide" -Message "Portfolio evidence index must link the dashboard anatomy guide."
+
+  $dashboardAnatomyGuide = Get-Content -LiteralPath (Resolve-ProjectPath "docs\dashboard-anatomy-review-guide.md") -Raw
+  Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Dashboard Anatomy Review Guide" -Message "Dashboard anatomy guide must include its title."
+  Assert-TextContains -Text $dashboardAnatomyGuide -Needle "What This Project Demonstrates" -Message "Dashboard anatomy guide must explain the portfolio demonstration section."
+  Assert-TextContains -Text $dashboardAnatomyGuide -Needle "Open-App Data QA Notices" -Message "Dashboard anatomy guide must explain data QA notices."
+  Assert-TextContains -Text $dashboardAnatomyGuide -Needle "not official public-health guidance" -Message "Dashboard anatomy guide must preserve public-health boundary."
 
   $jsonFiles = @(
     "data\sources.json",
