@@ -26,6 +26,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-cont
 This command updates `data/weather-context.json` without implying live weather
 telemetry, lake-health interpretation, or public-health guidance.
 
+For a reviewed public-source weather snapshot, use:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-public-source.ps1
+```
+
+This command writes a public-safe weather.gov station snapshot. It should be
+treated as environmental-driver context only, not live telemetry, not
+lake-health interpretation, and not public-health guidance.
+
 ## Publication Boundary
 
 The public dashboard may read:
@@ -70,6 +80,9 @@ Use one of these `machineReadableStatus` values:
 - `stale`
 - `partial`
 - `unavailable`
+
+Use `partial` for a reviewed public-source snapshot that is useful as context
+but is not a continuous local telemetry stream.
 
 ## Station Records
 

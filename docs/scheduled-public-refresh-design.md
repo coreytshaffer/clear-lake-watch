@@ -23,7 +23,7 @@ Do not let a scheduled run commit directly to `main`.
 1. Run on a conservative schedule, such as weekly, plus manual dispatch.
 2. Check out the repository on a generated branch such as `refresh/public-snapshot-candidate`.
 3. Run `scripts/refresh-live-data.ps1`.
-4. Run `scripts/write-weather-context-unavailable.ps1` unless reviewed public-safe telemetry exists.
+4. Run `scripts/write-weather-context-public-source.ps1` for reviewed public-source weather context, or `scripts/write-weather-context-unavailable.ps1` if the weather source cannot be reviewed for that release.
 5. Run `scripts/validate-public-mirror.ps1`.
 6. Capture validation output, including stale-source warnings.
 7. Fail closed if validation fails.
