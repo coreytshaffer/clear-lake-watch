@@ -37,6 +37,7 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Portfolio case study](docs/clear_lake_watch_portfolio_case_study.md)
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
+- [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 
 ## Public Documentation
 
@@ -49,6 +50,8 @@ It is not official public-health guidance, an official advisory, a validated for
 - [Publication review checklist](docs/publication-review-checklist.md)
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
+- [Site registry decision workflow](docs/site-registry-decision-workflow.md)
+- [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Research readiness brief](docs/research-readiness-brief.md)
 - [Published commentary tracker](docs/published-commentary.md)
 - [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md)
