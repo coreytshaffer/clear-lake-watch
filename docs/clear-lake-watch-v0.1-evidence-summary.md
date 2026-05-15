@@ -19,6 +19,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Reviewer demo notes: [reviewer-demo-notes.md](reviewer-demo-notes.md)
 - Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
 - Career Services handoff packet: [career-services-handoff-packet.md](career-services-handoff-packet.md)
+- Project delivery and EHS positioning: [project-delivery-ehs.md](project-delivery-ehs.md)
 - Accessibility review: [accessibility-review.md](accessibility-review.md)
 - Mobile reviewer path review: [mobile-reviewer-path-review.md](mobile-reviewer-path-review.md)
 
@@ -43,6 +44,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Conservative public communication around sensitive environmental-health data.
 - Static web deployment and documentation discipline.
 - Ability to turn a local environmental problem into a reviewable technical portfolio artifact.
+- Project delivery and EHS-informed workflow as supporting layers for environmental systems work.
 
 ## What It Does Not Claim
 

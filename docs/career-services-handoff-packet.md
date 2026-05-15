@@ -14,9 +14,9 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 2. Internship review start here: [internship-review-start-here.md](internship-review-start-here.md)
 3. Evidence summary: [clear-lake-watch-v0.1-evidence-summary.md](clear-lake-watch-v0.1-evidence-summary.md)
 4. Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
-5. Resume and LinkedIn snippets: [resume-linkedin-snippets.md](resume-linkedin-snippets.md)
+5. Project delivery and EHS positioning: [project-delivery-ehs.md](project-delivery-ehs.md)
 
-For screenshot-backed reviewer context, also use [reviewer-demo-notes.md](reviewer-demo-notes.md).
+For copy-ready career language, use [resume-linkedin-snippets.md](resume-linkedin-snippets.md). For screenshot-backed reviewer context, also use [reviewer-demo-notes.md](reviewer-demo-notes.md).
 
 ## Short Email Before An Appointment
 
@@ -27,6 +27,8 @@ Hello,
 I would like to review one portfolio project during our appointment: Clear Lake Watch, a late-prototype environmental data dashboard for Clear Lake, California.
 
 The project demonstrates public data integration, GIS/spatial review, source-freshness validation, cautious environmental risk communication, and static web deployment. I am using it to support internship applications in water quality, GIS, watershed planning, environmental monitoring, climate resilience, and environmental data systems.
+
+I am also using it to show project delivery and EHS-informed workflow as supporting competencies: issue tracking, release gates, validation checks, public/private review boundaries, and careful risk communication.
 
 The best starting point is the evidence summary:
 https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md
@@ -95,6 +97,7 @@ Avoid:
 
 - Which resume section should this project live in for environmental internships?
 - Which two or three bullets best match water-quality, GIS, or data-analysis roles?
+- Should I frame project management and EHS-informed workflow as supporting competency layers?
 - Should the published commentary be listed separately from the technical project?
 - Is the LinkedIn project description clear to a nontechnical reviewer?
 - What should be shortened for Handshake or a one-page resume?
