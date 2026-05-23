@@ -59,6 +59,9 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Reviewer demo notes](docs/reviewer-demo-notes.md)
 - [Variable register](docs/variable-register.md)
 - [Field validation plan](docs/field-validation-plan.md)
+- [Official method source spine](docs/official-method-source-spine.md)
+- [Secchi depth / clarity mentor-review protocol](docs/secchi-depth-clarity-mentor-review-protocol.md)
+- [Secchi mentor-review handoff](docs/secchi-mentor-review-handoff.md)
 
 ## Public Documentation
 
@@ -69,6 +72,9 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Field/microscopy review workflow](docs/field-microscopy-review-workflow.md)
 - [Variable register](docs/variable-register.md)
 - [Field validation plan](docs/field-validation-plan.md)
+- [Official method source spine](docs/official-method-source-spine.md)
+- [Secchi depth / clarity mentor-review protocol](docs/secchi-depth-clarity-mentor-review-protocol.md)
+- [Secchi mentor-review handoff](docs/secchi-mentor-review-handoff.md)
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)

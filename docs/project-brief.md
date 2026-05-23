@@ -2,11 +2,11 @@
 
 **Project brief**  
 Corey Shaffer  
-Updated May 14, 2026
+Updated May 17, 2026
 
 ## Summary
 
-Clear Lake Watch is a public-facing environmental dashboard prototype for Clear Lake, California. It brings together lake level, tributary discharge, cyanobacterial bloom reports, shoreline context, reviewed public-source weather context, site-registry review status, and source-freshness metadata into a single reviewed publication surface.
+Clear Lake Watch is a public-facing environmental dashboard prototype for Clear Lake, California. It brings together lake level, tributary discharge, cyanobacterial bloom reports, shoreline context, reviewed public-source weather context, site-registry review status, source-freshness metadata, and mentor-review-ready field-method planning into a single reviewed portfolio surface.
 
 The project is designed as a lake-focused public mirror on top of a broader local-first environmental monitoring backbone. Public-facing outputs stay static, transparent, and publication-safe, while private intake, QA, field observations, future local telemetry, and sensitive review materials remain behind explicit review boundaries.
 
@@ -22,7 +22,7 @@ Clear Lake Watch addresses that problem by combining:
 - reviewed NOAA/National Weather Service public-source weather context
 - site-registry review status and source-freshness cues
 
-## Current MVP
+## Current MVP And Review Packet
 
 The current late-prototype / early-MVP dashboard includes:
 
@@ -34,6 +34,8 @@ The current late-prototype / early-MVP dashboard includes:
 - source freshness, stale-source warnings, and partial-source handling
 - reviewed public-source weather context kept separate from lake-health interpretation
 - a public methodology page and interpretation disclaimers
+- an official method source spine for future field protocols
+- a Secchi depth / clarity mentor-review protocol and handoff packet for feedback before any field pilot
 
 Live public mirror:  
 [https://coreytshaffer.github.io/clear-lake-watch/](https://coreytshaffer.github.io/clear-lake-watch/)
@@ -58,6 +60,7 @@ Current limitations include:
 - some FHABS landmark assignments still require local review
 - weather context is a reviewed public-source partial snapshot, not local live telemetry
 - field and microscopy workflows are designed as private-reviewed intake pathways, not active public submission features
+- the Secchi depth / clarity protocol is mentor-review-only and does not authorize field work or public field-data exports
 - report counts should not be interpreted as bloom severity
 
 ## Collaboration sought
@@ -70,3 +73,5 @@ I am interested in collaboration with:
 - environmental data, GIS, and civic dashboard mentors
 
 The immediate goal is to strengthen reviewed public situational awareness around Clear Lake while building a modular backbone for future weather, field, and environmental intelligence workflows.
+
+The next active review step is to ask a mentor, faculty member, or qualified technical reviewer whether the Secchi depth / clarity source anchors, metadata, QA/QC checks, and public wording limits are reasonable before deciding whether to revise the packet, add official sources, or design a separate future private pilot.

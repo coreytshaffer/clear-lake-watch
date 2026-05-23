@@ -14,6 +14,8 @@ Clear Lake Watch is a late prototype / early MVP public-data dashboard for Clear
 
 This path gives an internship reviewer the working public artifact, the concise skills summary, and the screenshot-backed review guide without requiring a full repository read.
 
+For a one-page overview to send before a conversation, use [Portfolio outreach summary](portfolio-outreach-summary-2026-05-17.md).
+
 ## One-Sentence Project Summary
 
 Clear Lake Watch is a late-prototype watershed intelligence dashboard that integrates public hydrology, harmful-algal-bloom report data, GIS context, source-freshness validation, and conservative public communication into a static GitHub Pages portfolio artifact.

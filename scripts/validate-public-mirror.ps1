@@ -440,6 +440,11 @@ try {
     "docs\public-backlog.md",
     "docs\public-snapshot-release-note-2026-05-13.md",
     "docs\portfolio-evidence-index.md",
+    "docs\portfolio-outreach-summary-2026-05-17.md",
+    "docs\project-delivery-ehs.md",
+    "docs\official-method-source-spine.md",
+    "docs\secchi-depth-clarity-mentor-review-protocol.md",
+    "docs\secchi-mentor-review-handoff.md",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-mobile-2026-05-13.png",
     "docs\public-screenshots\clear-lake-watch-homepage-desktop-2026-05-14.png",
@@ -514,6 +519,7 @@ try {
   $index = Get-Content -LiteralPath (Resolve-ProjectPath "index.html") -Raw
   $project = Get-Content -LiteralPath (Resolve-ProjectPath "project.html") -Raw
   $methodology = Get-Content -LiteralPath (Resolve-ProjectPath "methodology.html") -Raw
+  $styles = Get-Content -LiteralPath (Resolve-ProjectPath "styles.css") -Raw
   $app = Get-Content -LiteralPath (Resolve-ProjectPath "app.js") -Raw
 
   Assert-TextContains -Text $readme -Needle "late-prototype / early-MVP" -Message "README must preserve maturity language."
@@ -524,12 +530,23 @@ try {
   Assert-TextContains -Text $readme -Needle "docs/public-snapshot-release-note-2026-05-13.md" -Message "README must link the public snapshot release note."
   Assert-TextContains -Text $readme -Needle "docs/reviewer-demo-notes.md" -Message "README must link the reviewer demo notes."
   Assert-TextContains -Text $readme -Needle "docs/site-registry-trust-review-pass-001.md" -Message "README must link the site-registry review pass."
+  Assert-TextContains -Text $readme -Needle "docs/official-method-source-spine.md" -Message "README must link the official method source spine."
+  Assert-TextContains -Text $readme -Needle "docs/secchi-depth-clarity-mentor-review-protocol.md" -Message "README must link the Secchi mentor-review protocol."
+  Assert-TextContains -Text $readme -Needle "docs/secchi-mentor-review-handoff.md" -Message "README must link the Secchi mentor-review handoff."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
+  Assert-TextContains -Text $index -Needle "Internship portfolio prototype showing Clear Lake environmental data integration, GIS/spatial QA, source-freshness validation, static deployment, and responsible public communication." -Message "Homepage meta description must describe the internship portfolio signal."
+  Assert-TextContains -Text $index -Needle "Internship Reviewer Path" -Message "Homepage must include an above-the-fold reviewer path."
+  Assert-TextContains -Text $index -Needle "Dashboard snapshot" -Message "Homepage reviewer path must start with the dashboard snapshot."
+  Assert-TextContains -Text $index -Needle "github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md" -Message "Homepage reviewer path must link the GitHub evidence summary."
+  Assert-TextContains -Text $index -Needle "github.com/coreytshaffer/clear-lake-watch/blob/main/docs/reviewer-demo-notes.md" -Message "Homepage reviewer path must link GitHub reviewer demo notes."
   Assert-TextContains -Text $index -Needle "Public Data Snapshot, Not Advisory Guidance" -Message "Homepage must include the public snapshot status strip."
   Assert-TextContains -Text $index -Needle "What The Public Snapshot Files Are Showing" -Message "Homepage must avoid overclaiming current-feed wording."
-  Assert-TextContains -Text $index -Needle "Best First Reads" -Message "Homepage must include reviewer entry points."
+  Assert-TextContains -Text $index -Needle "Deeper Review Links" -Message "Homepage must include secondary reviewer entry points."
   Assert-TextContains -Text $index -Needle "What This Project Demonstrates" -Message "Homepage must include a portfolio demonstration section."
   Assert-TextContains -Text $index -Needle "map-review-status" -Message "Homepage must include the map review status callout."
+  Assert-TextContains -Text $styles -Needle "@media print" -Message "Stylesheet must include print-friendly output rules."
+  Assert-TextContains -Text $styles -Needle ".site-nav" -Message "Print stylesheet must account for navigation."
+  Assert-TextContains -Text $styles -Needle "a[href]::after" -Message "Print stylesheet must expose link targets."
   Assert-TextContains -Text $methodology -Needle "not official public-health direction" -Message "Methodology page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "not official public-health guidance" -Message "Project page must preserve public-health boundary."
   Assert-TextContains -Text $project -Needle "late prototype / early MVP" -Message "Project page must preserve maturity language."
@@ -547,6 +564,13 @@ try {
   Assert-TextContains -Text $publicBacklog -Needle "late prototype / early MVP" -Message "Public backlog must preserve maturity language."
   Assert-TextContains -Text $publicBacklog -Needle "not official public-health guidance" -Message "Public backlog must preserve public-health boundary."
   Assert-TextContains -Text $publicBacklog -Needle "Completed Public Trust-Hardening Issues" -Message "Public backlog must reflect completed trust-hardening pass."
+  Assert-TextContains -Text $publicBacklog -Needle "above-the-fold internship reviewer path" -Message "Public backlog must record the homepage reviewer-path stabilization."
+  Assert-TextContains -Text $publicBacklog -Needle "print-friendly public review output" -Message "Public backlog must record the print-friendly reviewer output."
+  Assert-TextContains -Text $publicBacklog -Needle "This is a review-path improvement only." -Message "Public backlog must keep reviewer-path stabilization boundary language."
+  Assert-TextContains -Text $publicBacklog -Needle "official method source spine" -Message "Public backlog must record the official method source spine."
+  Assert-TextContains -Text $publicBacklog -Needle "This is a source-selection improvement only." -Message "Public backlog must preserve source-spine boundary language."
+  Assert-TextContains -Text $publicBacklog -Needle "Decision recorded: keep the Secchi protocol mentor-review-only for now." -Message "Public backlog must record the mentor-review-only Secchi decision."
+  Assert-TextContains -Text $publicBacklog -Needle "Secchi mentor-review handoff packet" -Message "Public backlog must record the Secchi mentor-review handoff packet."
   Assert-TextContains -Text $publicBacklog -Needle "issues/5" -Message "Public backlog must link the screenshot/release-note issue."
   Assert-TextContains -Text $publicBacklog -Needle "issues/11" -Message "Public backlog must link the reviewer screenshot issue."
   Assert-TextContains -Text $publicBacklog -Needle "Open Reviewer-Readiness Issues" -Message "Public backlog must define the current reviewer-readiness issue set."
@@ -619,10 +643,15 @@ try {
   Assert-TextContains -Text $variableRegister -Needle "future-lab-or-microscopy" -Message "Variable register must distinguish future lab or microscopy variables."
   Assert-TextContains -Text $variableRegister -Needle "future-sensor-or-backbone" -Message "Variable register must distinguish future sensor or backbone variables."
   Assert-TextContains -Text $variableRegister -Needle "do-not-use-as-label" -Message "Variable register must define variables that should not become public labels."
+  Assert-TextContains -Text $variableRegister -Needle "official-method-source-spine.md" -Message "Variable register must link the official method source spine."
   Assert-TextContains -Text $variableRegister -Needle "not official public-health guidance" -Message "Variable register must preserve public-health boundary."
 
   $fieldValidationPlan = Get-Content -LiteralPath (Resolve-ProjectPath "docs\field-validation-plan.md") -Raw
   Assert-TextContains -Text $fieldValidationPlan -Needle "Field Validation Plan" -Message "Field validation plan must include its title."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "official-method-source-spine.md" -Message "Field validation plan must link the official method source spine."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "secchi-depth-clarity-mentor-review-protocol.md" -Message "Field validation plan must link the Secchi mentor-review protocol."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "Keep the Secchi depth / clarity protocol mentor-review-only for now." -Message "Field validation plan must preserve the mentor-review-only Secchi decision."
+  Assert-TextContains -Text $fieldValidationPlan -Needle "Which Lake County QAPP, EPA, SWAMP/CEDEN, or lab method should govern the written protocol?" -Message "Field validation plan must ask source-anchor mentor review question."
   Assert-TextContains -Text $fieldValidationPlan -Needle "Calibration And QA/QC Questions" -Message "Field validation plan must document calibration and QA/QC questions."
   Assert-TextContains -Text $fieldValidationPlan -Needle "Public Export Gate" -Message "Field validation plan must define a public export gate."
   Assert-TextContains -Text $fieldValidationPlan -Needle "field-microscopy-review-workflow.md" -Message "Field validation plan must link the field/microscopy review workflow."
@@ -647,7 +676,49 @@ try {
   $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Dashboard anatomy review guide" -Message "Portfolio evidence index must link the dashboard anatomy guide."
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Career Services handoff packet" -Message "Portfolio evidence index must link the Career Services handoff packet."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Project Delivery, EHS, and Environmental Systems Governance" -Message "Portfolio evidence index must link the project delivery and EHS positioning aid."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Official method source spine" -Message "Portfolio evidence index must link the official method source spine."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Secchi depth / clarity mentor-review protocol" -Message "Portfolio evidence index must link the Secchi mentor-review protocol."
+  Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Secchi mentor-review handoff" -Message "Portfolio evidence index must link the Secchi mentor-review handoff."
   Assert-TextContains -Text $portfolioEvidenceIndex -Needle "Internship review start here" -Message "Portfolio evidence index must link the internship start-here path."
+
+  $portfolioOutreachSummary = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-outreach-summary-2026-05-17.md") -Raw
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "Clear Lake Watch Portfolio Outreach Summary" -Message "Portfolio outreach summary must include its title."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "late-prototype / early-MVP" -Message "Portfolio outreach summary must preserve maturity language."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "not official public-health guidance" -Message "Portfolio outreach summary must preserve public-health boundary."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "Strongest Current Claim" -Message "Portfolio outreach summary must include the strongest current claim."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "Current Review Ask" -Message "Portfolio outreach summary must include the current review ask."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "official-method planning" -Message "Portfolio outreach summary must include official-method planning language."
+  Assert-TextContains -Text $portfolioOutreachSummary -Needle "Avoid:" -Message "Portfolio outreach summary must include avoid-language boundaries."
+
+  $officialMethodSourceSpine = Get-Content -LiteralPath (Resolve-ProjectPath "docs\official-method-source-spine.md") -Raw
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "Official Method Source Spine" -Message "Official method source spine must include its title."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "Lake County Clear Lake QAPP" -Message "Official method source spine must include Lake County QAPP anchor."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "EPA quality assurance guidance" -Message "Official method source spine must include EPA QA anchor."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "EPA lake and volunteer monitoring methods" -Message "Official method source spine must include EPA lake/volunteer method anchor."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "Secchi depth / clarity" -Message "Official method source spine must identify the first Secchi protocol candidate."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "secchi-depth-clarity-mentor-review-protocol.md" -Message "Official method source spine must link the Secchi mentor-review protocol."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "keep the Secchi protocol mentor-review-only for now" -Message "Official method source spine must preserve the mentor-review-only Secchi decision."
+  Assert-TextContains -Text $officialMethodSourceSpine -Needle "not official public-health guidance" -Message "Official method source spine must preserve public-health boundary."
+
+  $secchiProtocol = Get-Content -LiteralPath (Resolve-ProjectPath "docs\secchi-depth-clarity-mentor-review-protocol.md") -Raw
+  Assert-TextContains -Text $secchiProtocol -Needle "Secchi Depth / Clarity Mentor-Review Protocol" -Message "Secchi protocol must include its title."
+  Assert-TextContains -Text $secchiProtocol -Needle "mentor-review-needed" -Message "Secchi protocol must preserve mentor-review-needed status."
+  Assert-TextContains -Text $secchiProtocol -Needle "mentor-review-only for now" -Message "Secchi protocol must preserve the mentor-review-only decision."
+  Assert-TextContains -Text $secchiProtocol -Needle "not an approved field protocol" -Message "Secchi protocol must preserve non-approved boundary."
+  Assert-TextContains -Text $secchiProtocol -Needle "What Not To Infer" -Message "Secchi protocol must define interpretation limits."
+  Assert-TextContains -Text $secchiProtocol -Needle "Private-To-Public Gate" -Message "Secchi protocol must define a private-to-public gate."
+  Assert-TextContains -Text $secchiProtocol -Needle "Do not use a Secchi reading by itself" -Message "Secchi protocol must prevent overinterpretation."
+  Assert-TextContains -Text $secchiProtocol -Needle "secchi-mentor-review-handoff.md" -Message "Secchi protocol must link the mentor-review handoff."
+  Assert-TextContains -Text $secchiProtocol -Needle "not official public-health guidance" -Message "Secchi protocol must preserve public-health boundary."
+
+  $secchiHandoff = Get-Content -LiteralPath (Resolve-ProjectPath "docs\secchi-mentor-review-handoff.md") -Raw
+  Assert-TextContains -Text $secchiHandoff -Needle "Secchi Mentor-Review Handoff" -Message "Secchi mentor-review handoff must include its title."
+  Assert-TextContains -Text $secchiHandoff -Needle "Keep the Secchi protocol mentor-review-only for now." -Message "Secchi mentor-review handoff must preserve the current decision."
+  Assert-TextContains -Text $secchiHandoff -Needle "What Feedback Is Needed" -Message "Secchi mentor-review handoff must define needed feedback."
+  Assert-TextContains -Text $secchiHandoff -Needle "Feedback Capture Template" -Message "Secchi mentor-review handoff must include a feedback capture template."
+  Assert-TextContains -Text $secchiHandoff -Needle "Do not convert this handoff directly into a field protocol or public export." -Message "Secchi mentor-review handoff must preserve the no-direct-pilot gate."
+  Assert-TextContains -Text $secchiHandoff -Needle "not official public-health guidance" -Message "Secchi mentor-review handoff must preserve public-health boundary."
 
   $internshipReviewStartHere = Get-Content -LiteralPath (Resolve-ProjectPath "docs\internship-review-start-here.md") -Raw
   Assert-TextContains -Text $internshipReviewStartHere -Needle "Internship Review Start Here" -Message "Internship review start-here doc must include its title."
@@ -680,8 +751,16 @@ try {
   Assert-TextContains -Text $careerServicesHandoff -Needle "Career Services Handoff Packet" -Message "Career Services handoff packet must include its title."
   Assert-TextContains -Text $careerServicesHandoff -Needle "Short Email Before An Appointment" -Message "Career Services handoff packet must include pre-appointment email language."
   Assert-TextContains -Text $careerServicesHandoff -Needle "Dashboard anatomy review guide" -Message "Career Services handoff packet must point to the dashboard anatomy guide."
+  Assert-TextContains -Text $careerServicesHandoff -Needle "project-delivery-ehs.md" -Message "Career Services handoff packet must point to the project delivery and EHS positioning aid."
   Assert-TextContains -Text $careerServicesHandoff -Needle "Resume Placement" -Message "Career Services handoff packet must include resume placement guidance."
   Assert-TextContains -Text $careerServicesHandoff -Needle "not official public-health guidance" -Message "Career Services handoff packet must preserve public-health boundary."
+
+  $projectDeliveryEhs = Get-Content -LiteralPath (Resolve-ProjectPath "docs\project-delivery-ehs.md") -Raw
+  Assert-TextContains -Text $projectDeliveryEhs -Needle "Project Delivery, EHS, And Environmental Systems Governance" -Message "Project delivery and EHS doc must include its title."
+  Assert-TextContains -Text $projectDeliveryEhs -Needle "Environmental systems analysis + field data workflows + project delivery + safety/risk governance" -Message "Project delivery and EHS doc must include the core frame."
+  Assert-TextContains -Text $projectDeliveryEhs -Needle "I am building applied competency" -Message "Project delivery and EHS doc must preserve early-career positioning."
+  Assert-TextContains -Text $projectDeliveryEhs -Needle "Avoid:" -Message "Project delivery and EHS doc must include avoid-language boundaries."
+  Assert-TextContains -Text $projectDeliveryEhs -Needle "not official public-health guidance" -Message "Project delivery and EHS doc must preserve public-health boundary."
 
   $jsonFiles = @(
     "data\sources.json",

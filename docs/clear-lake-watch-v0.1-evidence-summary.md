@@ -13,6 +13,7 @@ Clear Lake Watch is a public watershed intelligence dashboard prototype for Clea
 - Live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>
 - Internship review start here: [internship-review-start-here.md](internship-review-start-here.md)
 - GitHub repository: <https://github.com/coreytshaffer/clear-lake-watch>
+- One-page outreach summary: [portfolio-outreach-summary-2026-05-17.md](portfolio-outreach-summary-2026-05-17.md)
 - Methodology: <https://coreytshaffer.github.io/clear-lake-watch/methodology.html>
 - Project page: <https://coreytshaffer.github.io/clear-lake-watch/project.html>
 - Portfolio evidence index: [portfolio-evidence-index.md](portfolio-evidence-index.md)
@@ -105,7 +106,6 @@ Built a late-prototype watershed intelligence dashboard for Clear Lake, CA, inte
 ## Next Development Steps
 
 - Refresh remaining public-facing portfolio copy as new review work is completed.
-- Create a short outreach packet for mentors or internship reviewers.
-- Draft a variable register for future field or sensor data.
-- Develop a field validation and calibration plan before claiming any deployed monitoring value.
+- Use the one-page outreach summary for Career Services, mentors, and internship reviewers.
+- Use the variable register, field validation plan, official method source spine, and Secchi mentor-review packet for bounded technical feedback before any field pilot decision.
 - Continue preserving the distinction between public-source context, private review, and future telemetry.

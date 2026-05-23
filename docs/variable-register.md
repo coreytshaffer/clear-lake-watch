@@ -61,4 +61,4 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 
 ## Next Use
 
-Use this register to plan a field-validation protocol and to decide which variables are suitable for future student-led measurement, mentor review, or public-source backfill. Do not use this register as proof that any future field measurement has already happened.
+Use this register with [official-method-source-spine.md](official-method-source-spine.md) to plan a field-validation protocol and to decide which variables are suitable for future student-led measurement, mentor review, or public-source backfill. Do not use this register as proof that any future field measurement has already happened.
