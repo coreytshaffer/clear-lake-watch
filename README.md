@@ -114,7 +114,13 @@ Run the public mirror validation check from PowerShell:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
 ```
 
-If a local server is running on `http://127.0.0.1:4173/`, include endpoint checks:
+Or run the cross-platform Python validation helper:
+
+```bash
+python scripts/validate-public-mirror.py
+```
+
+If a local server is running on `http://127.0.0.1:4173/`, include endpoint checks (PowerShell only):
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 -CheckHttp
