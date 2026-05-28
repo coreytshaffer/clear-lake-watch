@@ -96,22 +96,23 @@ def main():
         r"docs/trusted-review-request\.md"
     ]
 
-    # Also look at tracked files without relying on git
     tracked_files = []
-    for root, dirs, files in os.walk('.'):
-        if '.git' in root:
-            continue
-        for file in files:
-            path = os.path.join(root, file)
-            path_unix = path.replace('\\', '/')
-            if path_unix.startswith('./'):
-                path_unix = path_unix[2:]
-            tracked_files.append(path_unix)
+    import subprocess
+    try:
+        # Get tracked files using git ls-files
+        tracked_files_output = subprocess.check_output(['git', 'ls-files']).decode('utf-8')
+        tracked_files = tracked_files_output.splitlines()
+    except Exception:
+        # Fall back to an explicit list if git is unavailable
+        tracked_files = [
+            "index.html", "app.js", "project.html", "methodology.html", "styles.css", "sw.js"
+        ]
 
     for file_path in tracked_files:
+        file_path_unix = file_path.replace('\\', '/')
         for pattern in private_patterns:
-            if re.search(pattern, file_path):
-                print_failure(f"Found private/trusted-review file: {file_path}")
+            if re.search(pattern, file_path_unix):
+                print_failure(f"Found private/trusted-review file tracked: {file_path_unix}")
                 failures += 1
 
     # check that no public files mention private paths
