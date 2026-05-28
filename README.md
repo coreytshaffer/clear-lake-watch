@@ -12,6 +12,23 @@ It is not official public-health guidance, an official advisory, a validated for
 
 ![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
 
+## Trust Model
+
+- Uses public-source data and clearly labeled prototype outputs.
+- Public mirror is a reviewed static publication surface, not the operational system of record.
+- Private/local records, reviewer notes, raw field records, and trusted-review paths are excluded from the public mirror.
+- Dashboard is not official guidance, a health advisory, a validated forecast, or a deployed sensor network.
+
+## Reviewer Start Here
+
+For a 5-minute review:
+
+1. Open the [dashboard](https://coreytshaffer.github.io/clear-lake-watch/).
+2. Read the [evidence summary](docs/clear-lake-watch-v0.1-evidence-summary.md).
+3. Read [known limitations](#known-limitations).
+4. Read [reviewer demo notes](docs/reviewer-demo-notes.md).
+5. Review the [public mirror boundary](docs/public-mirror-boundary.md) if evaluating data governance.
+
 ## For Internship Reviewers
 
 Open these first:
