@@ -1,4 +1,4 @@
-const STATIC_CACHE = "clear-lake-watch-static-v3";
+const STATIC_CACHE = "clear-lake-watch-static-v4";
 const DATA_CACHE = "clear-lake-watch-data-v3";
 const STATIC_ASSETS = [
   "./",
@@ -7,6 +7,7 @@ const STATIC_ASSETS = [
   "./methodology.html",
   "./styles.css",
   "./app.js",
+  "./scripts/dashboard-utils.js",
   "./manifest.webmanifest",
   "./assets/clear-lake-watch.ico",
   "./assets/clear-lake-watch-icon-192.png",

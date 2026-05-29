@@ -93,7 +93,7 @@ Current posture:
 
 Current note:
 
-- Medium-priority FHABS markers remain attached to broad place-based registry entries and stay `needs-local-review`; see `docs/site-registry-unresolved-decision.md`.
+- Medium-priority FHABS markers remain attached to broad place-based registry entries and stay `needs-local-review`; see [Site Registry Unresolved Decision](site-registry-unresolved-decision.md).
 - The validator passed locally without stale-snapshot allowance on the current review pass.
 - The public mirror has not been promoted in this pass, so public-mirror confirmation remains a separate gate.
 

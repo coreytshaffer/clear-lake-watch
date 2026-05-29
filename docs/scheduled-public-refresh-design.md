@@ -18,17 +18,30 @@ Use both local and GitHub Actions paths, with different responsibilities:
 
 Do not let a scheduled run commit directly to `main`.
 
+## Manual Dry Run
+
+Use this command before any real refresh:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.ps1 -DryRun
+```
+
+The dry run still resolves source metadata, fetches public source files, normalizes records, builds the manifest payload, and applies freshness failures. It skips all public JSON writes and reports the files it would write. A passing dry run does not publish a snapshot; it only proves the refresh path can complete without mutating the working tree.
+
+Latest recorded rehearsal: [Manual Refresh Dry Run - 2026-05-28](manual-refresh-dry-run-2026-05-28.md).
+
 ## Proposed Scheduled Workflow
 
 1. Run on a conservative schedule, such as weekly, plus manual dispatch.
 2. Check out the repository on a generated branch such as `refresh/public-snapshot-candidate`.
-3. Run `scripts/refresh-live-data.ps1`.
-4. Run `scripts/write-weather-context-public-source.ps1` for reviewed public-source weather context, or `scripts/write-weather-context-unavailable.ps1` if the weather source cannot be reviewed for that release.
-5. Run `scripts/validate-public-mirror.ps1`.
-6. Capture validation output, including stale-source warnings.
-7. Fail closed if validation fails.
-8. If generated public files changed, open or update a PR titled `Refresh public snapshot candidate`.
-9. Require human review before merge.
+3. Run `scripts/refresh-live-data.ps1 -DryRun` first and inspect failures or source-date warnings.
+4. After a reviewed dry run, run `scripts/refresh-live-data.ps1` only when the public JSON files are intentionally being refreshed.
+5. Run `scripts/write-weather-context-public-source.ps1` for reviewed public-source weather context, or `scripts/write-weather-context-unavailable.ps1` if the weather source cannot be reviewed for that release.
+6. Run `scripts/validate-public-mirror.ps1`.
+7. Capture validation output, including stale-source warnings.
+8. Fail closed if validation fails.
+9. If generated public files changed, open or update a PR titled `Refresh public snapshot candidate`.
+10. Require human review before merge.
 
 ## Required Validation Gates
 

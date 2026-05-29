@@ -1,14 +1,14 @@
 # Public Backlog
 
-Status: completed trust-hardening pass; reviewer-readiness phase open.
+Status: completed trust-hardening, reviewer-readiness, and first maintenance-split passes.
 
 Clear Lake Watch remains a late prototype / early MVP. It is not official public-health guidance, an official advisory, a validated forecast, or a deployed sensor network.
 
 ## Current Checkpoint
 
-The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, a Career Services handoff packet, a dashboard anatomy review guide, an accessibility review note, refreshed reviewer screenshots for the current homepage, a mobile reviewer path review, an above-the-fold internship reviewer path, print-friendly public review output, an official method source spine for future protocols, a Secchi depth / clarity mentor-review protocol draft, and a Secchi mentor-review handoff packet.
+The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, a Career Services handoff packet, a dashboard anatomy review guide, an accessibility review note, a browser accessibility interaction pass, refreshed reviewer screenshots for the current homepage, a mobile reviewer path review, an above-the-fold internship reviewer path, print-friendly public review output, an official method source spine for future protocols, a Secchi depth / clarity mentor-review protocol draft, and a Secchi mentor-review handoff packet.
 
-The current phase is reviewer readiness: make the public packet easier for Career Services, internship reviewers, mentors, and scholarship reviewers to inspect without weakening the public-health, recreation, emergency, forecasting, or official-advisory boundaries.
+The current follow-up posture is steady maintenance: keep the reviewer packet inspectable while avoiding unnecessary complexity and preserving the public-health, recreation, emergency, forecasting, and official-advisory boundaries.
 
 ## Latest Stabilization Note
 
@@ -69,6 +69,22 @@ These remain candidates for later work:
 - Manual-only refresh workflow dry run, with no scheduled automation.
 - Public page refresh after the next reviewed data snapshot.
 - Site-registry local review for Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay.
+
+## Completed Maintenance / Trust Issues
+
+| Issue | Focus | Result |
+| --- | --- | --- |
+| Internal link validation | Validator | Added tracked-file local link checks to `validate-public-mirror.ps1` so broken public-review links fail validation. |
+| Static snapshot age cue | Data trust | Added dated snapshot-age language to the release note and reviewer demo notes before broader sharing. |
+| County GIS geometry publication boundary | Source/licensing | Moved county-derived candidate JSON and the geometry preview page to ignored `data/private/county-gis/` storage; the public mirror keeps OpenStreetMap geometry until reuse terms are verified. |
+| Manual-only refresh dry-run support | Release process | Added `refresh-live-data.ps1 -DryRun` and recorded a successful May 28, 2026 dry-run rehearsal that skipped all public JSON writes. |
+| Site-registry local review pass | Map trust | Added a medium-priority unresolved-decision note for Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay; all remain visibly `needs-local-review`. |
+| Browser accessibility interaction pass | Reviewer readiness | Recorded a May 28, 2026 local browser pass for skip-link focus, notification controls, generated links, map keyboard interaction, chart rendering, and local request errors. |
+| Maintenance file split | Maintainability | Split dashboard utilities, refresh parsing helpers, and validator link checks into small helper files without changing public behavior. |
+
+## Open Maintenance / Trust Issues
+
+No maintenance/trust issues are currently open in this public backlog snapshot.
 
 ## Open Reviewer-Readiness Issues
 

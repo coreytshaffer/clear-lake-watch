@@ -45,6 +45,8 @@ This is QA for map context only. It is not public-health, recreation, emergency,
 
 ## Next Review Step
 
+The current medium-priority unresolved decision is recorded in [site-registry-unresolved-decision.md](site-registry-unresolved-decision.md).
+
 The next useful step is to collect named local review for the three medium-priority items before changing any public assignment status:
 
 - Clear Lake Keys near Ketch Court

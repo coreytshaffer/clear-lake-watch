@@ -85,18 +85,19 @@ This note captures the first pass on public data sources for the Clear Lake dash
 
 - Local source: Lake County public GIS `waterfeatures/lakes` layer
 - Role: Candidate replacement geometry for the Clear Lake shoreline overlay
-- Public-use check: `docs/county-gis-public-use-check.md`
-- Generated files:
-  - `data/lake-shoreline-county-candidate.json`
-  - `data/lake-shoreline-county-simplified-25ft.json`
-  - `data/lake-shoreline-county-simplified-50ft.json`
-- Current status: Candidate review only
+- Public-use check: [County GIS Public-Use Check](county-gis-public-use-check.md)
+- Local private review files:
+  - `data/private/county-gis/lake-shoreline-county-candidate.json`
+  - `data/private/county-gis/lake-shoreline-county-simplified-25ft.json`
+  - `data/private/county-gis/lake-shoreline-county-simplified-50ft.json`
+  - `data/private/county-gis/geometry-preview.html`
+- Current status: Candidate review only; moved out of the public mirror until source terms are verified.
 - Notes:
   - The county layer contains a `Clear Lake` polygon feature and appears to provide a more locally authoritative geometry source than OSM.
   - The raw county export is too large for the public dashboard without simplification.
   - The 25 ft simplified candidate is close to the current OSM payload size while preserving county geometry.
   - Public promotion should wait until attribution and publication terms are confirmed; public visibility of the GIS portal is not enough by itself to justify redistributing derived coordinate JSON.
-  - Use `geometry-preview.html` for local visual comparison before replacing `data/lake-shoreline.json`.
+  - Use the local private geometry preview for visual comparison before replacing `data/lake-shoreline.json`.
 
 ### Future Field And Microscopy Intake
 
