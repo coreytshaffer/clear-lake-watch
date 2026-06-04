@@ -951,6 +951,18 @@ try {
     }
   }
 
+  # Run node tests
+  Write-Host "Running Node.js tests..."
+  try {
+    # We use Start-Process to properly wait and capture exit codes
+    $nodeTestResult = Start-Process node -ArgumentList "--experimental-default-type=module", "--test", (Resolve-ProjectPath "scripts\dashboard-utils.test.js") -Wait -NoNewWindow -PassThru
+    if ($nodeTestResult.ExitCode -ne 0) {
+      Add-Failure "Node.js tests failed with exit code $($nodeTestResult.ExitCode)."
+    }
+  } catch {
+    Add-Failure "Failed to run Node.js tests: $_"
+  }
+
   if ($failures.Count -gt 0) {
     Write-Host "Validation failed:"
     foreach ($failure in $failures) {
