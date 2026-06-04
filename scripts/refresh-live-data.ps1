@@ -223,22 +223,24 @@ function Resolve-RegisteredSite {
     return $null
   }
 
-  $nearest = $siteRegistry.sites |
-    Where-Object { $_.source -eq $Source } |
-    ForEach-Object {
-      [PSCustomObject]@{
-        site = $_
-        distanceKm = Get-DistanceKm -Lat1 $lat -Lon1 $lon -Lat2 $_.latitude -Lon2 $_.longitude
-      }
-    } |
-    Sort-Object distanceKm |
-    Select-Object -First 1
+  $nearestSite = $null
+  $minDistanceKm = [double]::MaxValue
 
-  if ($nearest -and $nearest.distanceKm -le $nearest.site.matchRadiusKm) {
+  foreach ($site in $siteRegistry.sites) {
+    if ($site.source -eq $Source) {
+      $dist = Get-DistanceKm -Lat1 $lat -Lon1 $lon -Lat2 $site.latitude -Lon2 $site.longitude
+      if ($dist -lt $minDistanceKm) {
+        $minDistanceKm = $dist
+        $nearestSite = $site
+      }
+    }
+  }
+
+  if ($nearestSite -and $minDistanceKm -le $nearestSite.matchRadiusKm) {
     return [PSCustomObject]@{
-      site = $nearest.site
+      site = $nearestSite
       method = "proximity"
-      distanceKm = [math]::Round($nearest.distanceKm, 2)
+      distanceKm = [math]::Round($minDistanceKm, 2)
     }
   }
 
