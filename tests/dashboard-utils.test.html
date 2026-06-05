@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🧪 Tests: dashboard-utils</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 2rem;
+      color: #333;
+    }
+    .test-result {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+    .pass {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .fail {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .summary {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Tests: dashboard-utils.js</h1>
+  <div id="results"></div>
+  <div id="summary" class="summary"></div>
+
+  <script type="module">
+    import { getStoredJson } from '../scripts/dashboard-utils.js';
+
+    const resultsDiv = document.getElementById('results');
+    let passed = 0;
+    let failed = 0;
+
+    function report(name, isPass, errorMsg = '') {
+      const div = document.createElement('div');
+      div.className = `test-result ${isPass ? 'pass' : 'fail'}`;
+      div.textContent = `${isPass ? '✅ PASS' : '❌ FAIL'}: ${name} ${errorMsg ? '- ' + errorMsg : ''}`;
+      resultsDiv.appendChild(div);
+      if (isPass) passed++;
+      else failed++;
+    }
+
+    // A tiny test runner helper
+    function test(name, fn) {
+      try {
+        fn();
+        report(name, true);
+      } catch (err) {
+        report(name, false, err.message);
+        console.error(err);
+      }
+    }
+
+    // Assert helpers
+    const assert = {
+      strictEqual: (actual, expected, msg) => {
+        if (actual !== expected) {
+          throw new Error(msg || `Expected ${expected} but got ${actual}`);
+        }
+      },
+      deepEqual: (actual, expected, msg) => {
+        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+          throw new Error(msg || `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(actual)}`);
+        }
+      }
+    };
+
+    // Keep track of original methods to restore them
+    const originalGetItem = Storage.prototype.getItem;
+    const originalWarn = console.warn;
+
+    function resetMocks() {
+      Storage.prototype.getItem = originalGetItem;
+      console.warn = originalWarn;
+      localStorage.clear();
+    }
+
+    // Setup tests
+    try {
+      // 1. Valid JSON returns the parsed value
+      test('getStoredJson: valid JSON returns parsed value', () => {
+        resetMocks();
+        localStorage.setItem('test-valid-json', JSON.stringify({ a: 1, b: 'test' }));
+        const result = getStoredJson('test-valid-json', { fallback: true });
+        assert.deepEqual(result, { a: 1, b: 'test' });
+      });
+
+      // 2. Missing key / null storage value returns the fallback
+      test('getStoredJson: missing key returns fallback', () => {
+        resetMocks();
+        const result = getStoredJson('test-missing-key', { default: 'value' });
+        assert.deepEqual(result, { default: 'value' });
+      });
+
+      // 3. Invalid JSON returns the fallback and calls console.warn
+      test('getStoredJson: invalid JSON returns fallback and warns', () => {
+        resetMocks();
+
+        let warnCalled = false;
+        console.warn = (msg) => {
+          warnCalled = true;
+          // We can optionally verify it's a SyntaxError, but knowing it warned is the main goal
+        };
+
+        // Inject invalid JSON
+        localStorage.setItem('test-invalid-json', '{ invalid: json ]');
+
+        const result = getStoredJson('test-invalid-json', 'fallback-val');
+
+        assert.strictEqual(result, 'fallback-val', 'Should return fallback value');
+        assert.strictEqual(warnCalled, true, 'console.warn should have been called');
+      });
+
+      // 4. localStorage.getItem throwing an error returns the fallback and calls console.warn
+      test('getStoredJson: storage exception returns fallback and warns', () => {
+        resetMocks();
+
+        let warnCalled = false;
+        console.warn = (msg) => {
+          warnCalled = true;
+        };
+
+        // Mock getItem to throw
+        Storage.prototype.getItem = () => {
+          throw new Error('Simulated Storage Error');
+        };
+
+        const result = getStoredJson('test-throw', 42);
+
+        assert.strictEqual(result, 42, 'Should return fallback value');
+        assert.strictEqual(warnCalled, true, 'console.warn should have been called');
+      });
+
+    } finally {
+      // Ensure mocks are restored
+      resetMocks();
+    }
+
+    // Update summary
+    const summaryDiv = document.getElementById('summary');
+    summaryDiv.textContent = `Results: ${passed} passed, ${failed} failed.`;
+    if (failed > 0) {
+      summaryDiv.style.color = '#721c24';
+    } else {
+      summaryDiv.style.color = '#155724';
+    }
+  </script>
+</body>
+</html>
