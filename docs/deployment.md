@@ -9,22 +9,24 @@ Run these checks before publishing:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-osm-shoreline.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-public-source.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
+python .\scripts\validate-public-mirror.py
 ```
 
 If a local server is already running on port `4173`, run the full endpoint check:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 -CheckHttp
 ```
 
 If you are intentionally reviewing an older static snapshot for portfolio or archival work, make that choice explicit:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp -AllowStaleSnapshot
+python .\scripts\validate-public-mirror.py
 ```
 
-Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+Do not treat a passing validator as permission to hide stale dates. If the snapshot is intentionally old, keep the release note or README static-snapshot language visible.
 
 Use `docs/publication-review-checklist.md` before staging, committing, pushing, or promoting the dashboard. That checklist separates local review, private repository work, public mirror updates, and flagship portfolio promotion.
 
@@ -32,7 +34,7 @@ Current working posture as of May 5, 2026:
 
 - The public snapshot was refreshed locally on May 5, 2026.
 - Keep publication as a separate decision from local refresh.
-- Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+- Use the formal refresh runbook or manual workflow for reviewed refresh rehearsal, not unattended publication.
 - Capture a current screenshot before broad portfolio promotion.
 
 ## GitHub Pages
@@ -117,7 +119,7 @@ The same refresh writes `data/manifest.json`, which records source status, lates
 Near-term options:
 
 - Refresh locally and commit generated JSON updates.
-- Add a GitHub Actions workflow later for scheduled refreshes.
+- Use the manual `Formal Public Refresh` workflow for reviewed refresh rehearsal.
 - Keep OSM shoreline refresh less frequent than live data refreshes because shoreline geometry changes slowly.
 
 ## Recommended Deployment Posture

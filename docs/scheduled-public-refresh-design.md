@@ -1,8 +1,8 @@
 # Scheduled Public Refresh Design
 
-Status: design proposal only. No unattended publication workflow is enabled.
+Status: manual-only refresh workflow available. No unattended publication workflow is enabled.
 
-Clear Lake Watch should keep the current public mirror as a reviewed static snapshot until refresh behavior has been proven. The first scheduled-refresh design should create a repeatable candidate branch, run validation, and require human review before any generated JSON reaches `main`.
+Clear Lake Watch should keep the current public mirror as a reviewed static snapshot until refresh behavior has been proven. The current manual-only workflow creates a repeatable review artifact path, runs validation, and still requires human review before any generated JSON reaches `main`.
 
 This is a reviewed public snapshot workflow. It is not live monitoring, operational alerting, public-health guidance, recreation guidance, emergency guidance, or a real-time advisory system.
 
@@ -13,6 +13,7 @@ Use both local and GitHub Actions paths, with different responsibilities:
 | Path | Role | Publish behavior |
 |---|---|---|
 | Local manual refresh | Development, source debugging, and reviewer inspection. | Never publish automatically. |
+| Manual GitHub Actions refresh | Repeatable reviewed refresh rehearsal with uploaded artifacts. | Never publish automatically. |
 | GitHub Actions scheduled candidate | Repeatable public-data refresh on a schedule. | Open or update a candidate PR only. |
 | Human review | Confirm validation warnings, source dates, maps, and public language. | Merge only after review. |
 
@@ -29,6 +30,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.
 The dry run still resolves source metadata, fetches public source files, normalizes records, builds the manifest payload, and applies freshness failures. It skips all public JSON writes and reports the files it would write. A passing dry run does not publish a snapshot; it only proves the refresh path can complete without mutating the working tree.
 
 Latest recorded rehearsal: [Manual Refresh Dry Run - 2026-05-28](manual-refresh-dry-run-2026-05-28.md).
+
+## Current Manual Workflow
+
+The current first implementation step now exists as:
+
+- `.github/workflows/formal-public-refresh.yml`
+- `docs/formal-public-refresh-runbook.md`
+
+This workflow is manual-dispatch only. It runs refresh, weather-context generation, validation, and artifact upload without pushing commits or opening a PR.
 
 ## Proposed Scheduled Workflow
 
@@ -80,8 +90,6 @@ The scheduled workflow must never publish:
 
 Generated public exports should remain limited to reviewed static files already listed in the public mirror validator.
 
-## First Implementation Step
+## Next Implementation Step
 
-Do not enable the scheduled workflow yet. The first implementation slice should add a disabled or manual-only GitHub Actions workflow that runs refresh and validation, reports warnings, and opens no PR until the command has been reviewed in a test run.
-
-Only after that test passes should the project consider a scheduled candidate-PR workflow.
+Do not enable unattended scheduling yet. The next implementation slice, after reviewing manual workflow runs, should decide whether to add a candidate-PR workflow that still never commits directly to `main`.

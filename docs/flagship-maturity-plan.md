@@ -119,7 +119,7 @@ Deliverables:
 - README keeps "current maturity" visible near the front door.
 - Project brief stays concise and partner-friendly.
 - Portfolio copy uses "prototype" and "situational awareness" language.
-- Dashboard validation passes before sharing. In static review mode, `-AllowStaleSnapshot` is acceptable; before broad publication, the snapshot should be refreshed or explicitly release-noted.
+- Dashboard validation passes before sharing. In static review mode, the release note or README should explicitly preserve the dated-snapshot posture; before broad publication, the snapshot should be refreshed or explicitly release-noted.
 - The portfolio-safe release scope focuses on presentation, validation evidence, screenshots, and conservative claims before live weather telemetry or public field submission.
 
 ### Phase 2: Trust Hardening

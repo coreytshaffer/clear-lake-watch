@@ -1,0 +1,99 @@
+name: Formal Public Refresh
+
+on:
+  workflow_dispatch:
+    inputs:
+      weather_context_mode:
+        description: "Weather context writer to use for this reviewed refresh"
+        required: true
+        default: "public-source"
+        type: choice
+        options:
+          - public-source
+          - unavailable
+      refresh_shoreline:
+        description: "Refresh OSM shoreline geometry during this run"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  formal-public-refresh:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create review artifact folder
+        shell: pwsh
+        run: New-Item -ItemType Directory -Path "$env:RUNNER_TEMP\formal-refresh" -Force | Out-Null
+
+      - name: Refresh live public data
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.ps1 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\refresh-live-data.log"
+
+      - name: Refresh OSM shoreline
+        if: ${{ inputs.refresh_shoreline }}
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-osm-shoreline.ps1 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\refresh-osm-shoreline.log"
+
+      - name: Write reviewed public-source weather context
+        if: ${{ inputs.weather_context_mode == 'public-source' }}
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-public-source.ps1 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\write-weather-context.log"
+
+      - name: Write unavailable weather context placeholder
+        if: ${{ inputs.weather_context_mode == 'unavailable' }}
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-unavailable.ps1 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\write-weather-context.log"
+
+      - name: Run PowerShell public mirror validator
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\validate-public-mirror-ps.log"
+
+      - name: Run Python public mirror validator
+        shell: pwsh
+        run: |
+          python scripts\validate-public-mirror.py 2>&1 |
+            Tee-Object -FilePath "$env:RUNNER_TEMP\formal-refresh\validate-public-mirror-py.log"
+
+      - name: Capture reviewed refresh outputs
+        shell: pwsh
+        run: |
+          Copy-Item README.md "$env:RUNNER_TEMP\formal-refresh\README.md"
+          Copy-Item data\live.json "$env:RUNNER_TEMP\formal-refresh\live.json"
+          Copy-Item data\manifest.json "$env:RUNNER_TEMP\formal-refresh\manifest.json"
+          Copy-Item data\reports.json "$env:RUNNER_TEMP\formal-refresh\reports.json"
+          Copy-Item data\observations.json "$env:RUNNER_TEMP\formal-refresh\observations.json"
+          Copy-Item data\sites-normalized.json "$env:RUNNER_TEMP\formal-refresh\sites-normalized.json"
+          Copy-Item data\site-review-summary.json "$env:RUNNER_TEMP\formal-refresh\site-review-summary.json"
+          Copy-Item data\analytics.json "$env:RUNNER_TEMP\formal-refresh\analytics.json"
+          Copy-Item data\weather-context.json "$env:RUNNER_TEMP\formal-refresh\weather-context.json"
+          if (Test-Path data\lake-shoreline.json) {
+            Copy-Item data\lake-shoreline.json "$env:RUNNER_TEMP\formal-refresh\lake-shoreline.json"
+          }
+
+      - name: Upload formal refresh review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: formal-public-refresh-review
+          path: ${{ runner.temp }}\formal-refresh
