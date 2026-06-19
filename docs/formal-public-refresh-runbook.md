@@ -71,6 +71,10 @@ Workflow file:
 
 - `.github/workflows/formal-public-refresh.yml`
 
+Latest rehearsal evidence:
+
+- `docs/refresh-rehearsals/2026-06-19-stale-source-rehearsal.md`
+
 Inputs:
 
 - `weather_context_mode`
