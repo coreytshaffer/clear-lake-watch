@@ -10,6 +10,8 @@ It is not official public-health guidance, an official advisory, a validated for
 
 **Live public mirror:** [coreytshaffer.github.io/clear-lake-watch](https://coreytshaffer.github.io/clear-lake-watch/)
 
+Current public status: static reviewed snapshot generated on May 5, 2026. Treat the live mirror as dated portfolio/review evidence, not live lake conditions. See the [public snapshot release note](docs/public-snapshot-release-note-2026-05-13.md).
+
 ![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
 
 ## Trust Model
@@ -142,5 +144,13 @@ If a local server is running on `http://127.0.0.1:4173/`, include endpoint check
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 -CheckHttp
 ```
+
+For a cross-platform baseline check that is suitable for CI, run:
+
+```bash
+python scripts/validate-public-mirror.py
+```
+
+The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, static-snapshot warnings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes.
 
 The broader private review packet and trusted-review materials are intentionally not part of this public mirror branch.
