@@ -79,6 +79,12 @@ Inputs:
 - `refresh_shoreline`
   - `true`
   - `false`
+- `allow_stale_fhabs_rehearsal`
+  - `true`
+  - `false`
+- `fhabs_max_resource_age_days`
+  - default `14`
+  - used only when stale-source rehearsal is deliberately enabled
 
 What the workflow does:
 
@@ -99,6 +105,30 @@ What the workflow does not do:
 - bypass stale-source warnings,
 - publish private or review-only artifacts.
 
+## Stale-Source Rehearsal Mode
+
+The default formal refresh remains publication-safe and fail-closed. If FHABS resources are older than the allowed threshold, the run should stop.
+
+Use stale-source rehearsal only when all of these are true:
+
+- the run is manual,
+- the goal is to inspect generated outputs,
+- the artifact is not being treated as a publication candidate,
+- the logs clearly record that older FHABS resources were deliberately allowed.
+
+Workflow inputs for this mode:
+
+- `allow_stale_fhabs_rehearsal: true`
+- `fhabs_max_resource_age_days: <explicit value>`
+
+When this mode is enabled:
+
+- the workflow sets `CLEAR_LAKE_FHABS_MAX_RESOURCE_AGE_DAYS`,
+- the logs state that stale FHABS rehearsal was deliberately enabled,
+- the uploaded artifact name becomes `formal-public-refresh-review-stale-source-rehearsal`.
+
+This artifact is review-only. It is not a publication candidate and must not be used as evidence that the public mirror is fresh enough to publish.
+
 ## Acceptance Criteria
 
 A formal refresh is ready for review only when all of these are true:
@@ -110,6 +140,13 @@ A formal refresh is ready for review only when all of these are true:
 - generated files appear to come from the same refresh pass,
 - public/private boundary files remain excluded,
 - reviewer-facing snapshot language is updated if the refresh changes dates materially.
+
+For stale-source rehearsal, the acceptance bar is narrower:
+
+- the run completes,
+- the logs explicitly show that stale FHABS was deliberately allowed,
+- the artifact is clearly review-only,
+- no one treats the artifact as publishable output.
 
 ## Failure Modes
 
@@ -123,6 +160,8 @@ Treat these as stop conditions:
 - the run would require bundling unrelated reviewer/GIS cleanup work.
 
 If any stop condition occurs, keep the work local or in a scoped candidate branch. Do not publish from the failed run.
+
+If stale-source rehearsal succeeds, do not publish from that run either. Use it only to inspect outputs, identify downstream issues, and decide whether a fresh reviewed snapshot is even possible.
 
 ## Follow-Up After A Passing Refresh
 
