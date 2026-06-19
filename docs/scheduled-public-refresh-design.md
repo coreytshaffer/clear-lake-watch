@@ -68,6 +68,8 @@ The workflow must fail before publication when:
 
 Warnings are acceptable only when they are explicit and reviewed. For example, FHABS report or lab-linked sample dates may be older than the dashboard refresh time. Those warnings should preserve the distinction between source observation dates and dashboard generation dates.
 
+If a manual run deliberately allows older FHABS resources for review-only rehearsal, that allowance should be explicit in workflow inputs, logs, and artifact naming. It should not weaken the default publication-safe freshness gate.
+
 ## Rollback And Failure Behavior
 
 - If source fetches fail, do not publish partial outputs.
