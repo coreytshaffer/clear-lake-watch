@@ -266,7 +266,7 @@ Clear Lake Watch now has a release-governed review path for portfolio use. The p
 Current release evidence includes:
 
 - a publication review checklist for freshness, private-file exclusion, claim review, site-registry posture, screenshots, Git scope, and final publish readiness
-- local dashboard validation through `scripts/validate-dashboard.ps1 -SkipHttp`
+- local and CI-ready public mirror validation through `scripts/validate-public-mirror.ps1` and `scripts/validate-public-mirror.py`
 - SQLite validation for private site-review and field/microscopy stores
 - a local mobile-width screenshot review for first-viewport typography and wrapping
 - public/private mirror documentation that keeps local records, SQLite stores, and unreviewed intake files out of the public dashboard

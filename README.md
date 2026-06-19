@@ -112,6 +112,7 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Source freshness validation](docs/source-freshness-validation.md)
 - [Scheduled public refresh design](docs/scheduled-public-refresh-design.md)
+- [Formal public refresh runbook](docs/formal-public-refresh-runbook.md)
 - [Research readiness brief](docs/research-readiness-brief.md)
 - [Published commentary tracker](docs/published-commentary.md)
 - [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md)
@@ -152,5 +153,7 @@ python scripts/validate-public-mirror.py
 ```
 
 The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, static-snapshot warnings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes.
+
+For a manual reviewed refresh run, use the [formal public refresh runbook](docs/formal-public-refresh-runbook.md) or dispatch the `Formal Public Refresh` GitHub Actions workflow. That workflow generates review artifacts only; it does not publish automatically.
 
 The broader private review packet and trusted-review materials are intentionally not part of this public mirror branch.

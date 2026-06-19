@@ -951,16 +951,15 @@ try {
     }
   }
 
-  # Run node tests
-  Write-Host "Running Node.js tests..."
+  # Run a small dashboard-utils smoke test without relying on the Node test runner.
+  Write-Host "Running dashboard utils smoke test..."
   try {
-    # We use Start-Process to properly wait and capture exit codes
-    $nodeTestResult = Start-Process node -ArgumentList "--experimental-default-type=module", "--test", (Resolve-ProjectPath "scripts\dashboard-utils.test.js") -Wait -NoNewWindow -PassThru
+    $nodeTestResult = Start-Process node -ArgumentList (Resolve-ProjectPath "scripts\dashboard-utils.smoke.mjs") -Wait -NoNewWindow -PassThru
     if ($nodeTestResult.ExitCode -ne 0) {
-      Add-Failure "Node.js tests failed with exit code $($nodeTestResult.ExitCode)."
+      Add-Failure "Dashboard utils smoke test failed with exit code $($nodeTestResult.ExitCode)."
     }
   } catch {
-    Add-Failure "Failed to run Node.js tests: $_"
+    Add-Failure "Failed to run dashboard utils smoke test: $_"
   }
 
   if ($failures.Count -gt 0) {
