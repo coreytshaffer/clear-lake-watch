@@ -23,6 +23,7 @@ const mapReviewStatusElement = document.querySelector("#map-review-status");
 const siteReviewGridElement = document.querySelector("#site-review-grid");
 const productGridElement = document.querySelector("#product-grid");
 const sourceStatusGridElement = document.querySelector("#source-status-grid");
+const sourceFreshnessLegendElement = document.querySelector("#source-freshness-legend");
 const sourceOutputGridElement = document.querySelector("#source-output-grid");
 const manifestNotesElement = document.querySelector("#manifest-notes");
 const weatherContextGridElement = document.querySelector("#weather-context-grid");
@@ -1436,11 +1437,17 @@ const renderDataProducts = (products = []) => {
 };
 
 const renderSourceStatus = (manifestData) => {
-  if (!sourceStatusGridElement && !sourceOutputGridElement && !manifestNotesElement) {
+  if (
+    !sourceStatusGridElement &&
+    !sourceFreshnessLegendElement &&
+    !sourceOutputGridElement &&
+    !manifestNotesElement
+  ) {
     return;
   }
 
   sourceStatusGridElement?.replaceChildren();
+  sourceFreshnessLegendElement?.replaceChildren();
   sourceOutputGridElement?.replaceChildren();
   manifestNotesElement?.replaceChildren();
 
@@ -1452,6 +1459,29 @@ const renderSourceStatus = (manifestData) => {
     sourceStatusGridElement?.append(empty);
     return;
   }
+
+  const freshnessLegend = Array.isArray(manifestData.freshnessLegend)
+    ? manifestData.freshnessLegend
+    : [];
+
+  freshnessLegend.forEach((entry) => {
+    const item = document.createElement("article");
+    item.className = "source-freshness-item";
+
+    const term = document.createElement("h4");
+    term.textContent = entry.term ?? "Freshness field";
+
+    const field = document.createElement("p");
+    field.className = "source-status-meta";
+    field.textContent = entry.field ? `Manifest field: ${entry.field}` : "Manifest field: not specified";
+
+    const definition = document.createElement("p");
+    definition.className = "source-status-note";
+    definition.textContent = entry.definition ?? "Freshness meaning is not defined in the manifest.";
+
+    item.append(term, field, definition);
+    sourceFreshnessLegendElement?.append(item);
+  });
 
   manifestData.sources.forEach((source) => {
     const card = document.createElement("article");
@@ -1487,7 +1517,7 @@ const renderSourceStatus = (manifestData) => {
     freshness.textContent =
       source.resourceAgeDays === null || source.resourceAgeDays === undefined
         ? source.note
-        : `Resource file age: ${source.resourceAgeDays} days. ${source.note}`;
+        : `Resource freshness: source file was ${source.resourceAgeDays} days old at refresh. Observation freshness is listed separately above. ${source.note}`;
 
     card.append(title, statusBadge, meta, date, freshness);
     sourceStatusGridElement?.append(card);
@@ -1590,7 +1620,7 @@ const renderSnapshotStatusStrip = (manifestData) => {
       value: fhabsReports?.latestObservationDate
         ? formatDate(fhabsReports.latestObservationDate)
         : "Unavailable",
-      note: "Report dates reflect what is present in the public FHABS source file.",
+      note: "Observation freshness from FHABS report records; this is separate from source-file freshness.",
       kind: "reported",
     },
     {
@@ -1598,7 +1628,7 @@ const renderSnapshotStatusStrip = (manifestData) => {
       value: fhabsResults?.latestObservationDate
         ? formatDate(fhabsResults.latestObservationDate)
         : "Unavailable",
-      note: "Lab-linked result records may lag the public report stream.",
+      note: "Observation freshness from lab-linked records; source-resource age is tracked separately.",
       kind: "reported",
     },
     {
@@ -1643,7 +1673,7 @@ const renderFreshnessBadge = (generatedAt, { unavailable = false } = {}) => {
   note.className = "freshness-note";
   note.textContent = unavailable
     ? "The public data bundle could not be loaded, so snapshot values are not being shown."
-    : "Source observation dates may be older than the dashboard refresh time.";
+    : "Observation freshness can be older than dashboard refresh time; resource freshness only says whether the source file was recently accessible.";
 
   freshnessRowElement.append(badge, note);
 };

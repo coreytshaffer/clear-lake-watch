@@ -237,6 +237,22 @@ function Test-ManifestFreshness {
   }
 
   $maxSourceAgeDays = if ($Manifest.sourceFreshnessMaxAgeDays) { [int]$Manifest.sourceFreshnessMaxAgeDays } else { 14 }
+  $fieldDefinitions = $Manifest.fieldDefinitions
+  if ($null -eq $fieldDefinitions) {
+    Add-Failure "Manifest must include fieldDefinitions for trust clarity."
+  } else {
+    foreach ($fieldName in @("generatedAt", "latestObservationDate", "resourceDate", "resourceAgeDays")) {
+      if ([string]::IsNullOrWhiteSpace($fieldDefinitions.$fieldName)) {
+        Add-Failure "Manifest fieldDefinitions is missing $fieldName."
+      }
+    }
+  }
+
+  $freshnessLegendText = (@($Manifest.freshnessLegend) | ForEach-Object { "$($_.term) $($_.definition)" }) -join " "
+  foreach ($requiredPhrase in @("Dashboard snapshot freshness", "Observation freshness", "Resource freshness")) {
+    Assert-TextContains -Text $freshnessLegendText -Needle $requiredPhrase -Message "Manifest freshnessLegend must include $requiredPhrase."
+  }
+
 
   foreach ($source in @($Manifest.sources)) {
     if ([string]::IsNullOrWhiteSpace($source.id)) {
@@ -317,6 +333,7 @@ function Test-ManifestFreshness {
 
   $notesText = (@($Manifest.notes) -join " ")
   Assert-TextContains -Text $notesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
+  Assert-TextContains -Text $notesText -Needle "Resource freshness and observation freshness are separate checks" -Message "Manifest must preserve resource-freshness versus observation-freshness distinction."
 }
 
 function Test-WeatherContext {
@@ -589,6 +606,8 @@ try {
   Assert-TextContains -Text $readme -Needle "docs/secchi-mentor-review-handoff.md" -Message "README must link the Secchi mentor-review handoff."
   Assert-TextContains -Text $index -Needle "late prototype / early MVP" -Message "Homepage must preserve maturity language."
   Assert-TextContains -Text $index -Needle "Internship portfolio prototype showing Clear Lake environmental data integration, GIS/spatial QA, source-freshness validation, static deployment, and responsible public communication." -Message "Homepage meta description must describe the internship portfolio signal."
+  Assert-TextContains -Text $index -Needle "source-resource dates" -Message "Homepage must distinguish source-resource dates from observation dates."
+  Assert-TextContains -Text $index -Needle "source-freshness-legend" -Message "Homepage must expose the freshness legend container."
   Assert-TextContains -Text $index -Needle "Internship Reviewer Path" -Message "Homepage must include an above-the-fold reviewer path."
   Assert-TextContains -Text $index -Needle "Dashboard snapshot" -Message "Homepage reviewer path must start with the dashboard snapshot."
   Assert-TextContains -Text $index -Needle "github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md" -Message "Homepage reviewer path must link the GitHub evidence summary."
@@ -615,6 +634,8 @@ try {
   Assert-TextContains -Text $app -Needle "renderSnapshotStatusStrip" -Message "App must render the snapshot status strip."
   Assert-TextContains -Text $app -Needle "Latest Clear Lake FHABS report" -Message "App must expose FHABS report freshness in the status strip."
   Assert-TextContains -Text $app -Needle "Latest FHABS lab-linked sample" -Message "App must expose FHABS lab-result freshness in the status strip."
+  Assert-TextContains -Text $app -Needle "Observation freshness can be older than dashboard refresh time" -Message "App must distinguish dashboard refresh time from observation freshness."
+  Assert-TextContains -Text $app -Needle "Resource freshness: source file was" -Message "App must label resource freshness separately from observation freshness."
   Assert-TextContains -Text $app -Needle "before site or arm assignments should be treated as authoritative" -Message "App must preserve map-review caution language."
 
   $publicBacklog = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-backlog.md") -Raw
@@ -655,7 +676,7 @@ try {
   Assert-TextContains -Text $releaseNote -Needle "September 7, 2025" -Message "Release note must include FHABS report freshness date."
   Assert-TextContains -Text $releaseNote -Needle "January 11, 2024" -Message "Release note must include FHABS lab-linked sample freshness date."
   Assert-TextContains -Text $releaseNote -Needle "Static Snapshot Age Cue" -Message "Release note must include a static snapshot age cue."
-  Assert-TextContains -Text $releaseNote -Needle "the dashboard files are 23 days old" -Message "Release note must make committed snapshot age visible."
+  Assert-TextContains -Text $releaseNote -Needle "the dashboard files are 27 days old" -Message "Release note must make committed snapshot age visible."
   Assert-TextContains -Text $releaseNote -Needle "not current bloom observations" -Message "Release note must preserve stale FHABS warning framing."
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-desktop-2026-05-13.png" -Message "Release note must link the desktop screenshot."
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-mobile-2026-05-13.png" -Message "Release note must link the mobile-width screenshot."
@@ -697,6 +718,7 @@ try {
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "Source Freshness Validation" -Message "Source freshness validation doc must include its title."
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "not live monitoring" -Message "Source freshness validation doc must preserve non-operational boundary."
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "dashboard refresh time and source observation dates" -Message "Source freshness validation doc must preserve freshness distinction."
+  Assert-TextContains -Text $sourceFreshnessValidation -Needle "Resource freshness and observation freshness are separate checks" -Message "Source freshness validation doc must preserve resource-versus-observation freshness distinction."
   Assert-TextContains -Text $sourceFreshnessValidation -Needle "Warning Versus Failure" -Message "Source freshness validation doc must explain warning versus failure behavior."
 
   $scheduledRefreshDesign = Get-Content -LiteralPath (Resolve-ProjectPath "docs\scheduled-public-refresh-design.md") -Raw
@@ -785,7 +807,7 @@ try {
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Methodology page" -Message "Reviewer demo notes must caption the methodology screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Project page" -Message "Reviewer demo notes must caption the project-page screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "dashboard-anatomy-review-guide.md" -Message "Reviewer demo notes must link the dashboard anatomy guide."
-  Assert-TextContains -Text $reviewerDemoNotes -Needle "the committed snapshot generated on May 5, 2026 is 23 days old" -Message "Reviewer demo notes must make committed snapshot age visible."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "the committed snapshot generated on May 5, 2026 is 27 days old" -Message "Reviewer demo notes must make committed snapshot age visible."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "not official public-health guidance" -Message "Reviewer demo notes must preserve public-health boundary."
 
   $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw

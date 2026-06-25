@@ -1363,6 +1363,26 @@ h2 {
   gap: 12px;
 }
 
+.source-freshness-legend {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.source-freshness-item {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(221, 182, 111, 0.12);
+}
+
+.source-freshness-item h4 {
+  margin: 0;
+  font-size: 0.98rem;
+}
 .source-output-panel {
   display: grid;
   gap: 12px;

@@ -1,90 +1,116 @@
 {
-    "generatedAt":  "2026-05-05T01:44:50.0255703-07:00",
-    "schemaVersion":  1,
-    "dashboard":  "Clear Lake Watch",
-    "status":  "ok",
-    "sourceFreshnessMaxAgeDays":  14,
-    "sources":  [
-                    {
-                        "id":  "usgs-lake-level",
-                        "label":  "USGS Lakeport lake level",
-                        "source":  "USGS",
-                        "status":  "ok",
-                        "rowCount":  29,
-                        "latestObservationDate":  "2026-05-03",
-                        "station":  "11450000",
-                        "parameter":  "00065",
-                        "note":  "USGS daily values used for the Lakeport lake-level card and hydrology series."
-                    },
-                    {
-                        "id":  "usgs-cole-creek-discharge",
-                        "label":  "USGS Cole Creek discharge",
-                        "source":  "USGS",
-                        "status":  "ok",
-                        "rowCount":  29,
-                        "latestObservationDate":  "2026-05-03",
-                        "station":  "11449820",
-                        "parameter":  "00060",
-                        "note":  "USGS daily values used for tributary-flow context and hydrology series."
-                    },
-                    {
-                        "id":  "fhabs-bloom-reports",
-                        "label":  "FHABS bloom reports",
-                        "source":  "California Water Boards FHABS",
-                        "status":  "ok",
-                        "rowCount":  3429,
-                        "clearLakeRowCount":  230,
-                        "latestObservationDate":  "2025-09-07",
-                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/c6a36b91-ad38-4611-8750-87ee99e497dd/download/bloom-report_2026-05-04.csv",
-                        "resourceDate":  "2026-05-04",
-                        "resourceAgeDays":  1,
-                        "note":  "Public report records filtered to Clear Lake and normalized into reports, map markers, arm summaries, and report-pattern analytics."
-                    },
-                    {
-                        "id":  "fhabs-results",
-                        "label":  "FHABS lab results",
-                        "source":  "California Water Boards FHABS",
-                        "status":  "ok",
-                        "rowCount":  2080,
-                        "clearLakeRowCount":  169,
-                        "latestObservationDate":  "2024-01-11",
-                        "resourceUrl":  "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/9d4e1df4-0cd6-4165-9e63-effcafd9dccc/download/hab-results_2026-05-04.csv",
-                        "resourceDate":  "2026-05-04",
-                        "resourceAgeDays":  1,
-                        "note":  "Public lab-linked result records filtered to Clear Lake and normalized into observation-shaped records."
-                    }
-                ],
-    "outputs":  [
-                    {
-                        "file":  "data/live.json",
-                        "recordCount":  13,
-                        "description":  "Dashboard live snapshot cards, map markers, analytics bundle, and data product index."
-                    },
-                    {
-                        "file":  "data/reports.json",
-                        "recordCount":  230,
-                        "description":  "Normalized FHABS Clear Lake report records."
-                    },
-                    {
-                        "file":  "data/observations.json",
-                        "recordCount":  62,
-                        "description":  "Normalized USGS and FHABS observation records."
-                    },
-                    {
-                        "file":  "data/sites-normalized.json",
-                        "recordCount":  11,
-                        "description":  "Normalized stable site registry export."
-                    },
-                    {
-                        "file":  "data/analytics.json",
-                        "recordCount":  20,
-                        "description":  "Precomputed reporting-pattern and observation-coverage analytics."
-                    }
-                ],
-    "notes":  [
-                  "Observation dates may be older than the dashboard generation time.",
-                  "Lakeport lake-level values are shown as feet Rumsey, with approximate elevation calculated using Zero Rumsey = 1318.256 ft above mean sea level.",
-                  "FHABS report counts represent reporting activity, not direct bloom intensity.",
-                  "This manifest describes the generated public-data snapshot and is not official public-health guidance."
-              ]
+  "generatedAt": "2026-05-05T01:44:50.0255703-07:00",
+  "schemaVersion": 1,
+  "dashboard": "Clear Lake Watch",
+  "status": "ok",
+  "sourceFreshnessMaxAgeDays": 14,
+  "sources": [
+    {
+      "id": "usgs-lake-level",
+      "label": "USGS Lakeport lake level",
+      "source": "USGS",
+      "status": "ok",
+      "rowCount": 29,
+      "latestObservationDate": "2026-05-03",
+      "station": "11450000",
+      "parameter": "00065",
+      "note": "USGS daily values used for the Lakeport lake-level card and hydrology series."
+    },
+    {
+      "id": "usgs-cole-creek-discharge",
+      "label": "USGS Cole Creek discharge",
+      "source": "USGS",
+      "status": "ok",
+      "rowCount": 29,
+      "latestObservationDate": "2026-05-03",
+      "station": "11449820",
+      "parameter": "00060",
+      "note": "USGS daily values used for tributary-flow context and hydrology series."
+    },
+    {
+      "id": "fhabs-bloom-reports",
+      "label": "FHABS bloom reports",
+      "source": "California Water Boards FHABS",
+      "status": "ok",
+      "rowCount": 3429,
+      "clearLakeRowCount": 230,
+      "latestObservationDate": "2025-09-07",
+      "resourceUrl": "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/c6a36b91-ad38-4611-8750-87ee99e497dd/download/bloom-report_2026-05-04.csv",
+      "resourceDate": "2026-05-04",
+      "resourceAgeDays": 1,
+      "note": "Public report records filtered to Clear Lake and normalized into reports, map markers, arm summaries, and report-pattern analytics."
+    },
+    {
+      "id": "fhabs-results",
+      "label": "FHABS lab results",
+      "source": "California Water Boards FHABS",
+      "status": "ok",
+      "rowCount": 2080,
+      "clearLakeRowCount": 169,
+      "latestObservationDate": "2024-01-11",
+      "resourceUrl": "https://data.ca.gov/dataset/ab672540-aecd-42f1-9b05-9aad326f97ec/resource/9d4e1df4-0cd6-4165-9e63-effcafd9dccc/download/hab-results_2026-05-04.csv",
+      "resourceDate": "2026-05-04",
+      "resourceAgeDays": 1,
+      "note": "Public lab-linked result records filtered to Clear Lake and normalized into observation-shaped records."
+    }
+  ],
+  "outputs": [
+    {
+      "file": "data/live.json",
+      "recordCount": 13,
+      "description": "Dashboard live snapshot cards, map markers, analytics bundle, and data product index."
+    },
+    {
+      "file": "data/reports.json",
+      "recordCount": 230,
+      "description": "Normalized FHABS Clear Lake report records."
+    },
+    {
+      "file": "data/observations.json",
+      "recordCount": 62,
+      "description": "Normalized USGS and FHABS observation records."
+    },
+    {
+      "file": "data/sites-normalized.json",
+      "recordCount": 11,
+      "description": "Normalized stable site registry export."
+    },
+    {
+      "file": "data/analytics.json",
+      "recordCount": 20,
+      "description": "Precomputed reporting-pattern and observation-coverage analytics."
+    }
+  ],
+  "notes": [
+    "Observation dates may be older than the dashboard generation time.",
+    "Resource freshness and observation freshness are separate checks.",
+    "Lakeport lake-level values are shown as feet Rumsey, with approximate elevation calculated using Zero Rumsey = 1318.256 ft above mean sea level.",
+    "FHABS report counts represent reporting activity, not direct bloom intensity.",
+    "This manifest describes the generated public-data snapshot and is not official public-health guidance."
+  ],
+  "fieldDefinitions": {
+    "generatedAt": "Dashboard snapshot generation time. This describes when the public JSON files were built, not when lake conditions were observed.",
+    "sourceFreshnessMaxAgeDays": "Review threshold used by validation to warn when source observations are older than the dashboard freshness window.",
+    "latestObservationDate": "Observation freshness field. This is the newest environmental observation date available for a source within the public snapshot.",
+    "resourceDate": "Resource freshness field for downloadable source files. This is the date embedded in the source file URL or release, not an environmental observation date.",
+    "resourceAgeDays": "Resource freshness field for downloadable source files. This is how old the source file was when the dashboard snapshot was generated.",
+    "status": "Machine-readable source load status for the snapshot refresh pass."
+  },
+  "freshnessLegend": [
+    {
+      "term": "Dashboard snapshot freshness",
+      "field": "generatedAt",
+      "definition": "When Clear Lake Watch generated these public JSON files."
+    },
+    {
+      "term": "Observation freshness",
+      "field": "latestObservationDate",
+      "definition": "How recent the newest environmental record is for a source."
+    },
+    {
+      "term": "Resource freshness",
+      "field": "resourceDate / resourceAgeDays",
+      "definition": "How recent the downloaded source file is, separate from the age of the observations inside it."
+    }
+  ]
 }
