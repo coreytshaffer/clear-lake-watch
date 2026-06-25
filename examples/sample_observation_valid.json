@@ -1,0 +1,16 @@
+{
+  "observation_id": "example-clw-do-20260625t154500z-001",
+  "sensor_id": "do-sonde-demo-01",
+  "station_id": "lakeport-demo-station",
+  "observed_at": "2026-06-25T15:45:00Z",
+  "received_at": "2026-06-25T15:45:08Z",
+  "parameter": "dissolved_oxygen",
+  "value": 8.6,
+  "unit": "mg/L",
+  "latitude": 39.0422,
+  "longitude": -122.9158,
+  "source": "example",
+  "quality_flag": "valid",
+  "review_status": "approved_for_internal_use",
+  "notes": "Example documentation record only. Not real field data and not approved for public publication."
+}

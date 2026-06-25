@@ -1,0 +1,16 @@
+{
+  "observation_id": "example-clw-temp-20260625t154500z-900",
+  "sensor_id": "unknown-temp-demo-99",
+  "station_id": "lakeport-demo-station",
+  "observed_at": "2026-06-20T15:45:00Z",
+  "received_at": "2026-06-25T15:45:08Z",
+  "parameter": "water_temperature",
+  "value": -12.4,
+  "unit": "C",
+  "latitude": 39.0422,
+  "longitude": -122.9158,
+  "source": "example",
+  "quality_flag": "quarantined",
+  "review_status": "human_review_required",
+  "notes": "Example quarantined record only. Unknown sensor ID and physically implausible water temperature triggered quarantine."
+}
