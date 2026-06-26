@@ -19,6 +19,8 @@ It is not official public-health guidance, an official advisory, a validated for
 - Private/local records, reviewer notes, raw field records, and trusted-review paths are excluded from the public mirror.
 - Dashboard is not official guidance, a health advisory, a validated forecast, or a deployed sensor network.
 
+See [`docs/epistemic_safety_case.md`](docs/epistemic_safety_case.md) for the project’s reviewer-facing explanation of freshness, provenance, warning-preservation, and fail-closed publication boundaries.
+
 ## Reviewer Start Here
 
 For a 5-minute review:
