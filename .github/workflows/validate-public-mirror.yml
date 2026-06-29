@@ -21,4 +21,18 @@ jobs:
           python-version: "3.11"
 
       - name: Run cross-platform public mirror validator
-        run: python scripts/validate-public-mirror.py
+        shell: pwsh
+        run: |
+          python scripts/validate-public-mirror.py *> public-mirror-validation.log
+          $exitCode = $LASTEXITCODE
+          Get-Content public-mirror-validation.log
+          if ($exitCode -ne 0) {
+            Write-Error "Public mirror validation failed with exit code $exitCode"
+            exit $exitCode
+          }
+      - name: Upload public mirror validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-mirror-validation-log
+          path: public-mirror-validation.log

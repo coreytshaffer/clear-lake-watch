@@ -63,7 +63,28 @@ export const setStoredBoolean = (key, value) => {
 export const getStoredJson = (key, fallback = null) => {
   try {
     const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
+
+    if (value === null || value === undefined) {
+      return fallback;
+    }
+
+    const parsed = JSON.parse(value);
+
+    if (fallback === null || fallback === undefined) {
+      return parsed ?? fallback;
+    }
+
+    if (Array.isArray(fallback)) {
+      return Array.isArray(parsed) ? parsed : fallback;
+    }
+
+    if (typeof fallback === "object") {
+      return parsed !== null && typeof parsed === "object" && !Array.isArray(parsed)
+        ? parsed
+        : fallback;
+    }
+
+    return typeof parsed === typeof fallback ? parsed : fallback;
   } catch (error) {
     console.warn(error);
     return fallback;
