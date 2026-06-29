@@ -8,6 +8,8 @@ Clear Lake Watch is a late-prototype / early-MVP public dashboard for organizing
 
 It is not official public-health guidance, an official advisory, a validated forecast, or a deployed sensor network.
 
+This public mirror is a static reviewed snapshot generated on May 5, 2026, and it is not live lake conditions.
+
 **Live public mirror:** [coreytshaffer.github.io/clear-lake-watch](https://coreytshaffer.github.io/clear-lake-watch/)
 
 ![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
