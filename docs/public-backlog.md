@@ -84,7 +84,16 @@ These remain candidates for later work:
 
 ## Open Maintenance / Trust Issues
 
-No maintenance/trust issues are currently open in this public backlog snapshot.
+Freshness and publication-safety alignment follow-ups are now tracked here, opened after a claim-hygiene pass found that some safety-case wording described enforcement the validators do not yet perform:
+
+| Follow-up | Focus | Intent |
+| --- | --- | --- |
+| Implement a real stale-snapshot publication gate | Publication safety | Add an actual enforced gate (or reviewed override) so a stale snapshot cannot be published as fresh, replacing the current warn-only behavior and the previously documented but never-implemented `-AllowStaleSnapshot` control. |
+| Decide stale-source policy: fail vs warn | Publication safety | Make an explicit, documented decision on whether an over-threshold source observation should fail publication or remain a visible warning, and align the validators and docs to that decision. |
+| Unify Python and PowerShell validators | Reproducibility | Remove drift between `validate-public-mirror.py` (CI) and `validate-public-mirror.ps1` (local) by sharing one source of truth for required-text guards and freshness logic. |
+| Compute source and weather stale status | Data trust | Derive `status` / `machineReadableStatus` from observation age at build or render time instead of trusting static `"ok"` / `"partial"` fields that can misrepresent freshness. |
+
+These are documented as design/implementation follow-ups; none of them are enabled yet, and none change the current manual, reviewed publication posture.
 
 ## Open Reviewer-Readiness Issues
 

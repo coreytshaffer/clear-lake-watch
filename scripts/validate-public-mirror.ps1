@@ -665,7 +665,7 @@ try {
   Assert-TextContains -Text $publicBacklog -Needle "County GIS geometry publication boundary" -Message "Public backlog must include county GIS publication-boundary candidate."
   Assert-TextContains -Text $publicBacklog -Needle "Browser accessibility interaction pass" -Message "Public backlog must include browser accessibility interaction-pass status."
   Assert-TextContains -Text $publicBacklog -Needle "Maintenance file split" -Message "Public backlog must include maintenance file split status."
-  Assert-TextContains -Text $publicBacklog -Needle "No maintenance/trust issues are currently open" -Message "Public backlog must record that maintenance candidates are closed."
+  Assert-TextContains -Text $publicBacklog -Needle "Freshness and publication-safety alignment follow-ups" -Message "Public backlog must track the freshness and publication-safety alignment follow-ups."
 
   $releaseNote = Get-Content -LiteralPath (Resolve-ProjectPath "docs\public-snapshot-release-note-2026-05-13.md") -Raw
   Assert-TextContains -Text $releaseNote -Needle "Public Snapshot Release Note - 2026-05-13" -Message "Release note must include its title."
@@ -676,7 +676,7 @@ try {
   Assert-TextContains -Text $releaseNote -Needle "September 7, 2025" -Message "Release note must include FHABS report freshness date."
   Assert-TextContains -Text $releaseNote -Needle "January 11, 2024" -Message "Release note must include FHABS lab-linked sample freshness date."
   Assert-TextContains -Text $releaseNote -Needle "Static Snapshot Age Cue" -Message "Release note must include a static snapshot age cue."
-  Assert-TextContains -Text $releaseNote -Needle "the dashboard files are 27 days old" -Message "Release note must make committed snapshot age visible."
+  Assert-TextContains -Text $releaseNote -Needle "snapshot-age badge" -Message "Release note must point to the dashboard's dynamic snapshot-age badge instead of a hardcoded day count."
   Assert-TextContains -Text $releaseNote -Needle "not current bloom observations" -Message "Release note must preserve stale FHABS warning framing."
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-desktop-2026-05-13.png" -Message "Release note must link the desktop screenshot."
   Assert-TextContains -Text $releaseNote -Needle "clear-lake-watch-homepage-mobile-2026-05-13.png" -Message "Release note must link the mobile-width screenshot."
@@ -807,7 +807,7 @@ try {
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Methodology page" -Message "Reviewer demo notes must caption the methodology screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "Project page" -Message "Reviewer demo notes must caption the project-page screenshot."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "dashboard-anatomy-review-guide.md" -Message "Reviewer demo notes must link the dashboard anatomy guide."
-  Assert-TextContains -Text $reviewerDemoNotes -Needle "the committed snapshot generated on May 5, 2026 is 27 days old" -Message "Reviewer demo notes must make committed snapshot age visible."
+  Assert-TextContains -Text $reviewerDemoNotes -Needle "snapshot-age badge" -Message "Reviewer demo notes must point to the dashboard's dynamic snapshot-age badge instead of a hardcoded day count."
   Assert-TextContains -Text $reviewerDemoNotes -Needle "not official public-health guidance" -Message "Reviewer demo notes must preserve public-health boundary."
 
   $portfolioEvidenceIndex = Get-Content -LiteralPath (Resolve-ProjectPath "docs\portfolio-evidence-index.md") -Raw

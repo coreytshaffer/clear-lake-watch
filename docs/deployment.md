@@ -18,13 +18,9 @@ If a local server is already running on port `4173`, run the full endpoint check
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1
 ```
 
-If you are intentionally reviewing an older static snapshot for portfolio or archival work, make that choice explicit:
+If you are intentionally reviewing an older static snapshot for portfolio or archival work, make that choice explicit in the release note and README rather than relying on a CLI override. There is no `-AllowStaleSnapshot`-style flag today: the validator warns on stale snapshots but does not block or force-override publication, so the reviewer must decide.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp -AllowStaleSnapshot
-```
-
-Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+Do not publish a stale snapshot as if it were fresh. If you are intentionally preserving an older static snapshot, name the snapshot date and the reason in the release notes.
 
 Use `docs/publication-review-checklist.md` before staging, committing, pushing, or promoting the dashboard. That checklist separates local review, private repository work, public mirror updates, and flagship portfolio promotion.
 
@@ -32,7 +28,7 @@ Current working posture as of May 5, 2026:
 
 - The public snapshot was refreshed locally on May 5, 2026.
 - Keep publication as a separate decision from local refresh.
-- Do not use `-AllowStaleSnapshot` for a fresh public publish unless the stale date is explained in the release notes.
+- Do not publish a stale snapshot as fresh; if a static snapshot is preserved intentionally, name its date and reason in the release notes. (No CLI flag currently gates this — it is a manual reviewer decision.)
 - Capture a current screenshot before broad portfolio promotion.
 
 ## GitHub Pages

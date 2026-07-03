@@ -46,7 +46,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp
 ```
 
-Do not use `-AllowStaleSnapshot` for a fresh public publish.
+Do not publish a stale snapshot as if it were fresh. Note: the validator warns on a stale snapshot but does not block publication, and no `-AllowStaleSnapshot`-style override flag exists — freshness is a manual reviewer decision.
 
 For an intentional static portfolio snapshot, write a release note or README note that names the snapshot date and why it is being preserved.
 
@@ -119,7 +119,7 @@ For the current local portfolio-safe release prep branch, see `docs/portfolio-re
 
 Only publish after all of these are true:
 
-- validation passes without `-AllowStaleSnapshot`, or the release clearly explains a static snapshot
+- validation passes with no unresolved failures, and either the snapshot is fresh or the release clearly explains a preserved static snapshot (the validator only warns on staleness; it does not enforce this)
 - private local files are excluded
 - public claims match the maturity plan
 - a current screenshot exists for promotion use
