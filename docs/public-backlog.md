@@ -69,6 +69,7 @@ These remain candidates for later work:
 - Manual-only refresh workflow dry run, with no scheduled automation.
 - Public page refresh after the next reviewed data snapshot.
 - Site-registry local review for Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay.
+- Community visual observations: decide whether any community photo or camera intake is ever pursued. The [community observation boundary](community-observation-boundary.md) is a design position only and must be satisfied before any intake implementation; no submission form, camera ingestion, or social-media processing exists or is scheduled.
 
 ## Completed Maintenance / Trust Issues
 

@@ -96,6 +96,7 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Secchi mentor-review handoff](docs/secchi-mentor-review-handoff.md)
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
+- [Community observation boundary](docs/community-observation-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
