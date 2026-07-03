@@ -156,4 +156,9 @@ The Python validator is intentionally lighter than the PowerShell validator. Use
 
 For a manual reviewed refresh run, use the [formal public refresh runbook](docs/formal-public-refresh-runbook.md) or dispatch the `Formal Public Refresh` GitHub Actions workflow. That workflow generates review artifacts only; it does not publish automatically.
 
+## Related Projects
+
+- [community-monitoring](https://github.com/coreytshaffer/community-monitoring) — intake-side companion: a local-first trust pipeline for simulated field-sensor observations, with schema validation, semantic QA/QC, station provenance checks, and human-review routing. It is designed so that only validated, approved records could ever feed a public layer like this one. No integration exists yet; nothing in this public mirror comes from it.
+- [safetask-ai](https://github.com/coreytshaffer/safetask-ai) — hazard-first safety evidence pipeline whose fail-closed, review-gated governance patterns inform this project's publication boundaries. It uses a copy of this dashboard's May 5, 2026 public snapshot as demo fixture data.
+
 The broader private review packet and trusted-review materials are intentionally not part of this public mirror branch.
