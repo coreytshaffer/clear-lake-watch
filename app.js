@@ -1,3 +1,13 @@
+import {
+  daysSince,
+  formatDate,
+  formatDateTime,
+  getStoredBoolean,
+  getStoredJson,
+  setStoredBoolean,
+  setStoredJson,
+} from "./scripts/dashboard-utils.js";
+
 const summaryElement = document.querySelector("#summary");
 const liveSummaryElement = document.querySelector("#live-summary");
 const liveStatsElement = document.querySelector("#live-stats");
@@ -96,90 +106,12 @@ const themeColors = {
 const fhabsReportsDatasetUrl =
   "https://lab.data.ca.gov/dataset/surface-water-freshwater-harmful-algal-blooms";
 
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-});
-
-const formatDate = (value) => {
-  if (typeof value === "string") {
-    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
-    if (dateOnlyMatch) {
-      const [, year, month, day] = dateOnlyMatch;
-      return dateFormatter.format(
-        new Date(Number(year), Number(month) - 1, Number(day)),
-      );
-    }
-  }
-
-  return dateFormatter.format(new Date(value));
-};
-
-const formatDateTime = (value) =>
-  new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(value));
-
-const daysSince = (value) => {
-  const then = new Date(value).getTime();
-
-  if (Number.isNaN(then)) {
-    return null;
-  }
-
-  return Math.floor((Date.now() - then) / 86400000);
-};
-
-const getStoredBoolean = (key, fallback = false) => {
-  try {
-    const value = localStorage.getItem(key);
-    if (value === null) {
-      return fallback;
-    }
-
-    return value === "true";
-  } catch (error) {
-    console.warn(error);
-    return fallback;
-  }
-};
-
-const setStoredBoolean = (key, value) => {
-  try {
-    localStorage.setItem(key, `${value}`);
-  } catch (error) {
-    console.warn(error);
-  }
-};
-
-const getStoredJson = (key, fallback = null) => {
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
-  } catch (error) {
-    console.warn(error);
-    return fallback;
-  }
-};
-
-const setStoredJson = (key, value) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.warn(error);
-  }
-};
-
 const notificationsSupported = () => "Notification" in window;
 
 const notificationsEnabled = () =>
-  getStoredBoolean(notificationSettingsKey, false) && Notification.permission === "granted";
+  notificationsSupported() &&
+  getStoredBoolean(notificationSettingsKey, false) &&
+  Notification.permission === "granted";
 
 const defaultNotificationRules = {
   stale: true,
@@ -980,8 +912,8 @@ const markerSourceLinks = (marker) => {
   }
 
   links.push({
-    href: "./docs/site-registry-review.md",
-    label: "Site review queue",
+    href: "./docs/site-registry-decision-workflow.md",
+    label: "Site review workflow",
     external: false,
   });
 

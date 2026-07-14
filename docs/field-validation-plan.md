@@ -19,6 +19,7 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 
 | Task | Output | Boundary |
 | --- | --- | --- |
+| Check the official method source spine. | Source-anchor list for the candidate protocol. | Planning only. Source anchors do not authorize field work. |
 | Select 3-5 priority variables from the variable register. | Short candidate list for mentor review. | Planning only. No measurement claim. |
 | Match each variable to a method, unit, and likely instrument or source. | Methods table. | Do not mix field methods with public-source data silently. |
 | Identify candidate sites and privacy level. | Site list with review status. | Keep unresolved site-registry assignments unresolved. |
@@ -33,6 +34,8 @@ Recommended first variables:
 - visual bloom observation notes.
 
 These are useful starter variables because they can teach method discipline without claiming toxin risk, public safety, or forecast authority.
+
+Before any starter variable becomes a written protocol, use [official-method-source-spine.md](official-method-source-spine.md) to identify the relevant Lake County QAPP, EPA quality assurance, EPA lake-monitoring, and California data-system anchors. The first source-anchored draft is [secchi-depth-clarity-mentor-review-protocol.md](secchi-depth-clarity-mentor-review-protocol.md), and it remains mentor-review-needed rather than approved for field use.
 
 ## Phase 2: Field And Sample Metadata Minimums
 
@@ -100,7 +103,8 @@ Use these questions before field testing:
 4. Which variables should remain lab-only or official-source-only?
 5. What location precision is appropriate for public review?
 6. Which wording could accidentally imply public-health or advisory authority?
+7. Which Lake County QAPP, EPA, SWAMP/CEDEN, or lab method should govern the written protocol?
 
 ## Next Decision Point
 
-After mentor or lab-method feedback, choose one bounded pilot protocol. The first pilot should prove method discipline and review boundaries, not public safety, forecasting, or operational monitoring.
+Keep the Secchi depth / clarity protocol mentor-review-only for now. The next decision should be made after mentor, faculty, or qualified technical feedback is received; do not create field-data exports, forecasting, or new data ingestion from this protocol.

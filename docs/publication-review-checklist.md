@@ -43,10 +43,12 @@ For a fresh public publish:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-live-data.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\write-weather-context-public-source.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
+python .\scripts\validate-public-mirror.py
 ```
 
-Do not use `-AllowStaleSnapshot` for a fresh public publish.
+For a reviewed CI rehearsal without publication, use the `Formal Public Refresh` workflow or the commands in `docs/formal-public-refresh-runbook.md`.
 
 For an intentional static portfolio snapshot, write a release note or README note that names the snapshot date and why it is being preserved.
 
@@ -66,7 +68,8 @@ Confirm these files stay local:
 Confirm public pages and app code do not fetch private paths:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-dashboard.ps1 -SkipHttp
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
+python .\scripts\validate-public-mirror.py
 ```
 
 ## Claim-Review Gate
@@ -119,7 +122,8 @@ For the current local portfolio-safe release prep branch, see `docs/portfolio-re
 
 Only publish after all of these are true:
 
-- validation passes without `-AllowStaleSnapshot`, or the release clearly explains a static snapshot
+- validation passes, or the release clearly explains a static snapshot
+- both public mirror validators pass for the intended refresh
 - private local files are excluded
 - public claims match the maturity plan
 - a current screenshot exists for promotion use

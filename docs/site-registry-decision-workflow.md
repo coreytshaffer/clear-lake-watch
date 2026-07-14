@@ -42,3 +42,5 @@ A site should not move from `needs-local-review` to a reviewed status unless the
 ## Current Public Review Pass
 
 The current public-safe review pass is documented in [site-registry-trust-review-pass-001.md](site-registry-trust-review-pass-001.md).
+
+The current medium-priority unresolved decision is documented in [site-registry-unresolved-decision.md](site-registry-unresolved-decision.md).

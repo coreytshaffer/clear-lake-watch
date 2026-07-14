@@ -74,7 +74,7 @@ Use `docs/publication-review-checklist.md` for the full publication decision gat
 Before any broad public publish:
 
 1. Refresh public data or intentionally document a static snapshot.
-2. Run `scripts/validate-dashboard.ps1` without `-AllowStaleSnapshot`.
+2. Run `scripts/validate-public-mirror.ps1` and `python scripts/validate-public-mirror.py`.
 3. Confirm `.gitignore` still excludes private local records and SQLite stores.
 4. Confirm the public app does not fetch `data/private/`, `*.local.json`, or detailed private review artifacts.
 5. Capture a current screenshot if the publish is meant for portfolio promotion.

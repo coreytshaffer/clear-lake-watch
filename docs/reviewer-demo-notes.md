@@ -7,7 +7,7 @@ These notes provide a short review path for Clear Lake Watch and captions for th
 ## Suggested Review Path
 
 1. Open the public dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>.
-2. Start with the snapshot status strip and confirm the source freshness dates.
+2. Start with the snapshot status strip and confirm the source freshness dates. The committed snapshot was generated on May 5, 2026; check the dashboard's snapshot-age badge for its current age. Regardless of age, read it as static portfolio evidence, not current conditions.
 3. Review the map QA section and confirm unresolved site assignments remain visible.
 4. Open the methodology page to inspect source boundaries and limitations.
 5. Open the project page to inspect MVP scope, trust guardrails, and data-product framing.

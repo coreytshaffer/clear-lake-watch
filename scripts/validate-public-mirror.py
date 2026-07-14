@@ -1,137 +1,395 @@
-import os
-import sys
+from __future__ import annotations
+
 import json
-import re
+import subprocess
+import sys
+from dataclasses import dataclass, field
+from datetime import date, datetime
+from pathlib import Path
+from typing import Iterable
 
-def print_failure(msg):
-    print(f"FAIL: {msg}")
 
-def read_file_content(filepath):
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return f.read()
-    except Exception as e:
-        print_failure(f"Could not read {filepath}: {e}")
-        return None
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-def read_json_file(filepath):
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        print_failure(f"Could not parse JSON in {filepath}: {e}")
-        return None
+REQUIRED_FILES = [
+    Path(".nojekyll"),
+    Path("README.md"),
+    Path("index.html"),
+    Path("project.html"),
+    Path("methodology.html"),
+    Path("styles.css"),
+    Path("app.js"),
+    Path("sw.js"),
+    Path("manifest.webmanifest"),
+    Path("scripts/dashboard-utils.js"),
+    Path("scripts/public-mirror-link-validation.ps1"),
+    Path("scripts/validate-public-mirror.ps1"),
+    Path("data/live.json"),
+    Path("data/reports.json"),
+    Path("data/observations.json"),
+    Path("data/sites.json"),
+    Path("data/sites-normalized.json"),
+    Path("data/site-review-summary.json"),
+    Path("data/analytics.json"),
+    Path("data/manifest.json"),
+    Path("data/lake-shoreline.json"),
+    Path("data/weather-context.json"),
+    Path("data/reviewed-field-observations.json"),
+    Path("docs/public-backlog.md"),
+    Path("docs/public-snapshot-release-note-2026-05-13.md"),
+    Path("docs/reviewer-demo-notes.md"),
+    Path("docs/publication-review-checklist.md"),
+    Path("docs/public-mirror-boundary.md"),
+    Path("docs/flagship-maturity-plan.md"),
+    Path("docs/scheduled-public-refresh-design.md"),
+]
 
-def main():
-    failures = 0
-
-    # 1. Confirm required public files exist
-    required_files = [
-        "README.md",
-        "index.html",
-        "app.js",
-        "styles.css",
-        "data/manifest.json",
-        "data/weather-context.json",
-        "data/live.json"
-    ]
-
-    for f in required_files:
-        if not os.path.exists(f):
-            print_failure(f"Missing required file: {f}")
-            failures += 1
-
-    # Parse all public JSON files under data/ to make sure they are valid
-    if os.path.isdir('data'):
-        for file in os.listdir('data'):
-            if file.endswith('.json'):
-                path = os.path.join('data', file)
-                if read_json_file(path) is None:
-                    failures += 1
-
-    # 2. Check boundary phrases in README.md and HTML
-    readme_content = read_file_content("README.md")
-    index_content = read_file_content("index.html")
-
-    # Based on scripts/validate-public-mirror.ps1 exact needles
-    readme_phrases = [
+TEXT_GUARDS = {
+    Path("README.md"): [
+        "late-prototype / early-MVP",
         "not official public-health guidance",
-        "late-prototype / early-MVP"
-    ]
-
-    index_phrases = [
+        "static reviewed snapshot generated on May 5, 2026",
+        "not live lake conditions",
+        "docs/public-snapshot-release-note-2026-05-13.md",
+    ],
+    Path("index.html"): [
         "late prototype / early MVP",
-        "Public Data Snapshot, Not Advisory Guidance"
-    ]
+        "Public Data Snapshot, Not Advisory Guidance",
+        "What The Public Snapshot Files Are Showing",
+    ],
+    Path("project.html"): [
+        "late prototype / early MVP",
+        "not official public-health guidance",
+    ],
+    Path("methodology.html"): [
+        "not official public-health direction",
+    ],
+    Path("docs/public-snapshot-release-note-2026-05-13.md"): [
+        "Snapshot generated: May 5, 2026",
+        "not official public-health guidance",
+        "Static Snapshot Age Cue",
+    ],
+    Path("docs/reviewer-demo-notes.md"): [
+        "static portfolio evidence, not current conditions",
+        "not official public-health guidance",
+    ],
+    Path("docs/scheduled-public-refresh-design.md"): [
+        "No unattended publication workflow is enabled",
+        "The scheduled workflow must never publish",
+    ],
+}
 
-    if readme_content:
-        for phrase in readme_phrases:
-            if phrase.lower() not in readme_content.lower():
-                print_failure(f"README.md missing boundary phrase: '{phrase}'")
-                failures += 1
+EXPECTED_SOURCE_IDS = {
+    "usgs-lake-level",
+    "usgs-cole-creek-discharge",
+    "fhabs-bloom-reports",
+    "fhabs-results",
+}
 
-    if index_content:
-        for phrase in index_phrases:
-            if phrase.lower() not in index_content.lower():
-                print_failure(f"index.html missing boundary phrase: '{phrase}'")
-                failures += 1
+EXCLUDED_TRACKED_PATHS = [
+    "docs/private",
+    "docs/review-screenshots",
+    "docs/trusted-review-request.md",
+    "docs/trusted-review-feedback-log.md",
+    "docs/communications-log.md",
+    "data/private",
+    "data/site-review.json",
+    "portfolio-materials.html",
+    "shortcuts",
+    "server.pid",
+    "server.out.log",
+    "server.err.log",
+]
 
-    # 3. Check weather-context.json boundaries
-    weather_context = read_json_file("data/weather-context.json")
-    if weather_context:
-        status = weather_context.get("machineReadableStatus")
-        source_name = weather_context.get("sourceName", "")
+DISALLOWED_WORKING_PATHS = [
+    Path("geometry-preview.html"),
+    Path("data/lake-shoreline-county-candidate.json"),
+    Path("data/lake-shoreline-county-simplified-25ft.json"),
+    Path("data/lake-shoreline-county-simplified-50ft.json"),
+]
 
-        if status != "unavailable":
-            if "noaa" not in source_name.lower() and "national weather service" not in source_name.lower():
-                print_failure(f"weather-context is available but sourceName does not look like reviewed telemetry (NOAA/NWS): {source_name}")
-                failures += 1
 
-    # 4. Check for private/trusted-review references in the public mirror
+@dataclass
+class ValidationState:
+    failures: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
-    private_patterns = [
-        r"data/private/",
-        r"\.local\.json",
-        r"\.local\.sqlite",
-        r"docs/trusted-review-request\.md"
-    ]
+    def fail(self, message: str) -> None:
+        self.failures.append(message)
 
-    tracked_files = []
-    import subprocess
+    def warn(self, message: str) -> None:
+        self.warnings.append(message)
+
+
+def project_path(relative_path: Path) -> Path:
+    return PROJECT_ROOT / relative_path
+
+
+def read_text(relative_path: Path, state: ValidationState) -> str:
+    path = project_path(relative_path)
     try:
-        # Get tracked files using git ls-files
-        tracked_files_output = subprocess.check_output(['git', 'ls-files']).decode('utf-8')
-        tracked_files = tracked_files_output.splitlines()
-    except Exception:
-        # Fall back to an explicit list if git is unavailable
-        tracked_files = [
-            "index.html", "app.js", "project.html", "methodology.html", "styles.css", "sw.js"
+        return path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        state.fail(f"Missing required file: {relative_path.as_posix()}")
+    except OSError as exc:
+        state.fail(f"Unable to read {relative_path.as_posix()}: {exc}")
+    return ""
+
+
+def read_json(relative_path: Path, state: ValidationState) -> object | None:
+    content = read_text(relative_path, state)
+    if not content:
+        return None
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError as exc:
+        state.fail(f"Invalid JSON in {relative_path.as_posix()}: {exc}")
+        return None
+
+
+def assert_required_files(state: ValidationState) -> None:
+    for relative_path in REQUIRED_FILES:
+        if not project_path(relative_path).is_file():
+            state.fail(f"Missing required file: {relative_path.as_posix()}")
+
+
+def assert_text_guards(state: ValidationState) -> None:
+    for relative_path, needles in TEXT_GUARDS.items():
+        text = read_text(relative_path, state)
+        for needle in needles:
+            if needle not in text:
+                state.fail(
+                    f"{relative_path.as_posix()} is missing required text: {needle}"
+                )
+
+
+def parse_date_like(value: str) -> datetime:
+    normalized = value.replace("Z", "+00:00")
+    return datetime.fromisoformat(normalized)
+
+
+def load_tracked_files(state: ValidationState) -> set[str]:
+    try:
+        result = subprocess.run(
+            ["git", "ls-files"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        state.warn(f"Unable to inspect tracked files with git ls-files: {exc}")
+        return set()
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
+def assert_tracked_boundaries(state: ValidationState, tracked_files: set[str]) -> None:
+    if not tracked_files:
+        return
+
+    for excluded_path in EXCLUDED_TRACKED_PATHS:
+        normalized = excluded_path.replace("\\", "/")
+        for tracked_path in tracked_files:
+            if tracked_path == normalized or tracked_path.startswith(f"{normalized}/"):
+                state.fail(
+                    "Public mirror must not track excluded review/private/local "
+                    f"artifact: {normalized}"
+                )
+                break
+
+    for tracked_path in tracked_files:
+        if tracked_path.startswith("data/") and tracked_path.endswith(".local.json"):
+            state.fail(f"Public mirror must not track local/private file: {tracked_path}")
+        if tracked_path.endswith(".local.sqlite"):
+            state.fail(f"Public mirror must not track local/private file: {tracked_path}")
+
+
+def assert_working_boundaries(state: ValidationState) -> None:
+    for relative_path in DISALLOWED_WORKING_PATHS:
+        if project_path(relative_path).exists():
+            state.fail(
+                "Public mirror must not expose unverified county GIS review artifact: "
+                f"{relative_path.as_posix()}"
+            )
+
+
+def assert_manifest_freshness(
+    state: ValidationState, manifest: dict, live_data: dict
+) -> None:
+    try:
+        manifest_generated_at = parse_date_like(str(manifest["generatedAt"]))
+        live_generated_at = parse_date_like(str(live_data["generatedAt"]))
+    except (KeyError, TypeError, ValueError) as exc:
+        state.fail(f"Unable to parse manifest or live snapshot timestamps: {exc}")
+        return
+
+    gap_minutes = abs((manifest_generated_at - live_generated_at).total_seconds()) / 60
+    if gap_minutes > 5:
+        state.fail(
+            "Manifest and live snapshot appear to come from different refresh passes. "
+            f"Gap: {gap_minutes:.2f} minutes."
+        )
+
+    max_source_age_days = int(manifest.get("sourceFreshnessMaxAgeDays", 14))
+    sources = manifest.get("sources")
+    if not isinstance(sources, list):
+        state.fail("Manifest sources must be a list.")
+        return
+
+    source_ids = {
+        source.get("id")
+        for source in sources
+        if isinstance(source, dict) and source.get("id")
+    }
+    missing_ids = sorted(EXPECTED_SOURCE_IDS - source_ids)
+    for source_id in missing_ids:
+        state.fail(f"Manifest is missing expected source: {source_id}")
+
+    today = date.today()
+    snapshot_age_days = (today - manifest_generated_at.date()).days
+    if snapshot_age_days > max_source_age_days:
+        state.warn(
+            "Dashboard snapshot is "
+            f"{snapshot_age_days} days old, which exceeds "
+            f"sourceFreshnessMaxAgeDays={max_source_age_days}. "
+            "Keep static-snapshot language visible."
+        )
+
+    if manifest.get("status") == "ok":
+        non_ok_sources = [
+            source.get("id", "unknown")
+            for source in sources
+            if isinstance(source, dict) and source.get("status") != "ok"
         ]
+        if non_ok_sources:
+            state.fail(
+                "Manifest status is ok, but one or more sources are not ok: "
+                + ", ".join(non_ok_sources)
+            )
 
-    for file_path in tracked_files:
-        file_path_unix = file_path.replace('\\', '/')
-        for pattern in private_patterns:
-            if re.search(pattern, file_path_unix):
-                print_failure(f"Found private/trusted-review file tracked: {file_path_unix}")
-                failures += 1
+    for source in sources:
+        if not isinstance(source, dict):
+            state.fail("Manifest source entry must be an object.")
+            continue
+        source_id = str(source.get("id", "unknown"))
+        status = source.get("status")
+        row_count = source.get("rowCount")
+        latest_observation = source.get("latestObservationDate")
 
-    # check that no public files mention private paths
-    public_content_files = ["app.js", "index.html", "project.html", "methodology.html"]
-    for file in public_content_files:
-        if os.path.exists(file):
-            content = read_file_content(file)
-            if content:
-                for pattern in private_patterns:
-                    if re.search(pattern, content):
-                        print_failure(f"Public file {file} contains reference to private path matching: {pattern}")
-                        failures += 1
+        if not status:
+            state.fail(f"Manifest source {source_id} is missing status.")
+        if not isinstance(row_count, (int, float)) or row_count <= 0:
+            state.fail(f"Manifest source {source_id} must have a positive rowCount.")
+        if not latest_observation:
+            state.fail(f"Manifest source {source_id} is missing latestObservationDate.")
+            continue
 
-    if failures > 0:
-        print(f"\nValidation FAILED with {failures} errors.")
-        sys.exit(1)
+        try:
+            latest_observation_date = parse_date_like(str(latest_observation)).date()
+        except ValueError:
+            latest_observation_date = datetime.fromisoformat(
+                f"{latest_observation}T00:00:00"
+            ).date()
+
+        age_days = (manifest_generated_at.date() - latest_observation_date).days
+        if age_days < 0:
+            state.fail(
+                f"Manifest source {source_id} has a latestObservationDate after "
+                "the manifest generatedAt."
+            )
+        elif age_days > max_source_age_days:
+            state.warn(
+                f"Manifest source {source_id} latest observation is {age_days} days "
+                "older than the dashboard snapshot; keep stale-source language visible."
+            )
+
+
+def assert_live_data_shape(state: ValidationState, live_data: dict) -> None:
+    for key in ("liveCards", "mapMarkers", "dataProducts"):
+        value = live_data.get(key)
+        if not isinstance(value, list) or not value:
+            state.fail(f"Live snapshot must include a non-empty {key} list.")
+
+
+def assert_reviewed_field_observations(state: ValidationState, reviewed_data: dict) -> None:
+    records = reviewed_data.get("records")
+    if not isinstance(records, list):
+        state.fail("Reviewed field observations must expose a records list.")
+        return
+
+    private_needles = {
+        "collectorName",
+        "qaNotes",
+        "custodyNotes",
+        "photoOrVoucherReference",
+        "latitude",
+        "longitude",
+    }
+    for record in records:
+        serialized = json.dumps(record, sort_keys=True)
+        for private_needle in private_needles:
+            if private_needle in serialized:
+                record_id = (
+                    record.get("recordId", "unknown")
+                    if isinstance(record, dict)
+                    else "unknown"
+                )
+                state.fail(
+                    "Reviewed public field observation "
+                    f"{record_id} includes private or sensitive field: {private_needle}"
+                )
+
+
+def validate() -> ValidationState:
+    state = ValidationState()
+    assert_required_files(state)
+    assert_text_guards(state)
+
+    tracked_files = load_tracked_files(state)
+    assert_tracked_boundaries(state, tracked_files)
+    assert_working_boundaries(state)
+
+    manifest = read_json(Path("data/manifest.json"), state)
+    live_data = read_json(Path("data/live.json"), state)
+    reviewed_field_observations = read_json(
+        Path("data/reviewed-field-observations.json"), state
+    )
+
+    if isinstance(manifest, dict) and isinstance(live_data, dict):
+        assert_manifest_freshness(state, manifest, live_data)
+        assert_live_data_shape(state, live_data)
     else:
-        print("\nValidation PASSED. All checks look good.")
-        sys.exit(0)
+        state.fail("Manifest or live snapshot JSON is missing required object structure.")
+
+    if isinstance(reviewed_field_observations, dict):
+        assert_reviewed_field_observations(state, reviewed_field_observations)
+    else:
+        state.fail("Reviewed field observations JSON is missing required object structure.")
+
+    return state
+
+
+def emit_messages(messages: Iterable[str], label: str) -> None:
+    messages = list(messages)
+    if not messages:
+        return
+    print(f"{label}:")
+    for message in messages:
+        print(f"  - {message}")
+
+
+def main() -> int:
+    state = validate()
+    emit_messages(state.warnings, "Warnings")
+    emit_messages(state.failures, "Failures")
+
+    if state.failures:
+        print("Validation failed for Clear Lake Watch public mirror.")
+        return 1
+
+    print("Validation passed for Clear Lake Watch public mirror.")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

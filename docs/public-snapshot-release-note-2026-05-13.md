@@ -15,6 +15,12 @@ This snapshot is not official public-health guidance, recreation guidance, emerg
 - Latest FHABS lab-linked sample in the public source file: January 11, 2024
 - Map review status: current FHABS markers remain matched to the starter registry but still need local review before site or arm assignments should be treated as authoritative.
 
+## Static Snapshot Age Cue
+
+This committed public mirror is a static snapshot generated on May 5, 2026, with the latest USGS observation dated May 3, 2026. See the dashboard's snapshot-age badge for the current age of this reviewed static snapshot; the badge is computed at load time, so it does not go stale the way a hand-typed day count does.
+
+Treat the page as a dated portfolio/review artifact until a new reviewed refresh is generated, validated, and published. The stale FHABS dates above are intentional warning cues, not current bloom observations.
+
 ## Screenshots
 
 - Desktop homepage screenshot: [public-screenshots/clear-lake-watch-homepage-desktop-2026-05-13.png](public-screenshots/clear-lake-watch-homepage-desktop-2026-05-13.png)

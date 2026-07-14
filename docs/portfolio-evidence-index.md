@@ -15,6 +15,7 @@ It is not official public-health guidance, an official advisory, recreation guid
 | See the working public artifact | [Live dashboard](https://coreytshaffer.github.io/clear-lake-watch/) | Shows the public dashboard, snapshot status strip, map QA cues, and source-boundary language. |
 | Review for internships | [Internship review start here](internship-review-start-here.md) | Gives the three-link reviewer path, project summary, and copy-paste outreach blurb. |
 | Share a concise Career Services summary | [Clear Lake Watch v0.1 evidence summary](clear-lake-watch-v0.1-evidence-summary.md) | Provides one-page reviewer-friendly evidence, role fit, resume language, and limitations. |
+| Send a one-page outreach overview | [Portfolio outreach summary - 2026-05-17](portfolio-outreach-summary-2026-05-17.md) | Gives Career Services, mentors, and internship reviewers a short current summary and review ask. |
 | Prepare for a Career Services appointment | [Career Services handoff packet](career-services-handoff-packet.md) | Provides a short email, follow-up note, resume placement guidance, and review questions. |
 | Review project delivery and EHS positioning | [Project Delivery, EHS, and Environmental Systems Governance](project-delivery-ehs.md) | Shows how project management and EHS-informed practice support the environmental systems portfolio. |
 | Walk through the dashboard interface | [Dashboard anatomy review guide](dashboard-anatomy-review-guide.md) | Explains what each major dashboard area demonstrates for reviewers. |
@@ -24,7 +25,7 @@ It is not official public-health guidance, an official advisory, recreation guid
 | Review methods and limitations | [Methodology](../methodology.html) | Documents source categories, public-health boundary, and cautious interpretation rules. |
 | Inspect the reviewer path | [Reviewer demo notes](reviewer-demo-notes.md) | Provides screenshots, captions, review cues, and a short demo script. |
 | Check current implementation status | [Public backlog](public-backlog.md) | Summarizes completed trust-hardening work and optional next candidates. |
-| Review scientific credibility setup | [Variable register](variable-register.md) and [Field validation plan](field-validation-plan.md) | Shows the next planning layer before any field, lab, microscopy, or sensor claims. |
+| Review scientific credibility setup | [Variable register](variable-register.md), [Field validation plan](field-validation-plan.md), [Official method source spine](official-method-source-spine.md), [Secchi depth / clarity mentor-review protocol](secchi-depth-clarity-mentor-review-protocol.md), and [Secchi mentor-review handoff](secchi-mentor-review-handoff.md) | Shows the next planning layer before any field, lab, microscopy, or sensor claims. |
 
 ## Audience-Specific Review Paths
 
@@ -56,6 +57,9 @@ Open these first:
 - [Research readiness brief](research-readiness-brief.md)
 - [Variable register](variable-register.md)
 - [Field validation plan](field-validation-plan.md)
+- [Official method source spine](official-method-source-spine.md)
+- [Secchi depth / clarity mentor-review protocol](secchi-depth-clarity-mentor-review-protocol.md)
+- [Secchi mentor-review handoff](secchi-mentor-review-handoff.md)
 - [Project brief](project-brief.md)
 - [Source audit](source-audit.md)
 - [Forecast boundary](forecast-boundary.md)
@@ -136,6 +140,9 @@ Do not claim:
 | [Field/microscopy review workflow](field-microscopy-review-workflow.md) | Public workflow design | Private intake, review, permission, and sanitized export gates are planned before public release. | It does not mean field or microscopy submissions are active. |
 | [Variable register](variable-register.md) | Public planning artifact | Future variables are separated by readiness and source family. | It does not prove any future field or sensor measurement has occurred. |
 | [Field validation plan](field-validation-plan.md) | Public planning artifact | Calibration, sample handling, QA/QC, and publication gates are defined before field claims. | It does not create a deployed monitoring program or official guidance. |
+| [Official method source spine](official-method-source-spine.md) | Public planning artifact | Future protocols now have official source anchors such as Lake County QAPP, EPA QAPP guidance, and EPA lake-monitoring methods. | It does not mean any field protocol has been approved, piloted, or authorized. |
+| [Secchi depth / clarity mentor-review protocol](secchi-depth-clarity-mentor-review-protocol.md) | Public planning artifact | The first source-anchored field-method draft includes mentor-review questions, QA/QC checks, and a private-to-public gate. | It does not authorize field work, create public field data, diagnose bloom conditions, or support recreation-safety decisions. |
+| [Secchi mentor-review handoff](secchi-mentor-review-handoff.md) | Public review handout | A mentor has a short review path, exact feedback questions, and a feedback capture template. | It does not convert the Secchi protocol into a field protocol or public export. |
 
 ## Current Strengths
 
@@ -150,6 +157,7 @@ Do not claim:
 - Reviewer-path accessibility note available for descriptive links and screenshot-caption coverage.
 - Mobile reviewer path note available for sticky navigation and narrow-screen review.
 - Variable register and field-validation plan available for scientific credibility review.
+- Official method source spine, Secchi depth / clarity mentor-review protocol, and Secchi mentor-review handoff available before any student-led field use.
 
 ## Current Gaps
 
@@ -158,15 +166,14 @@ Do not claim:
 - Some site-registry assignments still need local review.
 - Public-source reports may be stale relative to the dashboard snapshot date.
 - The project has not been validated as a public-health, recreation, regulatory, or emergency tool.
-- Future field variables still need mentor review, method selection, calibration planning, and QA/QC before public use.
+- Future field variables still need mentor review, official method selection, calibration planning, and QA/QC before public use.
 
 ## Recommended Next Review Sequence
 
 1. Confirm this evidence index accurately routes the main reviewer audiences.
 2. Refresh the project brief, research readiness brief, and resume/LinkedIn snippets so they match the current public state.
 3. Inspect older open pull requests and close any that are superseded.
-4. Create a one-page release summary for outreach and Career Services use.
-5. Start the next scientific credibility slice: variable register, field validation plan, and calibration plan.
+4. Wait for mentor, faculty, or qualified technical feedback on the Secchi review packet before deciding whether to revise, add official sources, or create a separate future private pilot design.
 
 ## Public Language Boundary
 

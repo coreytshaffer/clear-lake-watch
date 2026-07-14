@@ -10,7 +10,26 @@ It is not official public-health guidance, an official advisory, a validated for
 
 **Live public mirror:** [coreytshaffer.github.io/clear-lake-watch](https://coreytshaffer.github.io/clear-lake-watch/)
 
+Current public status: static reviewed snapshot generated on May 5, 2026. Treat the live mirror as dated portfolio/review evidence, not live lake conditions. See the [public snapshot release note](docs/public-snapshot-release-note-2026-05-13.md).
+
 ![Clear Lake Watch dashboard preview](assets/clear-lake-watch-preview.png)
+
+## Trust Model
+
+- Uses public-source data and clearly labeled prototype outputs.
+- Public mirror is a reviewed static publication surface, not the operational system of record.
+- Private/local records, reviewer notes, raw field records, and trusted-review paths are excluded from the public mirror.
+- Dashboard is not official guidance, a health advisory, a validated forecast, or a deployed sensor network.
+
+## Reviewer Start Here
+
+For a 5-minute review:
+
+1. Open the [dashboard](https://coreytshaffer.github.io/clear-lake-watch/).
+2. Read the [evidence summary](docs/clear-lake-watch-v0.1-evidence-summary.md).
+3. Read [known limitations](#known-limitations).
+4. Read [reviewer demo notes](docs/reviewer-demo-notes.md).
+5. Review the [public mirror boundary](docs/public-mirror-boundary.md) if evaluating data governance.
 
 ## For Internship Reviewers
 
@@ -59,6 +78,9 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Reviewer demo notes](docs/reviewer-demo-notes.md)
 - [Variable register](docs/variable-register.md)
 - [Field validation plan](docs/field-validation-plan.md)
+- [Official method source spine](docs/official-method-source-spine.md)
+- [Secchi depth / clarity mentor-review protocol](docs/secchi-depth-clarity-mentor-review-protocol.md)
+- [Secchi mentor-review handoff](docs/secchi-mentor-review-handoff.md)
 
 ## Public Documentation
 
@@ -69,8 +91,12 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Field/microscopy review workflow](docs/field-microscopy-review-workflow.md)
 - [Variable register](docs/variable-register.md)
 - [Field validation plan](docs/field-validation-plan.md)
+- [Official method source spine](docs/official-method-source-spine.md)
+- [Secchi depth / clarity mentor-review protocol](docs/secchi-depth-clarity-mentor-review-protocol.md)
+- [Secchi mentor-review handoff](docs/secchi-mentor-review-handoff.md)
 - [Local-first operating model](docs/local-first-operating-model.md)
 - [Public mirror boundary](docs/public-mirror-boundary.md)
+- [Community observation boundary](docs/community-observation-boundary.md)
 - [Publication review checklist](docs/publication-review-checklist.md)
 - [Public backlog](docs/public-backlog.md)
 - [Public snapshot release note - 2026-05-13](docs/public-snapshot-release-note-2026-05-13.md)
@@ -87,6 +113,7 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 - [Site registry trust review pass 001](docs/site-registry-trust-review-pass-001.md)
 - [Source freshness validation](docs/source-freshness-validation.md)
 - [Scheduled public refresh design](docs/scheduled-public-refresh-design.md)
+- [Formal public refresh runbook](docs/formal-public-refresh-runbook.md)
 - [Research readiness brief](docs/research-readiness-brief.md)
 - [Published commentary tracker](docs/published-commentary.md)
 - [Resume and LinkedIn snippets](docs/resume-linkedin-snippets.md)
@@ -125,5 +152,20 @@ If a local server is running on `http://127.0.0.1:4173/`, include endpoint check
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 -CheckHttp
 ```
+
+For a cross-platform baseline check that is suitable for CI, run:
+
+```bash
+python scripts/validate-public-mirror.py
+```
+
+The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, static-snapshot warnings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes.
+
+For a manual reviewed refresh run, use the [formal public refresh runbook](docs/formal-public-refresh-runbook.md) or dispatch the `Formal Public Refresh` GitHub Actions workflow. That workflow generates review artifacts only; it does not publish automatically.
+
+## Related Projects
+
+- [community-monitoring](https://github.com/coreytshaffer/community-monitoring) — intake-side companion: a local-first trust pipeline for simulated field-sensor observations, with schema validation, semantic QA/QC, station provenance checks, and human-review routing. It is designed so that only validated, approved records could ever feed a public layer like this one. No integration exists yet; nothing in this public mirror comes from it.
+- [safetask-ai](https://github.com/coreytshaffer/safetask-ai) — hazard-first safety evidence pipeline whose fail-closed, review-gated governance patterns inform this project's publication boundaries. It uses a copy of this dashboard's May 5, 2026 public snapshot as demo fixture data.
 
 The broader private review packet and trusted-review materials are intentionally not part of this public mirror branch.

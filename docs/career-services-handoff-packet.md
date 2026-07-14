@@ -12,11 +12,11 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 
 1. Live dashboard: <https://coreytshaffer.github.io/clear-lake-watch/>
 2. Internship review start here: [internship-review-start-here.md](internship-review-start-here.md)
-3. Evidence summary: [clear-lake-watch-v0.1-evidence-summary.md](clear-lake-watch-v0.1-evidence-summary.md)
-4. Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
-5. Project delivery and EHS positioning: [project-delivery-ehs.md](project-delivery-ehs.md)
+3. One-page outreach summary: [portfolio-outreach-summary-2026-05-17.md](portfolio-outreach-summary-2026-05-17.md)
+4. Evidence summary: [clear-lake-watch-v0.1-evidence-summary.md](clear-lake-watch-v0.1-evidence-summary.md)
+5. Dashboard anatomy review guide: [dashboard-anatomy-review-guide.md](dashboard-anatomy-review-guide.md)
 
-For copy-ready career language, use [resume-linkedin-snippets.md](resume-linkedin-snippets.md). For screenshot-backed reviewer context, also use [reviewer-demo-notes.md](reviewer-demo-notes.md).
+For copy-ready career language, use [resume-linkedin-snippets.md](resume-linkedin-snippets.md). For project delivery and EHS positioning, use [project-delivery-ehs.md](project-delivery-ehs.md). For screenshot-backed reviewer context, also use [reviewer-demo-notes.md](reviewer-demo-notes.md).
 
 ## Short Email Before An Appointment
 
@@ -32,6 +32,9 @@ I am also using it to show project delivery and EHS-informed workflow as support
 
 The best starting point is the evidence summary:
 https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md
+
+For a one-page overview, use this outreach summary:
+https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/portfolio-outreach-summary-2026-05-17.md
 
 For internship reviewers, I also prepared a three-link start-here page:
 https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/internship-review-start-here.md
@@ -50,6 +53,7 @@ Hello,
 Thank you for reviewing my Clear Lake Watch portfolio project with me. Here are the main links we discussed:
 
 - Evidence summary: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md
+- One-page outreach summary: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/portfolio-outreach-summary-2026-05-17.md
 - Dashboard anatomy guide: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/dashboard-anatomy-review-guide.md
 - Live dashboard: https://coreytshaffer.github.io/clear-lake-watch/
 - Resume and LinkedIn snippets: https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/resume-linkedin-snippets.md

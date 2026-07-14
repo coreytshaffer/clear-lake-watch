@@ -1,4 +1,9 @@
+param(
+  [switch]$DryRun
+)
+
 $ErrorActionPreference = "Stop"
+$dryRunEnabled = [bool]$DryRun
 
 $headers = @{
   "User-Agent" = "Mozilla/5.0 (Codex Clear Lake Watch Prototype)"
@@ -27,6 +32,14 @@ if ($env:CLEAR_LAKE_FHABS_MAX_RESOURCE_AGE_DAYS) {
   $fhabsMaxResourceAgeDays = $parsedMaxAgeDays
 }
 
+. (Join-Path $PSScriptRoot "refresh-live-data.utilities.ps1")
+
+foreach ($helperName in @("Parse-Date", "Format-DateIso", "Get-RecordField", "Normalize-Text", "Parse-Number")) {
+  if (-not (Get-Command $helperName -CommandType Function -ErrorAction SilentlyContinue)) {
+    throw "Unable to load refresh helper function: $helperName"
+  }
+}
+
 function Write-JsonFile {
   param(
     [string]$Path,
@@ -36,31 +49,13 @@ function Write-JsonFile {
   $json = $Data | ConvertTo-Json -Depth 8
   $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
   $fullPath = [System.IO.Path]::GetFullPath($Path)
+
+  if ($script:dryRunEnabled) {
+    Write-Output "Dry run: would write $fullPath"
+    return
+  }
+
   [System.IO.File]::WriteAllText($fullPath, $json, $utf8NoBom)
-}
-
-function Parse-Date {
-  param(
-    [string]$Value
-  )
-
-  if ([string]::IsNullOrWhiteSpace($Value)) {
-    return $null
-  }
-
-  return [datetime]::Parse($Value, [System.Globalization.CultureInfo]::InvariantCulture)
-}
-
-function Format-DateIso {
-  param(
-    [object]$Value
-  )
-
-  if (-not $Value) {
-    return $null
-  }
-
-  return ([datetime]$Value).ToString("yyyy-MM-dd")
 }
 
 function Convert-RumseyToElevationFeet {
@@ -152,43 +147,12 @@ function Assert-FhabsResourceFreshness {
   $freshness = Get-FhabsResourceFreshness -Url $Url
 
   if ($null -eq $freshness.ageDays) {
-    return
+    throw "$Label FHABS resource URL does not include the expected _YYYY-MM-DD.csv date needed for freshness validation: $Url. Use a dated FHABS resource URL before publishing a refreshed public snapshot."
   }
 
   if ($freshness.ageDays -gt $MaxAgeDays) {
     throw "$Label FHABS resource appears stale ($($freshness.resourceDate.ToString('yyyy-MM-dd')), $($freshness.ageDays) days old): $Url. Set CLEAR_LAKE_FHABS_MAX_RESOURCE_AGE_DAYS to intentionally allow older resources, or override the URL with CLEAR_LAKE_FHABS_BLOOM_REPORTS_URL / CLEAR_LAKE_FHABS_RESULTS_URL."
   }
-}
-
-function Get-RecordField {
-  param(
-    [object]$Row,
-    [string]$FieldName
-  )
-
-  $property = $Row.PSObject.Properties | Where-Object {
-    $_.Name -eq $FieldName -or
-    ($_.Name -replace '^[^\w]+', '') -eq $FieldName -or
-    $_.Name -like "*$FieldName"
-  } | Select-Object -First 1
-
-  if ($property) {
-    return $property.Value
-  }
-
-  return $null
-}
-
-function Normalize-Text {
-  param(
-    [string]$Value
-  )
-
-  if ([string]::IsNullOrWhiteSpace($Value)) {
-    return ""
-  }
-
-  return ($Value.ToLowerInvariant() -replace '[^a-z0-9]+', ' ').Trim()
 }
 
 function Get-DistanceKm {
@@ -259,22 +223,24 @@ function Resolve-RegisteredSite {
     return $null
   }
 
-  $nearest = $siteRegistry.sites |
-    Where-Object { $_.source -eq $Source } |
-    ForEach-Object {
-      [PSCustomObject]@{
-        site = $_
-        distanceKm = Get-DistanceKm -Lat1 $lat -Lon1 $lon -Lat2 $_.latitude -Lon2 $_.longitude
-      }
-    } |
-    Sort-Object distanceKm |
-    Select-Object -First 1
+  $nearestSite = $null
+  $minDistanceKm = [double]::MaxValue
 
-  if ($nearest -and $nearest.distanceKm -le $nearest.site.matchRadiusKm) {
+  foreach ($site in $siteRegistry.sites) {
+    if ($site.source -eq $Source) {
+      $dist = Get-DistanceKm -Lat1 $lat -Lon1 $lon -Lat2 $site.latitude -Lon2 $site.longitude
+      if ($dist -lt $minDistanceKm) {
+        $minDistanceKm = $dist
+        $nearestSite = $site
+      }
+    }
+  }
+
+  if ($nearestSite -and $minDistanceKm -le $nearestSite.matchRadiusKm) {
     return [PSCustomObject]@{
-      site = $nearest.site
+      site = $nearestSite
       method = "proximity"
-      distanceKm = [math]::Round($nearest.distanceKm, 2)
+      distanceKm = [math]::Round($minDistanceKm, 2)
     }
   }
 
@@ -400,24 +366,6 @@ function Get-ArmName {
   }
 
   return "Needs Review"
-}
-
-function Parse-Number {
-  param(
-    [string]$Value
-  )
-
-  if ([string]::IsNullOrWhiteSpace($Value)) {
-    return $null
-  }
-
-  $parsed = 0.0
-
-  if ([double]::TryParse($Value, [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$parsed)) {
-    return $parsed
-  }
-
-  return $null
 }
 
 function Get-ArmNameFromCoordinate {
@@ -1098,6 +1046,10 @@ $payload = [ordered]@{
 }
 
 Write-JsonFile -Path $manifestOutputPath -Data $manifest
-Write-Output "Wrote $manifestOutputPath"
+if (-not $dryRunEnabled) {
+  Write-Output "Wrote $manifestOutputPath"
+}
 Write-JsonFile -Path $outputPath -Data $payload
-Write-Output "Wrote $outputPath"
+if (-not $dryRunEnabled) {
+  Write-Output "Wrote $outputPath"
+}
