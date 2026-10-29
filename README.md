@@ -161,6 +161,17 @@ python scripts/validate-public-mirror.py
 
 The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, static-snapshot warnings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes.
 
+Run the JavaScript checks with Node.js 24; no package installation is required:
+
+```bash
+node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs
+node scripts/dashboard-utils.smoke.mjs
+```
+
+The date-format tests launch isolated processes in `UTC` and `America/Los_Angeles` before importing the utilities. Date-only `YYYY-MM-DD` strings retain their calendar date. Timestamp strings and `Date` objects use the viewer's local time zone; `formatDateTime` includes the local hour and minute in the existing `en-US` format. Winter and summer cases cover both Pacific standard and daylight time.
+
+CI runs these Node checks alongside the Python validator. Use the explicit test paths above; `tests/dashboard-utils.test.html` runs the separate browser suite.
+
 For a manual reviewed refresh run, use the [formal public refresh runbook](docs/formal-public-refresh-runbook.md) or dispatch the `Formal Public Refresh` GitHub Actions workflow. That workflow generates review artifacts only; it does not publish automatically.
 
 ## Related Projects
