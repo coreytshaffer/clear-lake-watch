@@ -29,7 +29,7 @@ jobs:
           node-version: "24"
 
       - name: Run JavaScript regression tests
-        run: node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs
+        run: node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs scripts/freshness-status.test.mjs
 
       - name: Run dashboard storage smoke check
         run: node scripts/dashboard-utils.smoke.mjs

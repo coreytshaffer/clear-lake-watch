@@ -7,6 +7,12 @@ import {
   setStoredBoolean,
   setStoredJson,
 } from "./scripts/dashboard-utils.js";
+import {
+  SOURCE_TIME_ZONE,
+  parseInstant,
+  projectManifestSource,
+  projectWeatherContext,
+} from "./scripts/freshness-status.js";
 
 const summaryElement = document.querySelector("#summary");
 const liveSummaryElement = document.querySelector("#live-summary");
@@ -517,7 +523,7 @@ const setSnapshotHeader = (liveData) => {
   const generatedAt = liveData?.generatedAt;
 
   if (generatedAt && daysSince(generatedAt) !== null) {
-    generatedLabelElement.textContent = "Data Refreshed";
+    generatedLabelElement.textContent = "Snapshot generated";
     generatedOnElement.textContent = formatDate(generatedAt);
     generatedOnElement.classList.remove("snapshot-unavailable");
     return;
@@ -1331,7 +1337,115 @@ const renderSiteReviewSummary = (siteReviewData) => {
   });
 };
 
-const renderWeatherContext = (weatherContext) => {
+// Weather instants are shown in the source's fixed Pacific time with a zone
+// abbreviation, whatever the viewer's browser zone.
+const pacificDateTimeFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: SOURCE_TIME_ZONE,
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  timeZoneName: "short",
+});
+
+const createLabeledTime = (label, isoInstant, unavailableText = "unavailable") => {
+  const line = document.createElement("p");
+
+  if (!isoInstant) {
+    line.textContent = `${label} ${unavailableText}`;
+    return line;
+  }
+
+  const time = document.createElement("time");
+  time.dateTime = isoInstant;
+  time.textContent = pacificDateTimeFormatter.format(new Date(isoInstant));
+  line.append(`${label} `, time);
+  return line;
+};
+
+const weatherExportStatusLabels = {
+  partial: "Partial",
+  stale: "Stale",
+  unavailable: "Unavailable",
+  live: "Reported live by source",
+  unknown: "Unknown",
+};
+
+const formatHours = (hours) => `${hours} ${hours === 1 ? "hour" : "hours"}`;
+
+const weatherObservationStatement = ({ dataCurrency, reason }, staleAfterHours) => {
+  switch (reason) {
+    case null:
+      return dataCurrency === "lagging"
+        ? `Observation exceeds expected age (${formatHours(staleAfterHours)})`
+        : `Observation within expected age (${formatHours(staleAfterHours)})`;
+    case "missing_budget":
+    case "invalid_budget":
+      return "Observation age unavailable";
+    case "invalid_observation":
+      return "Observation time unavailable (timestamp unreadable)";
+    case "future_observation":
+      return "Observation time unavailable (timestamp is later than page load)";
+    case "invalid_clock":
+      return "Observation age unavailable (page clock unreadable)";
+    default:
+      return "Observation time unavailable";
+  }
+};
+
+const weatherStationTitle = ({ stationId, displayName }) => {
+  if (displayName !== null && stationId !== null && `${displayName}` !== `${stationId}`) {
+    return `${displayName} (${stationId})`;
+  }
+
+  return `${displayName ?? stationId ?? "Weather station"}`;
+};
+
+const createWeatherStationCard = (station, staleAfterHours) => {
+  const card = document.createElement("article");
+  card.className = "weather-context-card";
+
+  const title = document.createElement("h3");
+  title.textContent = weatherStationTitle(station);
+  card.append(title);
+
+  if (station.observedThrough) {
+    card.append(createLabeledTime("Observed:", station.observedThrough));
+  }
+
+  const statement = document.createElement("p");
+  statement.textContent = weatherObservationStatement(station.evaluation, staleAfterHours);
+  card.append(statement);
+
+  const badges = [{ label: "Context only", kind: "context" }];
+
+  if (station.evaluation.dataCurrency === "lagging") {
+    badges.push({ label: "Stale observation", kind: "review" });
+  }
+
+  appendSignalBadges(card, badges);
+  return card;
+};
+
+const createWeatherNoStationsCard = () => {
+  const card = document.createElement("article");
+  card.className = "weather-context-card";
+
+  const title = document.createElement("h3");
+  title.textContent = "Station observation";
+
+  const statement = document.createElement("p");
+  statement.textContent = "Observation time unavailable (this export lists no stations)";
+
+  card.append(title, statement);
+  appendSignalBadges(card, [{ label: "Context only", kind: "context" }]);
+  return card;
+};
+
+// `asOfMs` is the single clock captured at page load. Ages are evaluated once
+// and are not refreshed while the page stays open.
+const renderWeatherContext = (weatherContext, asOfMs) => {
   if (!weatherContextGridElement && !weatherContextNotesElement) {
     return;
   }
@@ -1359,27 +1473,45 @@ const renderWeatherContext = (weatherContext) => {
     return;
   }
 
+  const projection = projectWeatherContext(weatherContext, asOfMs);
+
   const statusCard = document.createElement("article");
   statusCard.className = "weather-context-card";
 
   const title = document.createElement("h3");
   title.textContent = weatherContext.sourceName ?? "Weather context export";
 
+  // The stored status describes the export at generation; it is not an age.
   const status = document.createElement("p");
   status.textContent =
-    `Status: ${formatStatusLabel(weatherContext.machineReadableStatus ?? "unknown")}`;
+    `Export status at generation: ${weatherExportStatusLabels[projection.exportStatus]}`;
 
-  const generatedAt = document.createElement("p");
-  generatedAt.textContent = weatherContext.generatedAt
-    ? `Generated: ${formatDateTime(weatherContext.generatedAt)}`
-    : "Generated: unavailable";
+  const generatedAt = createLabeledTime("Export generated:", projection.snapshotGeneratedAt);
 
   statusCard.append(title, status, generatedAt);
-  appendSignalBadges(statusCard, [
+  const statusBadges = [
     { label: "Weather context", kind: "context" },
     { label: "Separate domain", kind: "review" },
-  ]);
+  ];
+
+  // An unavailable export is a placeholder for the absence of a reviewed
+  // weather export, so it does not carry the reviewed-snapshot cue.
+  if (projection.exportStatus !== "unavailable") {
+    statusBadges.push({ label: "Reviewed public-source snapshot", kind: "context" });
+  }
+
+  appendSignalBadges(statusCard, statusBadges);
   weatherContextGridElement?.append(statusCard);
+
+  if (projection.stations.length) {
+    projection.stations.forEach((station) => {
+      weatherContextGridElement?.append(
+        createWeatherStationCard(station, projection.staleAfterHours),
+      );
+    });
+  } else {
+    weatherContextGridElement?.append(createWeatherNoStationsCard());
+  }
 
   weatherContext.summaryCards?.forEach((summary) => {
     const card = document.createElement("article");
@@ -1435,7 +1567,38 @@ const renderDataProducts = (products = []) => {
   });
 };
 
-const renderSourceStatus = (manifestData) => {
+const sourceLoadBadges = {
+  loaded: { label: "Source loaded at snapshot generation", kind: "observed" },
+  attention: { label: "Source attention at snapshot generation", kind: "review" },
+  unknown: { label: "Source check status unknown", kind: "review" },
+};
+
+const sourceStatusClass = (source, sourceLoadState) => {
+  if (sourceLoadState === "unknown") {
+    return "unknown";
+  }
+
+  const status = `${source.status}`.trim();
+  return /^[a-z0-9-]+$/i.test(status) ? status : "attention";
+};
+
+const resourceDateText = (resourceDate, daysBeforeSnapshot) => {
+  const base = `Resource file date: ${formatDate(resourceDate)}`;
+
+  if (daysBeforeSnapshot === null) {
+    return base;
+  }
+
+  if (daysBeforeSnapshot === 0) {
+    return `${base} (same calendar day as snapshot generation)`;
+  }
+
+  const days = daysBeforeSnapshot === 1 ? "1 day" : `${daysBeforeSnapshot} days`;
+  return `${base} (${days} before snapshot generation)`;
+};
+
+// `asOfMs` is the single clock captured at page load.
+const renderSourceStatus = (manifestData, asOfMs) => {
   if (!sourceStatusGridElement && !sourceOutputGridElement && !manifestNotesElement) {
     return;
   }
@@ -1454,17 +1617,15 @@ const renderSourceStatus = (manifestData) => {
   }
 
   manifestData.sources.forEach((source) => {
+    const view = projectManifestSource(source, manifestData, asOfMs);
     const card = document.createElement("article");
-    const status = source.status ?? "unknown";
-    card.className = `source-status-card source-status-${status}`;
+    card.className =
+      `source-status-card source-status-${sourceStatusClass(source, view.sourceLoadState)}`;
 
     const title = document.createElement("h4");
     title.textContent = source.label;
 
-    const statusBadge = createSignalBadge({
-      label: status === "ok" ? "Source loaded" : "Source attention",
-      kind: status === "ok" ? "observed" : "review",
-    });
+    const statusBadge = createSignalBadge(sourceLoadBadges[view.sourceLoadState]);
 
     const meta = document.createElement("p");
     meta.className = "source-status-meta";
@@ -1478,18 +1639,29 @@ const renderSourceStatus = (manifestData) => {
 
     const date = document.createElement("p");
     date.className = "source-status-date";
-    date.textContent = source.latestObservationDate
-      ? `Latest observation: ${formatDate(source.latestObservationDate)}`
+    date.textContent = view.observedThrough
+      ? `Latest observation: ${formatDate(view.observedThrough)}`
       : "Latest observation: unavailable";
 
-    const freshness = document.createElement("p");
-    freshness.className = "source-status-note";
-    freshness.textContent =
-      source.resourceAgeDays === null || source.resourceAgeDays === undefined
-        ? source.note
-        : `Resource file age: ${source.resourceAgeDays} days. ${source.note}`;
+    card.append(title, statusBadge, meta, date);
 
-    card.append(title, statusBadge, meta, date, freshness);
+    if (view.sourceResourceDate) {
+      const resource = document.createElement("p");
+      resource.className = "source-status-date";
+      resource.textContent =
+        resourceDateText(view.sourceResourceDate, view.resourceDaysBeforeSnapshot);
+      card.append(resource);
+    }
+
+    const note = document.createElement("p");
+    note.className = "source-status-note";
+    note.textContent = source.note;
+    card.append(note);
+
+    if (view.dataCurrency === "historical") {
+      appendSignalBadges(card, [{ label: "Historical observation", kind: "context" }]);
+    }
+
     sourceStatusGridElement?.append(card);
   });
 
@@ -1544,7 +1716,9 @@ const createSnapshotStatusCard = ({ label, value, note, kind = "derived" }) => {
   return article;
 };
 
-const renderSnapshotStatusStrip = (manifestData) => {
+// Uses the same projected dates as the source cards, evaluated at the
+// page-load clock `asOfMs`, so the two views cannot disagree.
+const renderSnapshotStatusStrip = (manifestData, asOfMs) => {
   if (!snapshotStatusGridElement) {
     return;
   }
@@ -1564,18 +1738,21 @@ const renderSnapshotStatusStrip = (manifestData) => {
   const usgsFlow = findManifestSource(manifestData, "usgs-cole-creek-discharge");
   const fhabsReports = findManifestSource(manifestData, "fhabs-bloom-reports");
   const fhabsResults = findManifestSource(manifestData, "fhabs-results");
+  const projectedObservation = (source) =>
+    source ? projectManifestSource(source, manifestData, asOfMs).observedThrough : null;
   const usgsDates = [usgsLevel, usgsFlow]
-    .map((source) => source?.latestObservationDate)
+    .map(projectedObservation)
     .filter(Boolean)
     .sort();
   const latestUsgsDate = usgsDates.at(-1);
+  const fhabsReportDate = projectedObservation(fhabsReports);
+  const fhabsResultDate = projectedObservation(fhabsResults);
+  const generatedMs = parseInstant(manifestData.generatedAt);
 
   const cards = [
     {
-      label: "Snapshot generated",
-      value: manifestData.generatedAt
-        ? formatDateTime(manifestData.generatedAt)
-        : "Unavailable",
+      label: "Reviewed snapshot generated",
+      value: generatedMs === null ? "Unavailable" : formatDateTime(generatedMs),
       note: "Dashboard files are generated snapshots, not live sensor telemetry.",
       kind: "derived",
     },
@@ -1587,17 +1764,13 @@ const renderSnapshotStatusStrip = (manifestData) => {
     },
     {
       label: "Latest Clear Lake FHABS report",
-      value: fhabsReports?.latestObservationDate
-        ? formatDate(fhabsReports.latestObservationDate)
-        : "Unavailable",
+      value: fhabsReportDate ? formatDate(fhabsReportDate) : "Unavailable",
       note: "Report dates reflect what is present in the public FHABS source file.",
       kind: "reported",
     },
     {
       label: "Latest FHABS lab-linked sample",
-      value: fhabsResults?.latestObservationDate
-        ? formatDate(fhabsResults.latestObservationDate)
-        : "Unavailable",
+      value: fhabsResultDate ? formatDate(fhabsResultDate) : "Unavailable",
       note: "Lab-linked result records may lag the public report stream.",
       kind: "reported",
     },
@@ -2194,16 +2367,19 @@ const boot = async () => {
     fetchJson("./data/weather-context.json", { optional: true }),
   ]);
 
+  // One evaluation clock per page load, shared by both freshness renderers.
+  const asOfMs = Date.now();
+
   setSnapshotHeader(liveData);
 
   renderSiteRegistrySummary(sitesData);
   renderLiveSnapshot(liveData, shorelineData, siteReviewData);
-  renderSourceStatus(manifestData);
-  renderSnapshotStatusStrip(manifestData);
+  renderSourceStatus(manifestData, asOfMs);
+  renderSnapshotStatusStrip(manifestData, asOfMs);
   evaluateSnapshotNotifications(liveData, manifestData);
   updateNotificationPanel();
   renderScreenReaderSummaries(liveData, manifestData, siteReviewData);
-  renderWeatherContext(weatherContextData);
+  renderWeatherContext(weatherContextData, asOfMs);
   renderStats(data);
   renderArms(data.arms);
   renderSources(data.sources);

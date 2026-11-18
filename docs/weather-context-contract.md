@@ -167,12 +167,77 @@ dashboard.
 If the file exists but reports `stale`, `partial`, or `unavailable`, the
 dashboard should display that status without suppressing the lake-source data.
 
-## Unavailable Placeholder
+### Two Weather Clocks
 
-The current `data/weather-context.json` is a public-safe unavailable placeholder.
-It should remain in that state until the environmental monitoring backbone has a
-reviewed export with public-safe station metadata, reviewed metrics, and quality
-notes.
+A weather export carries two different times, and the dashboard shows them
+separately:
+
+- `generatedAt` is when the export was written, and `machineReadableStatus` is
+  the status stored at that time. The dashboard labels it "Export status at
+  generation" and shows a stored `live` as "Reported live by source." It is
+  never treated as an observation age.
+- `stations[].observedAt` is when each station observation was made. Each
+  station gets its own age statement against the export's `staleAfterHours`.
+
+An observation is within the expected age while its elapsed age is at most
+`staleAfterHours`. It exceeds the expected age only when strictly greater
+(`age > limit`), compared in milliseconds before any display rounding, and the
+station then shows a visible "Stale observation" cue. A missing, unreadable,
+offset-free, or future `observedAt` shows "Observation time unavailable." A
+valid `observedAt` with a missing or non-positive numeric `staleAfterHours`
+shows "Observation age unavailable." The generation time never stands in for an
+observation time.
+
+Weather instants are displayed in fixed Pacific time with a zone abbreviation
+(for example, "May 13, 2026 at 10:57 PM PDT"), whatever the viewer's browser
+time zone.
+
+### Page-Load Evaluation
+
+The dashboard reads one clock value after its data files load and uses it for
+every weather and lake-source freshness statement on the page. Ages are
+evaluated once and are not refreshed while the page stays open; reloading the
+page evaluates them again. Calendar-day arithmetic uses the America/Los_Angeles
+calendar from the browser's bundled time-zone data.
+
+Lake-source dates from `data/manifest.json` are shown as reviewed history: each
+source card shows "Historical observation" with its latest observation date,
+and FHABS cards show the resource file date and its distance from snapshot
+generation. The stored `resourceAgeDays` value is not displayed. The snapshot
+status strip uses the same validated dates, so a date the source card rejects
+(after the render date or the snapshot generation date) shows as unavailable in
+both places.
+
+The evaluation logic lives in `scripts/freshness-status.js` and runs in CI with
+`node --test scripts/freshness-status.test.mjs`.
+
+### Local Browser Check
+
+`scripts/freshness-render.check.mjs` loads the production page in Chromium with
+a frozen page clock, substitutes only the manifest and weather-context fixture
+paths, blocks non-loopback requests, and confirms that the service worker's
+static cache includes the freshness module. Playwright is not a project
+dependency; install it outside the checkout and point the check at it:
+
+```bash
+PLAYWRIGHT_MODULE=/absolute/path/to/node_modules/playwright/index.js node scripts/freshness-render.check.mjs
+```
+
+This check runs locally and is not part of CI.
+
+## Unavailable Placeholder Format
+
+The unavailable export is a placeholder format for when no reviewed weather
+export exists: `machineReadableStatus` is `unavailable`, `stations` is empty,
+and the quality notes say weather context is not connected. See
+`data/weather-context.example.json` and
+`scripts/write-weather-context-unavailable.ps1`. The dashboard shows its
+generation status and "Observation time unavailable" with no observation-age
+statement, and it does not label an `unavailable` export as a reviewed
+public-source snapshot.
+
+Use the placeholder until the environmental monitoring backbone has a reviewed
+export with public-safe station metadata, reviewed metrics, and quality notes.
 
 The placeholder may be regenerated for release hygiene, but regeneration is not evidence of live telemetry.
 
