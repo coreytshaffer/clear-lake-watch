@@ -1,0 +1,37 @@
+name: CHE-22 Windows PowerShell Verification
+
+on:
+  push:
+    branches:
+      - verification/che-22-windows-4efcea3
+
+permissions:
+  contents: read
+
+jobs:
+  windows-powershell:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out PR head
+        uses: actions/checkout@v4
+        with:
+          ref: 4efcea3333d1edf71c83565f03b6c15b61219409
+          persist-credentials: false
+      - name: Run public-mirror validator in Windows PowerShell
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $actual = git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0 -or $actual -ne '4efcea3333d1edf71c83565f03b6c15b61219409') {
+            throw "Checkout does not match the PR head: $actual"
+          }
+          if ($env:OS -ne 'Windows_NT' -or $PSVersionTable.PSEdition -ne 'Desktop') {
+            throw 'Windows PowerShell Desktop is required.'
+          }
+          Write-Host "Commit: $actual"
+          Write-Host "Runner OS: $env:RUNNER_OS"
+          Write-Host "PowerShell edition: $($PSVersionTable.PSEdition)"
+          Write-Host "PowerShell version: $($PSVersionTable.PSVersion)"
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
+          exit $LASTEXITCODE
