@@ -9,6 +9,7 @@ import {
 } from "./scripts/dashboard-utils.js";
 import {
   SOURCE_TIME_ZONE,
+  parseInstant,
   projectManifestSource,
   projectWeatherContext,
 } from "./scripts/freshness-status.js";
@@ -1488,11 +1489,18 @@ const renderWeatherContext = (weatherContext, asOfMs) => {
   const generatedAt = createLabeledTime("Export generated:", projection.snapshotGeneratedAt);
 
   statusCard.append(title, status, generatedAt);
-  appendSignalBadges(statusCard, [
+  const statusBadges = [
     { label: "Weather context", kind: "context" },
     { label: "Separate domain", kind: "review" },
-    { label: "Reviewed public-source snapshot", kind: "context" },
-  ]);
+  ];
+
+  // An unavailable export is a placeholder for the absence of a reviewed
+  // weather export, so it does not carry the reviewed-snapshot cue.
+  if (projection.exportStatus !== "unavailable") {
+    statusBadges.push({ label: "Reviewed public-source snapshot", kind: "context" });
+  }
+
+  appendSignalBadges(statusCard, statusBadges);
   weatherContextGridElement?.append(statusCard);
 
   if (projection.stations.length) {
@@ -1708,7 +1716,9 @@ const createSnapshotStatusCard = ({ label, value, note, kind = "derived" }) => {
   return article;
 };
 
-const renderSnapshotStatusStrip = (manifestData) => {
+// Uses the same projected dates as the source cards, evaluated at the
+// page-load clock `asOfMs`, so the two views cannot disagree.
+const renderSnapshotStatusStrip = (manifestData, asOfMs) => {
   if (!snapshotStatusGridElement) {
     return;
   }
@@ -1728,18 +1738,21 @@ const renderSnapshotStatusStrip = (manifestData) => {
   const usgsFlow = findManifestSource(manifestData, "usgs-cole-creek-discharge");
   const fhabsReports = findManifestSource(manifestData, "fhabs-bloom-reports");
   const fhabsResults = findManifestSource(manifestData, "fhabs-results");
+  const projectedObservation = (source) =>
+    source ? projectManifestSource(source, manifestData, asOfMs).observedThrough : null;
   const usgsDates = [usgsLevel, usgsFlow]
-    .map((source) => source?.latestObservationDate)
+    .map(projectedObservation)
     .filter(Boolean)
     .sort();
   const latestUsgsDate = usgsDates.at(-1);
+  const fhabsReportDate = projectedObservation(fhabsReports);
+  const fhabsResultDate = projectedObservation(fhabsResults);
+  const generatedMs = parseInstant(manifestData.generatedAt);
 
   const cards = [
     {
       label: "Reviewed snapshot generated",
-      value: manifestData.generatedAt
-        ? formatDateTime(manifestData.generatedAt)
-        : "Unavailable",
+      value: generatedMs === null ? "Unavailable" : formatDateTime(generatedMs),
       note: "Dashboard files are generated snapshots, not live sensor telemetry.",
       kind: "derived",
     },
@@ -1751,17 +1764,13 @@ const renderSnapshotStatusStrip = (manifestData) => {
     },
     {
       label: "Latest Clear Lake FHABS report",
-      value: fhabsReports?.latestObservationDate
-        ? formatDate(fhabsReports.latestObservationDate)
-        : "Unavailable",
+      value: fhabsReportDate ? formatDate(fhabsReportDate) : "Unavailable",
       note: "Report dates reflect what is present in the public FHABS source file.",
       kind: "reported",
     },
     {
       label: "Latest FHABS lab-linked sample",
-      value: fhabsResults?.latestObservationDate
-        ? formatDate(fhabsResults.latestObservationDate)
-        : "Unavailable",
+      value: fhabsResultDate ? formatDate(fhabsResultDate) : "Unavailable",
       note: "Lab-linked result records may lag the public report stream.",
       kind: "reported",
     },
@@ -2366,7 +2375,7 @@ const boot = async () => {
   renderSiteRegistrySummary(sitesData);
   renderLiveSnapshot(liveData, shorelineData, siteReviewData);
   renderSourceStatus(manifestData, asOfMs);
-  renderSnapshotStatusStrip(manifestData);
+  renderSnapshotStatusStrip(manifestData, asOfMs);
   evaluateSnapshotNotifications(liveData, manifestData);
   updateNotificationPanel();
   renderScreenReaderSummaries(liveData, manifestData, siteReviewData);

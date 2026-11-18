@@ -203,7 +203,10 @@ calendar from the browser's bundled time-zone data.
 Lake-source dates from `data/manifest.json` are shown as reviewed history: each
 source card shows "Historical observation" with its latest observation date,
 and FHABS cards show the resource file date and its distance from snapshot
-generation. The stored `resourceAgeDays` value is not displayed.
+generation. The stored `resourceAgeDays` value is not displayed. The snapshot
+status strip uses the same validated dates, so a date the source card rejects
+(after the render date or the snapshot generation date) shows as unavailable in
+both places.
 
 The evaluation logic lives in `scripts/freshness-status.js` and runs in CI with
 `node --test scripts/freshness-status.test.mjs`.
@@ -230,7 +233,8 @@ and the quality notes say weather context is not connected. See
 `data/weather-context.example.json` and
 `scripts/write-weather-context-unavailable.ps1`. The dashboard shows its
 generation status and "Observation time unavailable" with no observation-age
-statement.
+statement, and it does not label an `unavailable` export as a reviewed
+public-source snapshot.
 
 Use the placeholder until the environmental monitoring backbone has a reviewed
 export with public-safe station metadata, reviewed metrics, and quality notes.

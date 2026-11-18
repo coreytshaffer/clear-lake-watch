@@ -123,8 +123,21 @@ const cardsIn = (page, gridSelector) =>
       exactTexts: Array.from(element.querySelectorAll("*"))
         .filter((child) => child.children.length === 0)
         .map((child) => child.textContent.replace(/\s+/g, " ").trim()),
+      // Snapshot strip cards: label and value as separate fields.
+      label: element.querySelector(".stat-label")?.textContent.replace(/\s+/g, " ").trim() ?? null,
+      value:
+        element.querySelector(".snapshot-status-value")?.textContent.replace(/\s+/g, " ").trim() ??
+        null,
     })),
   );
+
+const stripValue = (stripCards, label) =>
+  stripCards.find((card) => card.label === label)?.value ?? null;
+
+const assertStripValue = (check, stripCards, label, expected) => {
+  const actual = stripValue(stripCards, label);
+  check.ok(actual === expected, `snapshot strip "${label}": expected "${expected}", saw "${actual}"`);
+};
 
 const makeChecker = () => {
   const failures = [];
@@ -329,6 +342,9 @@ const buildCases = () => [
       const strip = stripCards.map((card) => card.text).join(" | ");
       check.includes(strip, "Reviewed snapshot generated", "snapshot strip");
       check.includes(strip, "May 5, 2026", "snapshot strip");
+      assertStripValue(check, stripCards, "USGS observations through", "May 3, 2026");
+      assertStripValue(check, stripCards, "Latest Clear Lake FHABS report", "September 7, 2025");
+      assertStripValue(check, stripCards, "Latest FHABS lab-linked sample", "January 11, 2024");
 
       const expected = [
         ["USGS Lakeport lake level", "May 3, 2026", false],
@@ -374,6 +390,7 @@ const buildCases = () => [
       const all = weatherCards.map((card) => card.text).join(" | ");
       check.includes(all, "Weather backbone not connected yet", "weather grid");
       check.excludes(all, "expected age", "weather grid");
+      check.excludes(all, "Reviewed public-source snapshot", "weather grid");
       assertFourSourceCards(check, sourceCards, "source grid");
       check.includes(
         stripCards.map((card) => card.text).join(" | "),
@@ -393,8 +410,47 @@ const buildCases = () => [
       check.includes(all, "Observation time unavailable", "weather grid");
       check.excludes(all, "expected age", "weather grid");
       check.excludes(all, "Stale observation", "weather grid");
+      check.excludes(all, "Reviewed public-source snapshot", "weather grid");
       assertNoBareLive(check, weatherCards, "weather grid");
       assertFourSourceCards(check, sourceCards, "source grid");
+    },
+  },
+  {
+    // One fixture, checked in both the source cards and the snapshot strip.
+    name: "Unusable observation dates agree in cards and strip",
+    asOf: T,
+    timezoneId: "Asia/Tokyo",
+    substitutions: {
+      weather: pinnedWeather(),
+      manifest: (() => {
+        const manifest = pinnedManifest();
+        const byId = (id) => manifest.sources.find((source) => source.id === id);
+        // After the render date (2026-11-17 Pacific at T).
+        byId("fhabs-bloom-reports").latestObservationDate = "2026-11-18";
+        // After the 2026-05-05 Pacific generation date, before the render date.
+        byId("usgs-lake-level").latestObservationDate = "2026-05-06";
+        return manifest;
+      })(),
+    },
+    async verify({ sourceCards, stripCards }, check) {
+      for (const label of ["FHABS bloom reports", "USGS Lakeport lake level"]) {
+        const card = findCard(sourceCards, label);
+        check.includes(card?.text ?? "", "Latest observation: unavailable", `${label} card`);
+        check.excludes(card?.text ?? "", "Historical observation", `${label} card`);
+      }
+
+      check.includes(
+        findCard(sourceCards, "USGS Cole Creek discharge")?.text ?? "",
+        "Latest observation: May 3, 2026",
+        "USGS Cole Creek discharge card",
+      );
+      assertStripValue(check, stripCards, "Latest Clear Lake FHABS report", "Unavailable");
+      assertStripValue(check, stripCards, "USGS observations through", "May 3, 2026");
+      assertStripValue(check, stripCards, "Latest FHABS lab-linked sample", "January 11, 2024");
+
+      const strip = stripCards.map((card) => card.text).join(" | ");
+      check.excludes(strip, "November 18, 2026", "snapshot strip");
+      check.excludes(strip, "May 6, 2026", "snapshot strip");
     },
   },
 ];
