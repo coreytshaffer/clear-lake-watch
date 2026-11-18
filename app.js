@@ -523,7 +523,7 @@ const setSnapshotHeader = (liveData) => {
   const generatedAt = liveData?.generatedAt;
 
   if (generatedAt && daysSince(generatedAt) !== null) {
-    generatedLabelElement.textContent = "Data Refreshed";
+    generatedLabelElement.textContent = "Snapshot generated";
     generatedOnElement.textContent = formatDate(generatedAt);
     generatedOnElement.classList.remove("snapshot-unavailable");
     return;

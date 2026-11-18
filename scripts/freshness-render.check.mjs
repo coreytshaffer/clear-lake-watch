@@ -338,7 +338,10 @@ const buildCases = () => [
     asOf: T,
     timezoneId: "Asia/Tokyo",
     substitutions: { weather: pinnedWeather(), manifest: pinnedManifest() },
-    async verify({ sourceCards, stripCards, freshnessBadge }, check) {
+    async verify({ sourceCards, stripCards, freshnessBadge, hero }, check) {
+      check.ok(hero?.label === "Snapshot generated", `hero label was "${hero?.label}"`);
+      check.ok(hero?.value === "May 5, 2026", `hero date was "${hero?.value}"`);
+
       const strip = stripCards.map((card) => card.text).join(" | ");
       check.includes(strip, "Reviewed snapshot generated", "snapshot strip");
       check.includes(strip, "May 5, 2026", "snapshot strip");
@@ -537,6 +540,10 @@ const runCase = async (browser, origin, testCase) => {
           visible: badge.getClientRects().length > 0,
         }))
         .catch(() => null),
+      hero: await page.evaluate(() => ({
+        label: document.querySelector("#generated-label")?.textContent.trim() ?? null,
+        value: document.querySelector("#generated-on")?.textContent.trim() ?? null,
+      })),
     };
 
     check.ok(
@@ -617,6 +624,7 @@ const summarize = (evidence) => {
     `    source[0]: ${evidence.sourceCards[0]?.text ?? "(none)"}`,
     `    strip[0]: ${evidence.stripCards[0]?.text ?? "(none)"}`,
     `    age cue: ${evidence.freshnessBadge?.text ?? "(none)"}`,
+    `    hero: ${evidence.hero?.label ?? "(none)"} / ${evidence.hero?.value ?? "(none)"}`,
   ];
 };
 
@@ -653,6 +661,20 @@ const main = async () => {
     const cacheResult = await runAssetCacheCheck(browser, origin);
     const ok = report("Service worker static cache", `(${STATIC_CACHE})`, cacheResult);
     ok ? passed++ : failed++;
+
+    // The pre-render hero placeholder is static HTML, visible until app.js runs.
+    const servedHtml = await (await fetch(`${origin}/index.html`)).text();
+    const placeholder = /<strong id="generated-on">([^<]*)<\/strong>/.exec(servedHtml)?.[1];
+    const placeholderOk = report("Served hero placeholder", "(index.html before render)", {
+      evidence: null,
+      failures:
+        placeholder === "Loading public snapshot"
+          ? []
+          : [`#generated-on placeholder was "${placeholder}"`],
+      pageErrors: [],
+      blocked: [],
+    });
+    placeholderOk ? passed++ : failed++;
   } finally {
     await browser?.close();
     await new Promise((resolve) => server.close(resolve));
