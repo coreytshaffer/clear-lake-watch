@@ -287,3 +287,158 @@ export const evaluateObservation = (observation, asOfMs) => {
     reason: null,
   };
 };
+
+// UI projections of the existing Clear Lake Watch exports. They use the
+// shared contract's currency values and never permit "current" labels.
+
+const WEATHER_EXPORT_STATUSES = new Set(["partial", "stale", "unavailable", "live"]);
+
+const isRecord = (value) => typeof value === "object" && value !== null;
+
+const toIsoInstant = (value) => {
+  const instantMs = parseInstant(value);
+  return instantMs === null ? null : new Date(instantMs).toISOString();
+};
+
+const identityValue = (value) =>
+  typeof value === "string" || (typeof value === "number" && Number.isFinite(value))
+    ? value
+    : null;
+
+const normalizeExportStatus = (value) => {
+  if (typeof value !== "string") {
+    return "unknown";
+  }
+
+  const normalized = value.trim().toLowerCase();
+  return WEATHER_EXPORT_STATUSES.has(normalized) ? normalized : "unknown";
+};
+
+const isPositiveHours = (value) =>
+  typeof value === "number" && Number.isFinite(value) && value > 0;
+
+// A present-but-unusable budget must surface as `invalid_budget`, not as a
+// missing one, so it is passed through as a budget the evaluator rejects.
+const UNUSABLE_SECONDS_BUDGET = Object.freeze({ limit: Number.NaN, unit: "seconds" });
+
+const weatherBudget = (staleAfterHours) => {
+  if (staleAfterHours === null || staleAfterHours === undefined) {
+    return null;
+  }
+
+  return isPositiveHours(staleAfterHours)
+    ? { limit: staleAfterHours * 3600, unit: "seconds" }
+    : UNUSABLE_SECONDS_BUDGET;
+};
+
+// Evaluation reasons that leave a valid, not-future observation instant.
+const OBSERVATION_USABLE_REASONS = new Set([null, "missing_budget", "invalid_budget"]);
+
+const projectWeatherStation = (station, budget, asOfMs) => {
+  const record = isRecord(station) ? station : {};
+  const { observedAt } = record;
+  let evaluation = evaluateObservation(
+    { observedThrough: observedAt, mode: OPERATIONAL, budget, timeZone: SOURCE_TIME_ZONE },
+    asOfMs,
+  );
+
+  // Weather observations are instants; a date-only value is malformed here.
+  if (
+    evaluation.reason !== "invalid_clock" &&
+    !isBlank(observedAt) &&
+    parseInstant(observedAt) === null
+  ) {
+    evaluation = unknownEvaluation("invalid_observation");
+  }
+
+  return {
+    stationId: identityValue(record.stationId),
+    displayName: identityValue(record.displayName),
+    observedThrough: OBSERVATION_USABLE_REASONS.has(evaluation.reason)
+      ? toIsoInstant(observedAt)
+      : null,
+    evaluation,
+  };
+};
+
+/**
+ * Project a stored weather-context export for display at `asOfMs`.
+ *
+ * `exportStatus` is the stored generation-time status, normalized; it is
+ * independent of observation age. Each station is evaluated against its own
+ * `observedAt` and the export's `staleAfterHours`, in input order.
+ *
+ * @param {unknown} exportData parsed `weather-context.json`
+ * @param {unknown} asOfMs
+ */
+export const projectWeatherContext = (exportData, asOfMs) => {
+  const record = isRecord(exportData) ? exportData : {};
+  const budget = weatherBudget(record.staleAfterHours);
+  const stations = Array.isArray(record.stations) ? record.stations : [];
+
+  return {
+    exportStatus: normalizeExportStatus(record.machineReadableStatus),
+    snapshotGeneratedAt: toIsoInstant(record.generatedAt),
+    staleAfterHours: isPositiveHours(record.staleAfterHours) ? record.staleAfterHours : null,
+    stations: stations.map((station) => projectWeatherStation(station, budget, asOfMs)),
+    currentObservationsAllowed: false,
+  };
+};
+
+const sourceLoadState = (status) => {
+  if (isBlank(status)) {
+    return "unknown";
+  }
+
+  return typeof status === "string" && status.trim() === "ok" ? "loaded" : "attention";
+};
+
+/**
+ * Project one manifest source for display at `asOfMs`.
+ *
+ * `sourceLoadState` describes the generation-time load recorded in the
+ * manifest. A date-only `latestObservationDate` is historical evidence only
+ * when it falls on or before both the render date and, when usable, the
+ * generation date, in the source's Pacific calendar. The stored
+ * `resourceAgeDays` is ignored; the resource date's distance from generation
+ * is recalculated.
+ *
+ * @param {unknown} source one entry of `manifest.sources`
+ * @param {unknown} manifest parsed `manifest.json`
+ * @param {unknown} asOfMs
+ */
+export const projectManifestSource = (source, manifest, asOfMs) => {
+  const record = isRecord(source) ? source : {};
+  const generatedMs = parseInstant(isRecord(manifest) ? manifest.generatedAt : undefined);
+  const observedDate = parseDateOnly(record.latestObservationDate)
+    ? record.latestObservationDate
+    : null;
+  const atRender = evaluateObservation(
+    { observedThrough: observedDate, mode: REVIEWED_SNAPSHOT, timeZone: SOURCE_TIME_ZONE },
+    asOfMs,
+  );
+  const daysBeforeGeneration =
+    observedDate === null || generatedMs === null
+      ? null
+      : calendarAgeDays(observedDate, generatedMs, SOURCE_TIME_ZONE);
+  const historical =
+    observedDate !== null &&
+    atRender.dataCurrency === "historical" &&
+    (generatedMs === null || (daysBeforeGeneration !== null && daysBeforeGeneration >= 0));
+
+  const resourceDate = parseDateOnly(record.resourceDate) ? record.resourceDate : null;
+  const resourceDays =
+    resourceDate === null || generatedMs === null
+      ? null
+      : calendarAgeDays(resourceDate, generatedMs, SOURCE_TIME_ZONE);
+
+  return {
+    sourceLoadState: sourceLoadState(record.status),
+    observedThrough: historical ? observedDate : null,
+    snapshotGeneratedAt: generatedMs === null ? null : new Date(generatedMs).toISOString(),
+    sourceResourceDate: resourceDate,
+    resourceDaysBeforeSnapshot: resourceDays !== null && resourceDays >= 0 ? resourceDays : null,
+    dataCurrency: historical ? "historical" : "unknown",
+    currentObservationsAllowed: false,
+  };
+};

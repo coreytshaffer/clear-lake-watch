@@ -1,12 +1,29 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import {
   calendarAgeDays,
   evaluateObservation,
   parseInstant,
+  projectManifestSource,
+  projectWeatherContext,
 } from "./freshness-status.js";
+
+const loadFixture = (name) =>
+  JSON.parse(
+    readFileSync(new URL(`../tests/fixtures/freshness/${name}`, import.meta.url), "utf8"),
+  );
+
+const deepFreeze = (value) => {
+  if (typeof value === "object" && value !== null && !Object.isFrozen(value)) {
+    Object.values(value).forEach(deepFreeze);
+    Object.freeze(value);
+  }
+
+  return value;
+};
 
 const moduleUrl = new URL("./freshness-status.js", import.meta.url).href;
 const PACIFIC = "America/Los_Angeles";
@@ -319,5 +336,350 @@ test("reviewed snapshot dates are historical without an age claim", () => {
       "invalid_observation",
     );
     assert.equal(evaluateObservation(reviewed(null), asOfMs).reason, "missing_observation");
+  });
+});
+
+// Task 2: projections of the pinned public replay inputs.
+const REPLAY_CLOCK = at("2026-11-17T12:00:00Z");
+const WEATHER_GENERATED_AT = "2026-05-14T06:17:06.349Z";
+const KELC1_OBSERVED_AT = "2026-05-14T05:57:00.000Z";
+const MANIFEST_GENERATED_AT = "2026-05-05T08:44:50.025Z";
+
+const unknownBecause = (reason) => ({
+  dataCurrency: "unknown",
+  age: null,
+  limit: null,
+  unit: null,
+  reason,
+});
+
+test("weather status and station ages are independent", () => {
+  const weather = deepFreeze(loadFixture("clw-weather-context-2026-05-13.json"));
+  const atLimit = at("2026-05-14T11:57:00Z");
+  const overLimit = at("2026-05-14T11:57:01Z");
+  const kelc1 = (evaluation) => ({
+    stationId: "KELC1",
+    displayName: "KONOCTI",
+    observedThrough: KELC1_OBSERVED_AT,
+    evaluation,
+  });
+  const within = (age) => ({
+    dataCurrency: "within_expected_lag",
+    age,
+    limit: 21600,
+    unit: "seconds",
+    reason: null,
+  });
+  const lagging = (age) => ({ ...within(age), dataCurrency: "lagging" });
+
+  withForbiddenNow(() => {
+    assert.deepEqual(projectWeatherContext(weather, atLimit), {
+      exportStatus: "partial",
+      snapshotGeneratedAt: WEATHER_GENERATED_AT,
+      staleAfterHours: 6,
+      stations: [kelc1(within(21600))],
+      currentObservationsAllowed: false,
+    });
+
+    // The stored, age-independent status does not move when the station ages out.
+    assert.deepEqual(projectWeatherContext(weather, overLimit), {
+      exportStatus: "partial",
+      snapshotGeneratedAt: WEATHER_GENERATED_AT,
+      staleAfterHours: 6,
+      stations: [kelc1(lagging(21601))],
+      currentObservationsAllowed: false,
+    });
+
+    // A stored "live" status cannot rescue an over-limit observation.
+    const storedLive = deepFreeze({ ...weather, machineReadableStatus: "live" });
+    assert.deepEqual(projectWeatherContext(storedLive, overLimit), {
+      exportStatus: "live",
+      snapshotGeneratedAt: WEATHER_GENERATED_AT,
+      staleAfterHours: 6,
+      stations: [kelc1(lagging(21601))],
+      currentObservationsAllowed: false,
+    });
+
+    // A second station observed one second earlier gets its own statement.
+    const mixed = deepFreeze({
+      ...weather,
+      stations: [
+        weather.stations[0],
+        {
+          ...weather.stations[0],
+          stationId: "TEST2",
+          displayName: "Second test station",
+          observedAt: "2026-05-14T05:56:59Z",
+        },
+      ],
+    });
+    const mixedProjection = projectWeatherContext(mixed, atLimit);
+    assert.equal(mixedProjection.currentObservationsAllowed, false);
+    assert.deepEqual(mixedProjection.stations, [
+      kelc1(within(21600)),
+      {
+        stationId: "TEST2",
+        displayName: "Second test station",
+        observedThrough: "2026-05-14T05:56:59.000Z",
+        evaluation: lagging(21601),
+      },
+    ]);
+  });
+});
+
+test("generation and stored results cannot fill missing observations", async (t) => {
+  const weather = deepFreeze(loadFixture("clw-weather-context-2026-05-13.json"));
+  const manifest = deepFreeze(loadFixture("clw-manifest-2026-05-05.json"));
+  const withStation = (overrides, exportOverrides = {}) =>
+    deepFreeze({
+      ...weather,
+      ...exportOverrides,
+      stations: [{ ...weather.stations[0], ...overrides }],
+    });
+  const { observedAt: _omitted, ...stationWithoutTime } = weather.stations[0];
+
+  await t.test("weather observation problems null the observation evidence", () => {
+    const cases = [
+      ["null observedAt", withStation({ observedAt: null }), "missing_observation"],
+      [
+        "absent observedAt",
+        deepFreeze({ ...weather, stations: [stationWithoutTime] }),
+        "missing_observation",
+      ],
+      [
+        "malformed observedAt",
+        withStation({ observedAt: "2026-02-30T05:57:00Z" }),
+        "invalid_observation",
+      ],
+      [
+        "offset-free observedAt",
+        withStation({ observedAt: "2026-05-14T05:57:00" }),
+        "invalid_observation",
+      ],
+      ["date-only observedAt", withStation({ observedAt: "2026-05-14" }), "invalid_observation"],
+      [
+        "future observedAt",
+        withStation({ observedAt: "2026-11-17T12:00:00.001Z" }),
+        "future_observation",
+      ],
+    ];
+
+    withForbiddenNow(() => {
+      for (const [label, exportData, reason] of cases) {
+        const projection = projectWeatherContext(exportData, REPLAY_CLOCK);
+        assert.equal(projection.snapshotGeneratedAt, WEATHER_GENERATED_AT, label);
+        assert.equal(projection.exportStatus, "partial", label);
+        assert.equal(projection.stations.length, 1, label);
+        assert.equal(projection.stations[0].stationId, "KELC1", label);
+        assert.equal(projection.stations[0].observedThrough, null, label);
+        assert.deepEqual(projection.stations[0].evaluation, unknownBecause(reason), label);
+      }
+    });
+  });
+
+  await t.test("unusable weather budgets keep the observation time visible", () => {
+    const cases = [
+      ['numeric-string "6"', { staleAfterHours: "6" }, "invalid_budget"],
+      ["zero", { staleAfterHours: 0 }, "invalid_budget"],
+      ["negative", { staleAfterHours: -6 }, "invalid_budget"],
+      ["null", { staleAfterHours: null }, "missing_budget"],
+    ];
+
+    withForbiddenNow(() => {
+      for (const [label, exportOverrides, reason] of cases) {
+        const projection = projectWeatherContext(withStation({}, exportOverrides), REPLAY_CLOCK);
+        assert.equal(projection.staleAfterHours, null, label);
+        assert.equal(projection.stations[0].observedThrough, KELC1_OBSERVED_AT, label);
+        assert.deepEqual(projection.stations[0].evaluation, unknownBecause(reason), label);
+      }
+
+      const { staleAfterHours: _absent, ...withoutBudget } = weather;
+      const projection = projectWeatherContext(deepFreeze(withoutBudget), REPLAY_CLOCK);
+      assert.equal(projection.stations[0].observedThrough, KELC1_OBSERVED_AT);
+      assert.deepEqual(projection.stations[0].evaluation, unknownBecause("missing_budget"));
+    });
+  });
+
+  await t.test("weather export status and station lists normalize conservatively", () => {
+    withForbiddenNow(() => {
+      const statusOf = (machineReadableStatus) =>
+        projectWeatherContext(deepFreeze({ ...weather, machineReadableStatus }), REPLAY_CLOCK)
+          .exportStatus;
+
+      assert.equal(statusOf("stale"), "stale");
+      assert.equal(statusOf("unavailable"), "unavailable");
+      assert.equal(statusOf(" Live "), "live");
+      assert.equal(statusOf("ok"), "unknown");
+      assert.equal(statusOf(undefined), "unknown");
+      assert.equal(statusOf(""), "unknown");
+
+      const empty = projectWeatherContext(deepFreeze({ ...weather, stations: [] }), REPLAY_CLOCK);
+      assert.deepEqual(empty.stations, []);
+      const { stations: _none, ...stationless } = weather;
+      assert.deepEqual(projectWeatherContext(deepFreeze(stationless), REPLAY_CLOCK).stations, []);
+
+      const badGeneration = projectWeatherContext(
+        deepFreeze({ ...weather, generatedAt: "2026-05-13T23:17:06" }),
+        REPLAY_CLOCK,
+      );
+      assert.equal(badGeneration.snapshotGeneratedAt, null);
+      assert.equal(badGeneration.stations[0].evaluation.dataCurrency, "lagging");
+
+      assert.deepEqual(projectWeatherContext(null, REPLAY_CLOCK), {
+        exportStatus: "unknown",
+        snapshotGeneratedAt: null,
+        staleAfterHours: null,
+        stations: [],
+        currentObservationsAllowed: false,
+      });
+    });
+  });
+
+  await t.test("manifest status and observation are separate evidence", () => {
+    const {
+      status: _status,
+      latestObservationDate: _observation,
+      ...stripped
+    } = manifest.sources[0];
+
+    withForbiddenNow(() => {
+      assert.deepEqual(projectManifestSource(deepFreeze(stripped), manifest, REPLAY_CLOCK), {
+        sourceLoadState: "unknown",
+        observedThrough: null,
+        snapshotGeneratedAt: MANIFEST_GENERATED_AT,
+        sourceResourceDate: null,
+        resourceDaysBeforeSnapshot: null,
+        dataCurrency: "unknown",
+        currentObservationsAllowed: false,
+      });
+
+      const restored = projectManifestSource(
+        deepFreeze({ ...stripped, status: "ok" }),
+        manifest,
+        REPLAY_CLOCK,
+      );
+      assert.equal(restored.sourceLoadState, "loaded");
+      assert.equal(restored.dataCurrency, "unknown");
+      assert.equal(restored.observedThrough, null);
+
+      const loadStateOf = (status) =>
+        projectManifestSource(deepFreeze({ ...stripped, status }), manifest, REPLAY_CLOCK)
+          .sourceLoadState;
+      assert.equal(loadStateOf("   "), "unknown");
+      assert.equal(loadStateOf(null), "unknown");
+      assert.equal(loadStateOf("error"), "attention");
+      assert.equal(loadStateOf("stale"), "attention");
+    });
+  });
+
+  await t.test("a calendar date after generation is not historical evidence", () => {
+    const source = manifest.sources[0];
+    const projectDate = (latestObservationDate, manifestData = manifest, clock = REPLAY_CLOCK) =>
+      projectManifestSource(
+        deepFreeze({ ...source, latestObservationDate }),
+        manifestData,
+        clock,
+      );
+
+    withForbiddenNow(() => {
+      // Generation is 2026-05-05 in the source's Pacific calendar.
+      const afterGeneration = projectDate("2026-05-06");
+      assert.equal(afterGeneration.observedThrough, null);
+      assert.equal(afterGeneration.dataCurrency, "unknown");
+
+      const generationDay = projectDate("2026-05-05");
+      assert.equal(generationDay.observedThrough, "2026-05-05");
+      assert.equal(generationDay.dataCurrency, "historical");
+
+      // Without a usable generation instant, the render date is the only bound.
+      const noGeneration = deepFreeze({ ...manifest, generatedAt: "not-a-time" });
+      assert.equal(projectDate("2026-05-06", noGeneration).dataCurrency, "historical");
+      assert.equal(projectDate("2026-11-18", noGeneration).dataCurrency, "unknown");
+      assert.equal(projectDate("2026-11-18", noGeneration).observedThrough, null);
+
+      // The render date bounds even a valid generation date.
+      assert.equal(
+        projectDate("2026-05-03", manifest, at("2026-05-02T12:00:00Z")).dataCurrency,
+        "unknown",
+      );
+
+      assert.equal(projectDate("2026-02-30").dataCurrency, "unknown");
+      assert.equal(projectDate("2026-05-03T00:00:00Z").dataCurrency, "unknown");
+    });
+  });
+
+  await t.test("resource dates stay separate from observation dates", () => {
+    const fhabs = manifest.sources.find((source) => source.id === "fhabs-results");
+    const project = (sourceOverrides, manifestData = manifest) =>
+      projectManifestSource(deepFreeze({ ...fhabs, ...sourceOverrides }), manifestData, REPLAY_CLOCK);
+
+    withForbiddenNow(() => {
+      const afterGeneration = project({ resourceDate: "2026-05-06" });
+      assert.equal(afterGeneration.sourceResourceDate, "2026-05-06");
+      assert.equal(afterGeneration.resourceDaysBeforeSnapshot, null);
+
+      const sameDay = project({ resourceDate: "2026-05-05" });
+      assert.equal(sameDay.resourceDaysBeforeSnapshot, 0);
+
+      const noGeneration = project({}, deepFreeze({ ...manifest, generatedAt: null }));
+      assert.equal(noGeneration.sourceResourceDate, "2026-05-04");
+      assert.equal(noGeneration.resourceDaysBeforeSnapshot, null);
+      assert.equal(noGeneration.snapshotGeneratedAt, null);
+
+      const invalid = project({ resourceDate: "2026-02-30" });
+      assert.equal(invalid.sourceResourceDate, null);
+      assert.equal(invalid.resourceDaysBeforeSnapshot, null);
+    });
+  });
+});
+
+test("four source clocks replay as reviewed history", () => {
+  const expected = {
+    "usgs-lake-level": ["2026-05-03", null, null],
+    "usgs-cole-creek-discharge": ["2026-05-03", null, null],
+    "fhabs-bloom-reports": ["2025-09-07", "2026-05-04", 1],
+    "fhabs-results": ["2024-01-11", "2026-05-04", 1],
+  };
+  const pinned = deepFreeze(loadFixture("clw-manifest-2026-05-05.json"));
+  const conflicting = loadFixture("clw-manifest-2026-05-05.json");
+  conflicting.sources.forEach((source) => {
+    if (source.id.startsWith("fhabs-")) {
+      source.resourceAgeDays = 999;
+    }
+  });
+  deepFreeze(conflicting);
+
+  const replay = (manifest) =>
+    manifest.sources.map((source) => [source.id, projectManifestSource(source, manifest, REPLAY_CLOCK)]);
+
+  withForbiddenNow(() => {
+    for (const manifest of [pinned, conflicting]) {
+      const rows = replay(manifest);
+      assert.deepEqual(
+        rows.map(([id]) => id),
+        Object.keys(expected),
+        "source identity and order are preserved",
+      );
+
+      for (const [id, projection] of rows) {
+        const [observedThrough, sourceResourceDate, resourceDaysBeforeSnapshot] = expected[id];
+        assert.deepEqual(
+          projection,
+          {
+            sourceLoadState: "loaded",
+            observedThrough,
+            snapshotGeneratedAt: MANIFEST_GENERATED_AT,
+            sourceResourceDate,
+            resourceDaysBeforeSnapshot,
+            dataCurrency: "historical",
+            currentObservationsAllowed: false,
+          },
+          id,
+        );
+      }
+    }
+
+    assert.deepEqual(replay(pinned), replay(pinned), "identical replays are equal");
+    assert.deepEqual(replay(conflicting), replay(pinned), "stored resourceAgeDays is ignored");
   });
 });
