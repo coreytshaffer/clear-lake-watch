@@ -135,6 +135,12 @@ For copy-paste outreach language, see [Internship review start here](docs/intern
 
 ## Validate This Mirror
 
+Both validators need Python 3.11 or newer with the pinned validation prerequisite. Install it once per environment, into the same Python that `python` runs:
+
+```bash
+python -m pip install -r requirements-public-mirror.txt
+```
+
 Run the public mirror validation check from PowerShell:
 
 ```powershell
@@ -159,7 +165,26 @@ For a cross-platform baseline check that is suitable for CI, run:
 python scripts/validate-public-mirror.py
 ```
 
-The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, static-snapshot warnings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes.
+Both commands take snapshot age, source observation age, and manifest integrity from the same shared evaluator, `scripts/public_mirror_common.py`, and print those findings as `[code] subject: message`. Ages are Pacific calendar days. To reproduce a review result, freeze the evaluation clock with a UTC instant:
+
+```bash
+python scripts/validate-public-mirror.py --as-of 2026-11-17T12:00:00Z
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1 -AsOfUtc 2026-11-17T12:00:00Z
+```
+
+The Python validator is intentionally lighter than the PowerShell validator. Use it as a portable floor for required files, JSON parsing, the shared snapshot findings, text guardrails, and public/private boundary checks. Keep the PowerShell validator as the stronger release gate for Windows review passes. See [source freshness validation](docs/source-freshness-validation.md) for finding codes and the scope of shared parity.
+
+Run the validator tests with the same Python:
+
+```bash
+python -m unittest discover -s tests -p test_public_mirror_common.py
+python -m unittest discover -s tests -p test_public_mirror_entrypoints.py
+```
+
+The entry-point tests compare both commands in scratch checkouts. They skip the PowerShell cases when no PowerShell runtime is found; set `CLW_REQUIRE_POWERSHELL=1` to make a missing runtime fail instead.
 
 Run the JavaScript checks with Node.js 24; no package installation is required:
 
@@ -170,7 +195,7 @@ node scripts/dashboard-utils.smoke.mjs
 
 The date-format tests launch isolated processes in `UTC` and `America/Los_Angeles` before importing the utilities. Date-only `YYYY-MM-DD` strings retain their calendar date. Timestamp strings and `Date` objects use the viewer's local time zone; `formatDateTime` includes the local hour and minute in the existing `en-US` format. Winter and summer cases cover both Pacific standard and daylight time.
 
-CI runs these Node checks alongside the Python validator. Use the explicit test paths above; `tests/dashboard-utils.test.html` runs the separate browser suite.
+CI runs these Node checks alongside the Python validator and the validator tests on Linux, and runs both validators and the entry-point tests with Windows PowerShell 5.1 on Windows. Use the explicit test paths above; `tests/dashboard-utils.test.html` runs the separate browser suite.
 
 For a manual reviewed refresh run, use the [formal public refresh runbook](docs/formal-public-refresh-runbook.md) or dispatch the `Formal Public Refresh` GitHub Actions workflow. That workflow generates review artifacts only; it does not publish automatically.
 

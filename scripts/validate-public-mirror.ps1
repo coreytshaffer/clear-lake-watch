@@ -1,8 +1,13 @@
 param(
-  [switch]$CheckHttp
+  [switch]$CheckHttp,
+  [string]$AsOfUtc
 )
 
 $ErrorActionPreference = "Stop"
+
+# An explicit -AsOfUtc (a UTC instant ending in Z or +00:00) freezes the
+# evaluation clock; otherwise the shared evaluator samples the UTC clock once.
+$hasAsOfUtc = $PSBoundParameters.ContainsKey("AsOfUtc")
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $failures = New-Object System.Collections.Generic.List[string]
@@ -156,167 +161,199 @@ function Assert-PositiveNumber {
   }
 }
 
-function Assert-GapWithinMinutes {
-  param(
-    [datetimeoffset]$Left,
-    [datetimeoffset]$Right,
-    [int]$MaxMinutes,
-    [string]$Message
-  )
+function ConvertTo-ProcessArgument {
+  param([string]$Value)
 
-  $gapMinutes = [math]::Abs(($Left - $Right).TotalMinutes)
-  if ($gapMinutes -gt $MaxMinutes) {
-    Add-Failure "$Message Gap: $([math]::Round($gapMinutes, 2)) minutes."
+  if ($Value.Length -gt 0 -and $Value -notmatch '[\s"]') {
+    return $Value
   }
+
+  # Windows command-line quoting, which .NET also applies on other platforms.
+  $quoted = $Value -replace '(\\*)"', '$1$1\"'
+  $quoted = $quoted -replace '(\\+)$', '$1$1'
+  return '"' + $quoted + '"'
 }
 
-function Get-OutputRecordCount {
-  param(
-    [string]$File,
-    [object]$Data
-  )
-
-  switch ($File) {
-    "data/live.json" {
-      return (Get-ArrayCount $Data.liveCards) + (Get-ArrayCount $Data.mapMarkers)
-    }
-    "data/reports.json" {
-      return Get-ArrayCount $Data.records
-    }
-    "data/observations.json" {
-      return Get-ArrayCount $Data.records
-    }
-    "data/sites-normalized.json" {
-      return Get-ArrayCount $Data.sites
-    }
-    "data/analytics.json" {
-      return (Get-ArrayCount $Data.reportTrendByYear) + (Get-ArrayCount $Data.advisoryDistributionByArm) + (Get-ArrayCount $Data.observationCoverage)
-    }
-    default {
-      return $null
+function Get-SharedEvaluatorPython {
+  foreach ($name in @("python", "python3")) {
+    $command = @(Get-Command $name -CommandType Application -ErrorAction SilentlyContinue) | Select-Object -First 1
+    if ($null -ne $command) {
+      return $command.Path
     }
   }
+  return $null
 }
 
-function Test-ManifestFreshness {
+function Get-SharedReportProblem {
   param(
-    [object]$Manifest,
-    [object]$LiveData
+    [string]$Stdout,
+    [object]$Report,
+    [int]$ExitCode
   )
 
-  if ($null -eq $Manifest -or $null -eq $LiveData) {
+  if ([string]::IsNullOrWhiteSpace($Stdout) -or -not $Stdout.TrimStart().StartsWith("{")) {
+    return "stdout is not one JSON object"
+  }
+
+  if ($null -eq $Report -or $Report -isnot [System.Management.Automation.PSCustomObject]) {
+    return "stdout is not one JSON object"
+  }
+
+  $propertyNames = @($Report.PSObject.Properties | ForEach-Object { $_.Name })
+  if ($propertyNames -cnotcontains "schema_version" -or $propertyNames -cnotcontains "findings") {
+    return "schema_version and findings are required"
+  }
+
+  $schemaVersion = $Report.schema_version
+  if (-not ($schemaVersion -is [int] -or $schemaVersion -is [long]) -or $schemaVersion -ne 1) {
+    return "unsupported schema_version $schemaVersion"
+  }
+
+  $findings = $Report.findings
+  if ($null -eq $findings -or $findings -isnot [System.Array]) {
+    return "findings must be an array"
+  }
+
+  $failureCount = 0
+  foreach ($finding in $findings) {
+    if ($finding -isnot [System.Management.Automation.PSCustomObject]) {
+      return "each finding must be an object"
+    }
+
+    foreach ($field in @("severity", "code", "subject", "message")) {
+      $value = $finding.$field
+      if ($value -isnot [string] -or [string]::IsNullOrWhiteSpace($value)) {
+        return "finding field $field must be a non-empty string"
+      }
+    }
+
+    if ($finding.severity -ceq "failure") {
+      $failureCount++
+    } elseif ($finding.severity -cne "warning") {
+      return "unknown severity $($finding.severity)"
+    }
+  }
+
+  if ($ExitCode -eq 0 -and $failureCount -gt 0) {
+    return "exit code 0 with $failureCount failure finding(s)"
+  }
+
+  if ($ExitCode -eq 1 -and $failureCount -eq 0) {
+    return "exit code 1 without a failure finding"
+  }
+
+  return $null
+}
+
+function Invoke-SharedSnapshotEvaluator {
+  param(
+    [bool]$HasAsOfUtc,
+    [string]$AsOfUtc
+  )
+
+  # Snapshot age, source observation age, and manifest integrity come from the
+  # same evaluator the Python validator imports. Launch, protocol, and
+  # dependency failures fail this gate.
+  $evaluatorPath = Join-Path $PSScriptRoot "public_mirror_common.py"
+  if (-not (Test-Path -LiteralPath $evaluatorPath -PathType Leaf)) {
+    Add-Failure "Shared snapshot evaluator is unavailable: scripts/public_mirror_common.py is missing."
     return
   }
 
-  $manifestGeneratedAt = ConvertTo-DateTimeOffsetOrNull $Manifest.generatedAt "Manifest generatedAt"
-  $liveGeneratedAt = ConvertTo-DateTimeOffsetOrNull $LiveData.generatedAt "Live snapshot generatedAt"
-
-  if ($manifestGeneratedAt -and $liveGeneratedAt) {
-    Assert-GapWithinMinutes -Left $manifestGeneratedAt -Right $liveGeneratedAt -MaxMinutes 5 -Message "Manifest and live snapshot appear to come from different refresh passes."
+  $python = Get-SharedEvaluatorPython
+  if ($null -eq $python) {
+    Add-Failure "Shared snapshot evaluator could not start: no python executable was found on PATH. Install Python 3.11 or newer, then run: python -m pip install -r requirements-public-mirror.txt"
+    return
   }
 
-  $expectedSourceIds = @(
-    "usgs-lake-level",
-    "usgs-cole-creek-discharge",
-    "fhabs-bloom-reports",
-    "fhabs-results"
-  )
-  $sourceIds = @($Manifest.sources | ForEach-Object { $_.id })
-
-  foreach ($expectedSourceId in $expectedSourceIds) {
-    if ($sourceIds -notcontains $expectedSourceId) {
-      Add-Failure "Manifest is missing expected source: $expectedSourceId"
-    }
+  $arguments = @("-B", $evaluatorPath)
+  if ($HasAsOfUtc) {
+    $arguments += @("--as-of", $AsOfUtc)
   }
 
-  if ($Manifest.status -eq "ok") {
-    $nonOkSources = @($Manifest.sources | Where-Object { $_.status -ne "ok" })
-    if ($nonOkSources.Count -gt 0) {
-      Add-Failure "Manifest status is ok, but one or more sources are not ok."
-    }
+  $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+  $startInfo.FileName = $python
+  $startInfo.Arguments = (@($arguments | ForEach-Object { ConvertTo-ProcessArgument $_ }) -join " ")
+  $startInfo.WorkingDirectory = $projectRoot
+  $startInfo.UseShellExecute = $false
+  $startInfo.CreateNoWindow = $true
+  $startInfo.RedirectStandardOutput = $true
+  $startInfo.RedirectStandardError = $true
+  $utf8 = New-Object System.Text.UTF8Encoding $false
+  $startInfo.StandardOutputEncoding = $utf8
+  $startInfo.StandardErrorEncoding = $utf8
+  $startInfo.EnvironmentVariables["PYTHONIOENCODING"] = "utf-8"
+
+  $process = New-Object System.Diagnostics.Process
+  $process.StartInfo = $startInfo
+  try {
+    [void]$process.Start()
+  } catch {
+    Add-Failure "Shared snapshot evaluator could not start with $($python): $($_.Exception.Message)"
+    $process.Dispose()
+    return
   }
 
-  $maxSourceAgeDays = if ($Manifest.sourceFreshnessMaxAgeDays) { [int]$Manifest.sourceFreshnessMaxAgeDays } else { 14 }
-
-  foreach ($source in @($Manifest.sources)) {
-    if ([string]::IsNullOrWhiteSpace($source.id)) {
-      Add-Failure "Manifest source is missing id."
-      continue
+  try {
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit(120000)) {
+      try { $process.Kill() } catch { }
+      Add-Failure "Shared snapshot evaluator did not finish within 120 seconds."
+      return
     }
-
-    if ([string]::IsNullOrWhiteSpace($source.status)) {
-      Add-Failure "Manifest source $($source.id) is missing status."
-    }
-
-    Assert-PositiveNumber -Value $source.rowCount -Message "Manifest source $($source.id) must have a positive rowCount."
-
-    $latestObservation = ConvertTo-DateTimeOffsetOrNull $source.latestObservationDate "Manifest source $($source.id) latestObservationDate"
-    if ($manifestGeneratedAt -and $latestObservation) {
-      $ageDays = ($manifestGeneratedAt.Date - $latestObservation.Date).TotalDays
-      if ($ageDays -lt 0) {
-        Add-Failure "Manifest source $($source.id) has a latestObservationDate after the manifest generatedAt."
-      } elseif ($ageDays -gt $maxSourceAgeDays) {
-        Add-Warning "Manifest source $($source.id) latest observation is $([int]$ageDays) days older than the dashboard snapshot; keep stale-source language visible."
-      }
-    }
-
-    if ($source.id -like "fhabs-*") {
-      Assert-PositiveNumber -Value $source.clearLakeRowCount -Message "Manifest source $($source.id) must have a positive clearLakeRowCount."
-      if ($null -ne $source.resourceDate) {
-        $resourceDate = ConvertTo-DateTimeOffsetOrNull $source.resourceDate "Manifest source $($source.id) resourceDate"
-        if ($manifestGeneratedAt -and $resourceDate -and $resourceDate.Date -gt $manifestGeneratedAt.Date) {
-          Add-Failure "Manifest source $($source.id) resourceDate is after manifest generatedAt."
-        }
-      } else {
-        Add-Failure "Manifest source $($source.id) must include resourceDate for FHABS freshness validation."
-      }
-      if ($null -eq $source.resourceAgeDays) {
-        Add-Failure "Manifest source $($source.id) must include resourceAgeDays for FHABS freshness validation."
-      } elseif ([int]$source.resourceAgeDays -lt 0) {
-        Add-Failure "Manifest source $($source.id) resourceAgeDays cannot be negative."
-      }
-    }
+    $process.WaitForExit()
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    $exitCode = $process.ExitCode
+  } catch {
+    Add-Failure "Shared snapshot evaluator output could not be read: $($_.Exception.Message)"
+    return
+  } finally {
+    $process.Dispose()
   }
 
-  $expectedOutputFiles = @(
-    "data/live.json",
-    "data/reports.json",
-    "data/observations.json",
-    "data/sites-normalized.json",
-    "data/analytics.json"
-  )
-  $manifestOutputFiles = @($Manifest.outputs | ForEach-Object { $_.file })
-
-  foreach ($expectedOutputFile in $expectedOutputFiles) {
-    if ($manifestOutputFiles -notcontains $expectedOutputFile) {
-      Add-Failure "Manifest is missing expected output entry: $expectedOutputFile"
-    }
+  $stderrText = ""
+  if (-not [string]::IsNullOrWhiteSpace($stderr)) {
+    $stderrText = $stderr.Trim() -replace '\s+', ' '
+  }
+  $diagnostics = "exit code $exitCode"
+  if ($stderrText) {
+    $diagnostics = "$diagnostics; stderr: $stderrText"
   }
 
-  foreach ($output in @($Manifest.outputs)) {
-    if ([string]::IsNullOrWhiteSpace($output.file)) {
-      Add-Failure "Manifest output is missing file."
-      continue
-    }
-
-    Assert-PositiveNumber -Value $output.recordCount -Message "Manifest output $($output.file) must have a positive recordCount."
-
-    $outputData = Read-JsonFile ($output.file -replace '/', '\')
-    if ($null -ne $outputData) {
-      $outputGeneratedAt = ConvertTo-DateTimeOffsetOrNull $outputData.generatedAt "Manifest output $($output.file) generatedAt"
-      if ($manifestGeneratedAt -and $outputGeneratedAt) {
-        Assert-GapWithinMinutes -Left $manifestGeneratedAt -Right $outputGeneratedAt -MaxMinutes 5 -Message "Manifest output $($output.file) appears to come from a different refresh pass."
-      }
-
-      $computedCount = Get-OutputRecordCount -File $output.file -Data $outputData
-      if ($null -ne $computedCount -and [int]$output.recordCount -ne [int]$computedCount) {
-        Add-Failure "Manifest output $($output.file) recordCount $($output.recordCount) does not match computed count $computedCount."
-      }
-    }
+  if ($exitCode -ne 0 -and $exitCode -ne 1) {
+    Add-Failure "Shared snapshot evaluator failed ($diagnostics)."
+    return
   }
 
-  $notesText = (@($Manifest.notes) -join " ")
-  Assert-TextContains -Text $notesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
+  $report = $null
+  try {
+    if (-not [string]::IsNullOrWhiteSpace($stdout)) {
+      $report = $stdout | ConvertFrom-Json
+    }
+  } catch {
+    $report = $null
+  }
+
+  $problem = Get-SharedReportProblem -Stdout $stdout -Report $report -ExitCode $exitCode
+  if ($problem) {
+    Add-Failure "Shared snapshot evaluator returned an invalid report: $problem ($diagnostics)."
+    return
+  }
+
+  if ($stderrText) {
+    Add-Warning "Shared snapshot evaluator wrote to stderr: $stderrText"
+  }
+
+  foreach ($finding in @($report.findings)) {
+    $line = "[$($finding.code)] $($finding.subject): $($finding.message)"
+    if ($finding.severity -ceq "failure") {
+      Add-Failure $line
+    } else {
+      Add-Warning $line
+    }
+  }
 }
 
 function Test-WeatherContext {
@@ -921,8 +958,12 @@ try {
     Assert-TextContains -Text $joinedNotes -Needle "not official public-health guidance" -Message "Manifest must preserve public-health boundary."
   }
 
-  $liveData = Read-JsonFile "data\live.json"
-  Test-ManifestFreshness -Manifest $manifest -LiveData $liveData
+  Invoke-SharedSnapshotEvaluator -HasAsOfUtc $hasAsOfUtc -AsOfUtc $AsOfUtc
+
+  if ($manifest) {
+    $manifestNotesText = (@($manifest.notes) -join " ")
+    Assert-TextContains -Text $manifestNotesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
+  }
 
   $weatherContext = Read-JsonFile "data\weather-context.json"
   Test-WeatherContext -WeatherContext $weatherContext
