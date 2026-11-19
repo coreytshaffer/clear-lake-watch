@@ -95,7 +95,7 @@ The validator warns when the dashboard snapshot or a source observation date is 
 
 For the same checkout and clock, both commands report the same shared findings, compared by severity, code, and subject, and the same exit status from those findings. Each command still runs its own native checks, so either may report more. The PowerShell validator remains the stronger Windows release gate: it adds internal-link checks, weather-context structure and wording, reviewed-record approval and permission, the manifest note guard, and the storage smoke check. The required-text guards remain separate in each command for now.
 
-`tests/test_public_mirror_common.py` covers the evaluator, and `tests/test_public_mirror_entrypoints.py` compares both commands in scratch checkouts. CI runs both suites on Linux, and on Windows with Windows PowerShell 5.1.
+`tests/test_public_mirror_common.py` covers the evaluator, and `tests/test_public_mirror_entrypoints.py` compares both commands in scratch checkouts. CI runs both suites on Linux, and on Windows with Windows PowerShell 5.1. The historical replay cases use a pinned copy of the May 5, 2026 snapshot in `tests/fixtures/public-mirror-2026-05-05/`, so a reviewed refresh of `data/` needs no test edits.
 
 ## Publication Boundary
 

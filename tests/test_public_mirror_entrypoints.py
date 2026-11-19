@@ -5,7 +5,9 @@ Run from the repository root:
     python -m unittest discover -s tests -p test_public_mirror_entrypoints.py
 
 Each case copies the checkout's tracked and untracked-but-not-ignored files
-into a scratch Git repository, mutates only that copy, and runs:
+into a scratch Git repository, replaces its snapshot files with the pinned
+May 5, 2026 fixture (see tests/public_mirror_fixtures.py) unless the case
+checks the live snapshot, mutates only that copy, and runs:
 
 - ``python scripts/validate-public-mirror.py [--as-of ...]``
 - ``powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-public-mirror.ps1 [-AsOfUtc ...]``
@@ -36,7 +38,12 @@ from pathlib import Path
 from typing import Callable, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PINNED_MANIFEST = REPO_ROOT / "tests" / "fixtures" / "freshness" / "clw-manifest-2026-05-05.json"
+TESTS_DIR = REPO_ROOT / "tests"
+if str(TESTS_DIR) not in sys.path:
+    sys.path.insert(0, str(TESTS_DIR))
+
+import public_mirror_fixtures as fixtures  # noqa: E402
+
 AS_OF = "2026-11-17T12:00:00Z"
 COMMAND_TIMEOUT_SECONDS = 600
 
@@ -128,11 +135,7 @@ def _command_env() -> dict:
 
 
 def setUpModule() -> None:
-    if (REPO_ROOT / "data" / "manifest.json").read_bytes() != PINNED_MANIFEST.read_bytes():
-        raise AssertionError(
-            "data/manifest.json no longer matches the pinned May 5, 2026 fixture. "
-            "Update the historical expectations in this module with the reviewed refresh."
-        )
+    fixtures.verify_fixture()
     if REQUIRE_POWERSHELL and not POWERSHELL:
         raise AssertionError("CLW_REQUIRE_POWERSHELL=1, but no PowerShell executable was found.")
     if REQUIRE_POWERSHELL and not shutil.which("node"):
@@ -162,10 +165,17 @@ class ScratchCheckouts:
         _git(self.template, "add", "-A")
         self._count = 0
 
-    def new(self) -> Path:
+    def new(self, history: bool = True) -> Path:
+        """Return a fresh scratch checkout.
+
+        With ``history`` (the default) its snapshot files are the pinned May 5
+        fixture; otherwise it keeps the checkout's live data/ files.
+        """
         self._count += 1
         checkout = self.base / f"case-{self._count:02d}"
         shutil.copytree(self.template, checkout, symlinks=True)
+        if history:
+            fixtures.install_snapshot(checkout)
         return checkout
 
     def cleanup(self) -> None:
@@ -254,7 +264,9 @@ class SharedParityTests(EntryPointTestCase):
         self.assert_parity(self.scratch.new(), 0, HISTORY)
 
     def test_ordinary_invocations_match_on_clean_snapshot(self) -> None:
-        python, _ = self.assert_parity(self.scratch.new(), 0, as_of=None)
+        # The live snapshot at the real clock: whatever it holds, a reviewed
+        # mirror passes with at most age warnings, and both commands agree.
+        python, _ = self.assert_parity(self.scratch.new(history=False), 0, as_of=None)
         codes = {key[1] for key in shared_findings(python.stdout)}
         self.assertTrue(codes <= {"snapshot_old", "source_observation_old"}, python.stdout)
 

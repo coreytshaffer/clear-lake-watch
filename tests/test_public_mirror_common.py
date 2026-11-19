@@ -4,8 +4,10 @@ Run from the repository root:
 
     python -m unittest discover -s tests -p test_public_mirror_common.py
 
-Each test builds a temporary snapshot by copying the tracked public files
-(the manifest and its five outputs) and mutates only that scratch copy.
+Each test builds a temporary snapshot from the pinned May 5, 2026 fixture
+(the manifest and its five outputs, see tests/public_mirror_fixtures.py) and
+mutates only that scratch copy. The live data/ directory is never read, so a
+reviewed refresh needs no test edits.
 """
 
 from __future__ import annotations
@@ -24,25 +26,18 @@ from unittest import mock
 sys.dont_write_bytecode = True
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+TESTS_DIR = REPO_ROOT / "tests"
 SCRIPTS_DIR = REPO_ROOT / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+for _path in (SCRIPTS_DIR, TESTS_DIR):
+    if str(_path) not in sys.path:
+        sys.path.insert(0, str(_path))
 
 import public_mirror_common as pmc  # noqa: E402
+import public_mirror_fixtures as fixtures  # noqa: E402
 
-SNAPSHOT_FILES = (
-    "data/manifest.json",
-    "data/live.json",
-    "data/reports.json",
-    "data/observations.json",
-    "data/sites-normalized.json",
-    "data/analytics.json",
-)
+SNAPSHOT_FILES = fixtures.SNAPSHOT_FILES
 
-# The historical expectations below are pinned to the reviewed May 5, 2026
-# snapshot. A reviewed refresh that replaces data/manifest.json must update
-# these expectations together with the pinned manifest fixture.
-PINNED_MANIFEST = REPO_ROOT / "tests" / "fixtures" / "freshness" / "clw-manifest-2026-05-05.json"
+# The historical expectations below replay the pinned May 5, 2026 snapshot.
 HISTORY_AS_OF = "2026-11-17T12:00:00Z"
 
 HISTORY_FINDINGS = [
@@ -79,16 +74,13 @@ def codes(findings: list) -> list[str]:
 
 
 class SnapshotFixture:
-    """A scratch copy of the tracked public snapshot files."""
+    """A scratch copy of the pinned May 5, 2026 snapshot files."""
 
     def __init__(self, include_cli: bool = False) -> None:
         self._tmp = tempfile.TemporaryDirectory(prefix="clw-pmc-")
         self.base = Path(self._tmp.name)
         self.root = self.base / "checkout"
-        for relative in SNAPSHOT_FILES:
-            target = self.root / relative
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(REPO_ROOT / relative, target)
+        fixtures.install_snapshot(self.root)
         if include_cli:
             (self.root / "scripts").mkdir()
             shutil.copyfile(
@@ -131,12 +123,7 @@ class SnapshotFixture:
 
 
 def setUpModule() -> None:
-    tracked = (REPO_ROOT / "data" / "manifest.json").read_bytes()
-    if tracked != PINNED_MANIFEST.read_bytes():
-        raise AssertionError(
-            "data/manifest.json no longer matches the pinned May 5, 2026 fixture. "
-            "Update the historical expectations in this module with the reviewed refresh."
-        )
+    fixtures.verify_fixture()
 
 
 class ReviewedHistoryTests(unittest.TestCase):
@@ -149,6 +136,12 @@ class ReviewedHistoryTests(unittest.TestCase):
         self.assertIn("196", messages["data/manifest.json"])
         self.assertIn("240", messages["fhabs-bloom-reports"])
         self.assertIn("845", messages["fhabs-results"])
+
+    def test_pinned_fixture_provenance(self) -> None:
+        fixtures.verify_fixture()
+        # `git hash-object` of "a\nb\n"; a CRLF checkout must hash the same.
+        self.assertEqual(fixtures.git_blob_id(b"a\nb\n"), "422c2b7ab3b3c668038da977e4e93a5fc623169c")
+        self.assertEqual(fixtures.git_blob_id(b"a\r\nb\r\n"), "422c2b7ab3b3c668038da977e4e93a5fc623169c")
 
     def test_findings_are_immutable(self) -> None:
         finding = pmc.Finding("warning", "snapshot_old", "data/manifest.json", "m")
