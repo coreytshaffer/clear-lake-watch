@@ -219,6 +219,7 @@ section[id],
 
 a:focus-visible,
 button:focus-visible,
+.trend-data summary:focus-visible,
 .map-marker:focus-visible,
 .map-detail:focus-visible,
 main:focus-visible {
@@ -956,6 +957,47 @@ h2 {
   font-size: 1.4rem;
   color: var(--lake-deep);
   white-space: nowrap;
+}
+
+.trend-data {
+  margin-top: 12px;
+}
+
+.trend-data summary {
+  padding: 6px 0;
+  font-weight: 700;
+  cursor: pointer;
+  scroll-margin-block: 6px;
+}
+
+.trend-data table {
+  width: 100%;
+  margin-top: 6px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.trend-data caption {
+  padding-bottom: 6px;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.trend-data th,
+.trend-data td {
+  padding: 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.trend-data tbody th {
+  font-weight: normal;
+}
+
+.trend-data th:last-child,
+.trend-data td {
+  text-align: right;
 }
 
 .sparkline {

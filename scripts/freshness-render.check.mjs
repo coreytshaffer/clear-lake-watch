@@ -282,6 +282,73 @@ const hydrologyCases = () => {
   }));
 };
 
+const hydrologyTableCases = () => {
+  const live = readJson(path.join(ROOT, "data", "live.json"));
+  const withoutObservations = {
+    ...live,
+    hydrologySeries: live.hydrologySeries.map((series) => ({ ...series, points: [] })),
+  };
+
+  return [
+    {
+      name: "Hydrology tables match plotted observations",
+      asOf: T,
+      timezoneId: "America/Los_Angeles",
+      substitutions: {},
+      async verify(_evidence, check, page) {
+        const cards = page.locator("#trend-grid .trend-card");
+        check.ok(await cards.count() === live.hydrologySeries.length, "one card per hydrology series");
+        for (const [index, series] of live.hydrologySeries.entries()) {
+          const card = cards.nth(index);
+          const summary = card.locator("summary");
+          const name = series.label + " data table";
+          const table = card.getByRole("table", { name: series.label + " daily observations", exact: true });
+          if (!(await summary.isVisible())) {
+            check.ok(false, name + " disclosure is missing");
+            continue;
+          }
+
+          check.ok(await summary.textContent() === name, name + " has a distinct label");
+          check.ok(!(await table.isVisible()), name + " is initially collapsed");
+          await summary.focus();
+          await page.keyboard.press(index === 0 ? "Enter" : "Space");
+          check.ok(await table.isVisible(), name + " opens from the keyboard");
+          if (!(await table.isVisible())) continue;
+
+          const rows = await table.evaluate((element) => ({
+            headers: [...element.querySelectorAll("thead th[scope=col]")].map((cell) => cell.textContent),
+            points: [...element.querySelectorAll("tbody tr")].map((row) => [
+              row.querySelector("th[scope=row]")?.textContent,
+              row.querySelector("td")?.textContent,
+            ]),
+          }));
+          check.ok(JSON.stringify(rows.headers) === JSON.stringify(["Date", "Value (" + series.unit + ")"]),
+            name + " labels the date and the chart unit");
+          const expected = series.points.map(({ date, value }) => [date, String(value)]);
+          check.ok(JSON.stringify(rows.points) === JSON.stringify(expected),
+            name + " exposes all " + expected.length + " chart points in order");
+          check.ok(await summary.evaluate((element) => element === document.activeElement),
+            name + " retains focus when expanded");
+          await page.keyboard.press(index === 0 ? "Space" : "Enter");
+          check.ok(!(await table.isVisible()), name + " closes from the keyboard");
+        }
+      },
+    },
+    {
+      name: "Empty hydrology series have no table disclosure",
+      asOf: T,
+      timezoneId: "America/Los_Angeles",
+      substitutions: { live: withoutObservations },
+      async verify(_evidence, check, page) {
+        check.ok(await page.locator("#trend-grid .trend-value").allTextContents().then(
+          (values) => values.length === live.hydrologySeries.length && values.every((value) => value === "No data"),
+        ), "empty series retain their no-data labels");
+        check.ok(await page.locator("#trend-grid summary:visible").count() === 0, "no empty data-table control");
+      },
+    },
+  ];
+};
+
 const catalogCases = () => {
   const catalog = readJson(path.join(ROOT, "data", "sources.json"));
   const extendedCatalog = {
@@ -531,6 +598,7 @@ const buildCases = () => [
     },
   },
   ...hydrologyCases(),
+  ...hydrologyTableCases(),
   ...catalogCases(),
 ];
 
@@ -643,7 +711,7 @@ const runCase = async (browser, origin, testCase) => {
       evidence.pageClock === new Date(testCase.asOf).toISOString(),
       `page clock was ${evidence.pageClock}`,
     );
-    await testCase.verify(evidence, check);
+    await testCase.verify(evidence, check, page);
     return { evidence, failures: check.failures, pageErrors, blocked };
   } catch (error) {
     return { evidence: null, failures: [...check.failures, error.message], pageErrors, blocked };

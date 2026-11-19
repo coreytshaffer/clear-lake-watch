@@ -825,6 +825,21 @@ const renderTrendCard = (series) => {
 
   drawSparkline(sparkline, points);
 
+  const dataTable = fragment.querySelector(".trend-data");
+  dataTable.querySelector("summary").textContent = `${series.label} data table`;
+  dataTable.querySelector("caption").textContent = `${series.label} daily observations`;
+  dataTable.querySelector(".trend-data-value-heading").textContent = `Value (${series.unit})`;
+  const tableBody = dataTable.querySelector("tbody");
+  for (const { date, value } of points) {
+    const row = tableBody.insertRow();
+    const dateCell = document.createElement("th");
+    dateCell.scope = "row";
+    dateCell.textContent = date;
+    row.append(dateCell);
+    row.insertCell().textContent = value;
+  }
+  dataTable.hidden = false;
+
   return fragment;
 };
 
