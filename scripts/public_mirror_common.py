@@ -17,8 +17,9 @@ is a failure, and 2 for invalid arguments (reported on stderr). Without
 ``--as-of`` the evaluation clock is sampled once from the system UTC clock.
 
 Evaluation is offline and read-only. It reads only ``data/manifest.json``,
-``data/live.json``, and manifest outputs whose paths pass the safety check,
-all relative to the repository root. Calendar ages use Pacific calendar days
+``data/live.json``, and manifest outputs whose paths pass the safety check.
+Every read must resolve to a file directly inside the checkout's own
+``data/`` directory, so symlinks cannot redirect it outside the checkout. Calendar ages use Pacific calendar days
 from the pinned ``tzdata`` package, never host time-zone data. A reviewed
 public mirror may be old: snapshot and source age produce warnings, while
 structural problems produce failures. See docs/source-freshness-validation.md
@@ -94,8 +95,8 @@ OUTPUT_COUNT_FIELDS = {
     ),
 }
 
-# A manifest output must name one JSON file directly inside data/.
-SAFE_OUTPUT_PATH = re.compile(r"data/[A-Za-z0-9._-]+\.json")
+# Every snapshot file the evaluator reads names one JSON file directly inside data/.
+SAFE_SNAPSHOT_PATH = re.compile(r"data/[A-Za-z0-9._-]+\.json")
 
 _DATE_ONLY = re.compile(r"(\d{4})-(\d{2})-(\d{2})", re.ASCII)
 _INSTANT = re.compile(
@@ -274,22 +275,51 @@ def _array_count(value: object) -> int:
     return 1
 
 
+def _json_type(value: object) -> str:
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "a boolean"
+    if isinstance(value, (int, float)):
+        return "a number"
+    if isinstance(value, str):
+        return "a string"
+    if isinstance(value, list):
+        return "an array"
+    return "an object"
+
+
 def _reject_constant(name: str) -> Any:
     raise ValueError(f"non-standard JSON constant {name}")
 
 
-def is_safe_output_path(root: Path, relative: str) -> bool:
-    """True when ``relative`` names a JSON file directly inside root/data.
+def resolve_snapshot_file(root: Path, relative: str) -> Optional[str]:
+    """Return the real path of ``relative`` if it stays inside the checkout.
 
-    The lexical check runs first, so an unsafe path is never touched on disk.
-    A path that passes is then resolved to reject symlinks out of data/.
+    ``relative`` must name a JSON file directly inside ``data/``. The lexical
+    check runs first, so an unsafe path is never touched on disk. A path that
+    passes is then resolved against the checkout's real path: ``data/`` must
+    be the checkout's own directory, not a symlink elsewhere, and the file must
+    resolve directly inside it. Returns None otherwise.
     """
 
-    if not SAFE_OUTPUT_PATH.fullmatch(relative):
-        return False
-    data_dir = os.path.normcase(os.path.realpath(root / "data"))
-    target = os.path.normcase(os.path.realpath(root / relative))
-    return os.path.dirname(target) == data_dir
+    if not isinstance(relative, str) or not SAFE_SNAPSHOT_PATH.fullmatch(relative):
+        return None
+    root_real = os.path.realpath(root)
+    expected_data = os.path.join(root_real, "data")
+    data_real = os.path.realpath(expected_data)
+    if os.path.normcase(data_real) != os.path.normcase(expected_data):
+        return None
+    target = os.path.realpath(os.path.join(root_real, *relative.split("/")))
+    if os.path.normcase(os.path.dirname(target)) != os.path.normcase(data_real):
+        return None
+    return target
+
+
+# Returned by _Evaluation.load_json when a file could not be read or parsed;
+# a finding has already been recorded. JSON null loads as None, so the two
+# outcomes stay distinct.
+_LOAD_FAILED = object()
 
 
 class _Evaluation:
@@ -306,21 +336,31 @@ class _Evaluation:
     def warn(self, code: str, subject: str, message: str) -> None:
         self.add(WARNING, code, subject, message)
 
-    def load_json(self, relative: str) -> Optional[Any]:
-        path = self.root.joinpath(*relative.split("/"))
+    def load_json(self, relative: str) -> Any:
+        """Parse one snapshot file, or record a finding and return _LOAD_FAILED."""
+
+        path = resolve_snapshot_file(self.root, relative)
+        if path is None:
+            self.fail(
+                "unsafe_snapshot_path",
+                relative,
+                "Snapshot file does not resolve directly inside this checkout's data/ directory; it was not read.",
+            )
+            return _LOAD_FAILED
         try:
-            text = path.read_text(encoding="utf-8-sig")
+            with open(path, encoding="utf-8-sig") as handle:
+                text = handle.read()
         except FileNotFoundError:
             self.fail("missing_file", relative, f"Missing required file: {relative}")
-            return None
+            return _LOAD_FAILED
         except (OSError, UnicodeDecodeError) as exc:
             self.fail("invalid_json", relative, f"Unable to read {relative}: {exc}")
-            return None
+            return _LOAD_FAILED
         try:
             return json.loads(text, parse_constant=_reject_constant)
         except ValueError as exc:
             self.fail("invalid_json", relative, f"Invalid JSON in {relative}: {exc}")
-            return None
+            return _LOAD_FAILED
 
 
 def check_snapshot(root: Path, as_of: datetime) -> list[Finding]:
@@ -355,10 +395,14 @@ def check_snapshot(root: Path, as_of: datetime) -> list[Finding]:
         )
 
     manifest = ev.load_json(MANIFEST_PATH)
-    if manifest is None:
+    if manifest is _LOAD_FAILED:
         return ev.findings
     if not isinstance(manifest, dict):
-        ev.fail("invalid_manifest", MANIFEST_PATH, "The manifest must be a JSON object.")
+        ev.fail(
+            "invalid_manifest",
+            MANIFEST_PATH,
+            f"The manifest must be a JSON object; found {_json_type(manifest)}.",
+        )
         return ev.findings
 
     generation = parse_timestamp(manifest.get("generatedAt"))
@@ -571,6 +615,7 @@ def _check_fhabs_source(
 def _check_outputs(ev: _Evaluation, manifest: dict, generation: Optional[Instant]) -> None:
     outputs = manifest.get("outputs")
     listed: List[tuple] = []
+    rejected = set()
     if isinstance(outputs, list):
         for index, entry in enumerate(outputs):
             pointer = f"{MANIFEST_PATH}#/outputs/{index}"
@@ -581,12 +626,14 @@ def _check_outputs(ev: _Evaluation, manifest: dict, generation: Optional[Instant
             if not isinstance(relative, str) or not relative:
                 ev.fail("invalid_output_path", pointer, "Manifest output is missing file.")
                 continue
-            if not is_safe_output_path(ev.root, relative):
+            if resolve_snapshot_file(ev.root, relative) is None:
+                rejected.add(relative)
                 ev.fail(
                     "invalid_output_path",
                     relative,
-                    "Manifest output file must name a JSON file directly inside data/ "
-                    "(forward slashes, no traversal or symlink escape); it was not read.",
+                    "Manifest output file must name a JSON file directly inside this checkout's data/ "
+                    "directory (forward slashes, no traversal, no symlink out of the checkout); "
+                    "it was not read.",
                 )
                 continue
             listed.append((relative, entry))
@@ -598,15 +645,22 @@ def _check_outputs(ev: _Evaluation, manifest: dict, generation: Optional[Instant
         ev.fail("invalid_manifest", f"{MANIFEST_PATH}#/outputs", "Manifest outputs must be a list.")
 
     # data/live.json is always compared with the manifest, once, whether or
-    # not the manifest lists it.
-    gap_files = list(dict.fromkeys([relative for relative, _ in listed] + [LIVE_PATH]))
+    # not the manifest lists it. A listed path already rejected as unsafe is
+    # not read or reported again.
+    gap_files = [relative for relative, _ in listed]
+    if LIVE_PATH not in rejected:
+        gap_files.append(LIVE_PATH)
     loaded = {}
-    for relative in gap_files:
+    for relative in dict.fromkeys(gap_files):
         data = ev.load_json(relative)
-        if data is None:
+        if data is _LOAD_FAILED:
             continue
         if not isinstance(data, dict):
-            ev.fail("invalid_output_data", relative, "Output file must contain a JSON object.")
+            ev.fail(
+                "invalid_output_data",
+                relative,
+                f"Output file must contain a JSON object; found {_json_type(data)}.",
+            )
             continue
         loaded[relative] = data
         stamp = parse_timestamp(data.get("generatedAt"))

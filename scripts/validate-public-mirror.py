@@ -260,10 +260,17 @@ def apply_shared_findings(state: ValidationState, as_of: Optional[object]) -> No
 
 
 def load_json_quietly(relative_path: Path) -> object | None:
-    # The shared evaluator reports missing or invalid snapshot JSON; this
-    # reader only supplies native shape checks.
+    # The shared evaluator reports missing, unsafe, or invalid snapshot JSON;
+    # this reader only supplies native shape checks. It reads only through the
+    # evaluator's resolver, so it never follows data/ outside the checkout.
+    resolve = getattr(public_mirror_common, "resolve_snapshot_file", None)
+    if not callable(resolve):
+        return None
+    resolved = resolve(PROJECT_ROOT, relative_path.as_posix())
+    if not isinstance(resolved, str):
+        return None
     try:
-        return json.loads(project_path(relative_path).read_text(encoding="utf-8"))
+        return json.loads(Path(resolved).read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, ValueError):
         return None
 

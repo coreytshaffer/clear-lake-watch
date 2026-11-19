@@ -520,6 +520,103 @@ class ManifestIntegrityTests(unittest.TestCase):
             self.assertNotIn(os.path.realpath(outside), _AUDIT["opened"])
 
 
+class NullJsonTests(unittest.TestCase):
+    def test_json_null_snapshot_files_fail(self) -> None:
+        for relative in SNAPSHOT_FILES:
+            code = "invalid_manifest" if relative == "data/manifest.json" else "invalid_output_data"
+            with self.subTest(file=relative), SnapshotFixture() as fx:
+                (fx.root / relative).write_text("null", encoding="utf-8")
+                self.assertIn(("failure", code, relative), keys(fx.check()))
+
+    def test_json_null_manifest_fails_the_command(self) -> None:
+        with SnapshotFixture(include_cli=True) as fx:
+            (fx.root / "data" / "manifest.json").write_text("null\n", encoding="utf-8")
+            result = fx.run_cli("--as-of", HISTORY_AS_OF)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertEqual(
+            [(f["severity"], f["code"], f["subject"]) for f in json.loads(result.stdout)["findings"]],
+            [("failure", "invalid_manifest", "data/manifest.json")],
+        )
+
+
+class ContainmentTests(unittest.TestCase):
+    """Snapshot files must resolve directly inside the checkout's own data/ directory."""
+
+    def outside_copy(self, fx: SnapshotFixture) -> Path:
+        outside = fx.base / "outside-data"
+        shutil.copytree(fx.root / "data", outside)
+        return outside
+
+    def symlink(self, link: Path, target: Path) -> None:
+        try:
+            link.symlink_to(target, target_is_directory=target.is_dir())
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+
+    def check_without_reading(self, fx: SnapshotFixture, outside: Path) -> list:
+        _AUDIT["opened"].clear()
+        _AUDIT["recording"] = True
+        try:
+            findings = keys(fx.check())
+        finally:
+            _AUDIT["recording"] = False
+        outside_real = os.path.realpath(outside)
+        read_outside = [p for p in _AUDIT["opened"] if p == outside_real or p.startswith(outside_real + os.sep)]
+        self.assertEqual(read_outside, [], "a file outside the checkout was opened")
+        return findings
+
+    def test_data_directory_symlink_outside_checkout_fails_unread(self) -> None:
+        with SnapshotFixture() as fx:
+            outside = self.outside_copy(fx)
+            shutil.rmtree(fx.root / "data")
+            self.symlink(fx.root / "data", outside)
+            findings = self.check_without_reading(fx, outside)
+        self.assertEqual(findings, [("failure", "unsafe_snapshot_path", "data/manifest.json")])
+
+    def test_manifest_symlink_outside_checkout_fails_unread(self) -> None:
+        with SnapshotFixture() as fx:
+            outside = self.outside_copy(fx)
+            (fx.root / "data" / "manifest.json").unlink()
+            self.symlink(fx.root / "data" / "manifest.json", outside / "manifest.json")
+            findings = self.check_without_reading(fx, outside)
+        self.assertEqual(findings, [("failure", "unsafe_snapshot_path", "data/manifest.json")])
+
+    def test_listed_live_symlink_outside_checkout_fails_unread_once(self) -> None:
+        with SnapshotFixture() as fx:
+            outside = self.outside_copy(fx)
+            (fx.root / "data" / "live.json").unlink()
+            self.symlink(fx.root / "data" / "live.json", outside / "live.json")
+            findings = self.check_without_reading(fx, outside)
+        self.assertEqual(
+            [k for k in findings if k[2] == "data/live.json"],
+            [("failure", "invalid_output_path", "data/live.json"), ("failure", "missing_output", "data/live.json")],
+        )
+
+    def test_unlisted_live_symlink_outside_checkout_fails_unread(self) -> None:
+        with SnapshotFixture() as fx:
+            outside = self.outside_copy(fx)
+            fx.edit(
+                "data/manifest.json",
+                lambda m: m.update(outputs=[o for o in m["outputs"] if o["file"] != "data/live.json"]),
+            )
+            (fx.root / "data" / "live.json").unlink()
+            self.symlink(fx.root / "data" / "live.json", outside / "live.json")
+            findings = self.check_without_reading(fx, outside)
+        self.assertEqual(
+            [k for k in findings if k[2] == "data/live.json"],
+            [("failure", "missing_output", "data/live.json"), ("failure", "unsafe_snapshot_path", "data/live.json")],
+        )
+
+    def test_symlinked_checkout_root_is_allowed(self) -> None:
+        # Containment is checked against the checkout's real path, so reaching
+        # the checkout itself through a symlink is not an escape.
+        with SnapshotFixture() as fx:
+            alias = fx.base / "alias"
+            self.symlink(alias, fx.root)
+            findings = keys(pmc.check_snapshot(alias, utc(HISTORY_AS_OF)))
+        self.assertEqual(findings, HISTORY_FINDINGS)
+
+
 class TimezoneDataTests(unittest.TestCase):
     def test_requirements_pin_matches_evaluator(self) -> None:
         lines = (REPO_ROOT / "requirements-public-mirror.txt").read_text(encoding="utf-8").splitlines()

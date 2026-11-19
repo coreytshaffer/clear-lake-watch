@@ -313,6 +313,28 @@ class SharedParityTests(EntryPointTestCase):
         if powershell is not None:
             self.assertIn("must not track excluded review/private/local artifact", powershell.stdout)
 
+    def test_json_null_snapshot_files_fail_in_both(self) -> None:
+        cases = {
+            "data/manifest.json": [("failure", "invalid_manifest", "data/manifest.json")],
+            "data/live.json": HISTORY + [("failure", "invalid_output_data", "data/live.json")],
+            "data/analytics.json": HISTORY + [("failure", "invalid_output_data", "data/analytics.json")],
+        }
+        for relative, expected in cases.items():
+            with self.subTest(file=relative):
+                checkout = self.scratch.new()
+                (checkout / relative).write_text("null\n", encoding="utf-8")
+                self.assert_parity(checkout, 1, expected)
+
+    def test_data_directory_outside_checkout_fails_in_both(self) -> None:
+        checkout = self.scratch.new()
+        outside = checkout.parent / f"{checkout.name}-outside-data"
+        shutil.move(str(checkout / "data"), str(outside))
+        try:
+            (checkout / "data").symlink_to(outside, target_is_directory=True)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"directory symlinks unavailable: {exc}")
+        self.assert_parity(checkout, 1, [("failure", "unsafe_snapshot_path", "data/manifest.json")])
+
     def test_missing_pinned_timezone_data_fails_in_both(self) -> None:
         checkout = self.scratch.new()
         evaluator = checkout / "scripts" / "public_mirror_common.py"

@@ -39,6 +39,8 @@ On Windows, install the prerequisite into the same Python that `python` resolves
 - Source `status`, `rowCount`, and `latestObservationDate` are present and internally consistent. A manifest whose status is `ok` cannot list a source that is not `ok`.
 - FHABS source entries include positive Clear Lake row counts, a real `resourceDate` no later than the snapshot generation day, and a non-negative whole-number `resourceAgeDays`.
 - Expected public outputs are listed in the manifest. Each output path must name a JSON file directly inside `data/`; any other path fails and is never read.
+- Every snapshot file the evaluator reads, including `data/manifest.json` and `data/live.json`, must resolve directly inside the checkout's own `data/` directory. A `data/` directory or file that is a symlink out of the checkout fails and is never read.
+- `data/manifest.json` and each output file must contain a JSON object; JSON `null` or any other value fails.
 - Manifest output `recordCount` values match the generated public files: live cards plus map markers, report records, observation records, normalized sites, and the three analytics arrays.
 - Manifest notes preserve the distinction between dashboard refresh time and source observation dates. This text check stays in the PowerShell validator.
 
@@ -82,10 +84,11 @@ The validator warns when the dashboard snapshot or a source observation date is 
 | `source_status_inconsistent` | failure | The manifest status is `ok` while a source is not. |
 | `invalid_row_count` / `invalid_clear_lake_row_count` | failure | A source row count is not a positive number. |
 | `invalid_fhabs_resource` | failure | An FHABS resource date or age is absent, invalid, after generation, or negative. |
-| `missing_output` / `invalid_output_path` | failure | An expected output is not listed, or a listed path is unsafe. |
+| `missing_output` / `invalid_output_path` | failure | An expected output is not listed, or a listed path is unsafe or resolves outside the checkout's `data/`. |
+| `unsafe_snapshot_path` | failure | `data/manifest.json`, or an unlisted `data/live.json`, resolves outside the checkout's `data/`; it was not read. |
 | `invalid_record_count` / `output_count_mismatch` | failure | A declared output count is not positive or does not match the file. |
 | `output_refresh_gap` | failure | An output was generated more than five minutes from the manifest. |
-| `missing_file` / `invalid_json` / `invalid_manifest` / `invalid_output_data` | failure | A snapshot file is missing, unreadable, or has the wrong structure. |
+| `missing_file` / `invalid_json` / `invalid_manifest` / `invalid_output_data` | failure | A snapshot file is missing, unreadable, or is not a JSON object (including JSON `null`). |
 | `timezone_data_unavailable` / `unsupported_python` | failure | The pinned `tzdata` or Python 3.11+ prerequisite is not met. |
 
 ## Scope Of Parity
