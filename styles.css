@@ -1300,6 +1300,11 @@ h2 {
   text-align: left;
 }
 
+.marker-card:focus-visible {
+  /* Leave room for the 3px outline and its 3px offset when scrolling to a card. */
+  scroll-margin-block: 6px;
+}
+
 .marker-card:hover,
 .marker-card.active {
   border-color: rgba(15, 108, 115, 0.5);
