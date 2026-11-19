@@ -1,15 +1,28 @@
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import sys
 from dataclasses import dataclass, field
-from datetime import date, datetime
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional, Sequence
 
+# Evaluation must not write: skip bytecode caches for the shared evaluator.
+sys.dont_write_bytecode = True
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
+try:
+    import public_mirror_common
+except Exception as exc:  # Any import problem must fail the gate, not crash it.
+    public_mirror_common = None
+    EVALUATOR_IMPORT_ERROR: Optional[str] = f"{type(exc).__name__}: {exc}"
+else:
+    EVALUATOR_IMPORT_ERROR = None
 
 REQUIRED_FILES = [
     Path(".nojekyll"),
@@ -77,13 +90,6 @@ TEXT_GUARDS = {
         "No unattended publication workflow is enabled",
         "The scheduled workflow must never publish",
     ],
-}
-
-EXPECTED_SOURCE_IDS = {
-    "usgs-lake-level",
-    "usgs-cole-creek-discharge",
-    "fhabs-bloom-reports",
-    "fhabs-results",
 }
 
 EXCLUDED_TRACKED_PATHS = [
@@ -163,11 +169,6 @@ def assert_text_guards(state: ValidationState) -> None:
                 )
 
 
-def parse_date_like(value: str) -> datetime:
-    normalized = value.replace("Z", "+00:00")
-    return datetime.fromisoformat(normalized)
-
-
 def load_tracked_files(state: ValidationState) -> set[str]:
     try:
         result = subprocess.run(
@@ -213,95 +214,65 @@ def assert_working_boundaries(state: ValidationState) -> None:
             )
 
 
-def assert_manifest_freshness(
-    state: ValidationState, manifest: dict, live_data: dict
-) -> None:
-    try:
-        manifest_generated_at = parse_date_like(str(manifest["generatedAt"]))
-        live_generated_at = parse_date_like(str(live_data["generatedAt"]))
-    except (KeyError, TypeError, ValueError) as exc:
-        state.fail(f"Unable to parse manifest or live snapshot timestamps: {exc}")
-        return
+SHARED_SEVERITIES = {"warning", "failure"}
 
-    gap_minutes = abs((manifest_generated_at - live_generated_at).total_seconds()) / 60
-    if gap_minutes > 5:
+
+def apply_shared_findings(state: ValidationState, as_of: Optional[object]) -> None:
+    """Run the shared snapshot evaluator and render its findings.
+
+    Each finding is rendered as ``[code] subject: message`` in the existing
+    warning or failure section. An unavailable or malformed evaluator fails.
+    """
+
+    if public_mirror_common is None:
         state.fail(
-            "Manifest and live snapshot appear to come from different refresh passes. "
-            f"Gap: {gap_minutes:.2f} minutes."
+            "Shared snapshot evaluator is unavailable (scripts/public_mirror_common.py): "
+            f"{EVALUATOR_IMPORT_ERROR}"
         )
-
-    max_source_age_days = int(manifest.get("sourceFreshnessMaxAgeDays", 14))
-    sources = manifest.get("sources")
-    if not isinstance(sources, list):
-        state.fail("Manifest sources must be a list.")
+        return
+    check_snapshot = getattr(public_mirror_common, "check_snapshot", None)
+    if not callable(check_snapshot) or as_of is None:
+        state.fail(
+            "Shared snapshot evaluator is incomplete: scripts/public_mirror_common.py must "
+            "provide parse_as_of(), utc_now(), and check_snapshot()."
+        )
+        return
+    try:
+        findings = list(check_snapshot(PROJECT_ROOT, as_of))
+    except Exception as exc:  # Fail closed on any evaluator error.
+        state.fail(f"Shared snapshot evaluator raised {type(exc).__name__}: {exc}")
         return
 
-    source_ids = {
-        source.get("id")
-        for source in sources
-        if isinstance(source, dict) and source.get("id")
-    }
-    missing_ids = sorted(EXPECTED_SOURCE_IDS - source_ids)
-    for source_id in missing_ids:
-        state.fail(f"Manifest is missing expected source: {source_id}")
+    rendered = []
+    for finding in findings:
+        values = [getattr(finding, name, None) for name in ("severity", "code", "subject", "message")]
+        if not all(isinstance(value, str) and value for value in values) or values[0] not in SHARED_SEVERITIES:
+            state.fail(f"Shared snapshot evaluator returned a malformed finding: {finding!r}")
+            return
+        rendered.append(values)
 
-    today = date.today()
-    snapshot_age_days = (today - manifest_generated_at.date()).days
-    if snapshot_age_days > max_source_age_days:
-        state.warn(
-            "Dashboard snapshot is "
-            f"{snapshot_age_days} days old, which exceeds "
-            f"sourceFreshnessMaxAgeDays={max_source_age_days}. "
-            "Keep static-snapshot language visible."
-        )
+    for severity, code, subject, message in rendered:
+        line = f"[{code}] {subject}: {message}"
+        if severity == "failure":
+            state.fail(line)
+        else:
+            state.warn(line)
 
-    if manifest.get("status") == "ok":
-        non_ok_sources = [
-            source.get("id", "unknown")
-            for source in sources
-            if isinstance(source, dict) and source.get("status") != "ok"
-        ]
-        if non_ok_sources:
-            state.fail(
-                "Manifest status is ok, but one or more sources are not ok: "
-                + ", ".join(non_ok_sources)
-            )
 
-    for source in sources:
-        if not isinstance(source, dict):
-            state.fail("Manifest source entry must be an object.")
-            continue
-        source_id = str(source.get("id", "unknown"))
-        status = source.get("status")
-        row_count = source.get("rowCount")
-        latest_observation = source.get("latestObservationDate")
-
-        if not status:
-            state.fail(f"Manifest source {source_id} is missing status.")
-        if not isinstance(row_count, (int, float)) or row_count <= 0:
-            state.fail(f"Manifest source {source_id} must have a positive rowCount.")
-        if not latest_observation:
-            state.fail(f"Manifest source {source_id} is missing latestObservationDate.")
-            continue
-
-        try:
-            latest_observation_date = parse_date_like(str(latest_observation)).date()
-        except ValueError:
-            latest_observation_date = datetime.fromisoformat(
-                f"{latest_observation}T00:00:00"
-            ).date()
-
-        age_days = (manifest_generated_at.date() - latest_observation_date).days
-        if age_days < 0:
-            state.fail(
-                f"Manifest source {source_id} has a latestObservationDate after "
-                "the manifest generatedAt."
-            )
-        elif age_days > max_source_age_days:
-            state.warn(
-                f"Manifest source {source_id} latest observation is {age_days} days "
-                "older than the dashboard snapshot; keep stale-source language visible."
-            )
+def load_json_quietly(relative_path: Path) -> object | None:
+    # The shared evaluator reports missing, unsafe, or invalid snapshot JSON;
+    # this reader only supplies native shape checks. It reads only through the
+    # evaluator's resolver, so it never follows data/ outside the checkout.
+    resolve = getattr(public_mirror_common, "resolve_snapshot_file", None)
+    if not callable(resolve):
+        return None
+    resolved = resolve(PROJECT_ROOT, relative_path.as_posix())
+    if not isinstance(resolved, str):
+        return None
+    try:
+        return json.loads(Path(resolved).read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError):
+        return None
 
 
 def assert_live_data_shape(state: ValidationState, live_data: dict) -> None:
@@ -340,7 +311,7 @@ def assert_reviewed_field_observations(state: ValidationState, reviewed_data: di
                 )
 
 
-def validate() -> ValidationState:
+def validate(as_of: Optional[object]) -> ValidationState:
     state = ValidationState()
     assert_required_files(state)
     assert_text_guards(state)
@@ -349,17 +320,15 @@ def validate() -> ValidationState:
     assert_tracked_boundaries(state, tracked_files)
     assert_working_boundaries(state)
 
-    manifest = read_json(Path("data/manifest.json"), state)
-    live_data = read_json(Path("data/live.json"), state)
+    apply_shared_findings(state, as_of)
+
+    live_data = load_json_quietly(Path("data/live.json"))
     reviewed_field_observations = read_json(
         Path("data/reviewed-field-observations.json"), state
     )
 
-    if isinstance(manifest, dict) and isinstance(live_data, dict):
-        assert_manifest_freshness(state, manifest, live_data)
+    if isinstance(live_data, dict):
         assert_live_data_shape(state, live_data)
-    else:
-        state.fail("Manifest or live snapshot JSON is missing required object structure.")
 
     if isinstance(reviewed_field_observations, dict):
         assert_reviewed_field_observations(state, reviewed_field_observations)
@@ -378,8 +347,47 @@ def emit_messages(messages: Iterable[str], label: str) -> None:
         print(f"  - {message}")
 
 
-def main() -> int:
-    state = validate()
+def parse_arguments(argv: Optional[Sequence[str]]) -> tuple[argparse.ArgumentParser, argparse.Namespace]:
+    parser = argparse.ArgumentParser(
+        description="Validate the Clear Lake Watch public mirror before review."
+    )
+    parser.add_argument(
+        "--as-of",
+        metavar="UTC_INSTANT",
+        help=(
+            "Evaluation clock for snapshot and source age, for example "
+            "2026-11-17T12:00:00Z. Defaults to one sample of the system UTC clock."
+        ),
+    )
+    return parser, parser.parse_args(argv)
+
+
+def resolve_clock(parser: argparse.ArgumentParser, as_of_text: Optional[str]) -> Optional[object]:
+    """Return one evaluation clock, or None when the evaluator cannot supply one.
+
+    An explicit clock must be a UTC instant ending in Z or +00:00; anything
+    else is an argument error (exit 2). Without one, the system UTC clock is
+    sampled once.
+    """
+
+    if public_mirror_common is None:
+        return None
+    if as_of_text is None:
+        utc_now = getattr(public_mirror_common, "utc_now", None)
+        return utc_now() if callable(utc_now) else None
+    parse_as_of = getattr(public_mirror_common, "parse_as_of", None)
+    if not callable(parse_as_of):
+        return None
+    try:
+        return parse_as_of(as_of_text)
+    except ValueError as exc:
+        parser.error(f"argument --as-of: {exc}")
+    return None
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    parser, args = parse_arguments(argv)
+    state = validate(resolve_clock(parser, args.as_of))
     emit_messages(state.warnings, "Warnings")
     emit_messages(state.failures, "Failures")
 

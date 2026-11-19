@@ -43,6 +43,10 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install validation prerequisites
+        shell: pwsh
+        run: python -m pip install -r requirements-public-mirror.txt
+
       - name: Create review artifact folder
         shell: pwsh
         run: New-Item -ItemType Directory -Path "$env:RUNNER_TEMP\formal-refresh" -Force | Out-Null

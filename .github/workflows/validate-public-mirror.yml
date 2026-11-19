@@ -20,16 +20,79 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install validation prerequisites
+        run: python -m pip install -r requirements-public-mirror.txt
+
       - name: Run cross-platform public mirror validator
         run: python scripts/validate-public-mirror.py
+
+      - name: Run shared snapshot evaluator tests
+        run: python -m unittest discover -s tests -p test_public_mirror_common.py
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
 
+      - name: Run validator entry-point tests
+        run: python -m unittest discover -s tests -p test_public_mirror_entrypoints.py
+
       - name: Run JavaScript regression tests
         run: node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs scripts/freshness-status.test.mjs
 
       - name: Run dashboard storage smoke check
         run: node scripts/dashboard-utils.smoke.mjs
+
+  validate-public-mirror-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install validation prerequisites
+        shell: pwsh
+        run: python -m pip install -r requirements-public-mirror.txt
+
+      - name: Require Windows PowerShell 5.1
+        shell: pwsh
+        run: |
+          $windowsPowerShell = Get-Command powershell.exe -CommandType Application -ErrorAction SilentlyContinue
+          if (-not $windowsPowerShell) {
+            throw "Windows PowerShell (powershell.exe) is required to verify the release gate."
+          }
+          $edition = "$(& powershell.exe -NoProfile -Command '$PSVersionTable.PSEdition')".Trim()
+          $version = "$(& powershell.exe -NoProfile -Command '$PSVersionTable.PSVersion.ToString()')".Trim()
+          Write-Host "Windows PowerShell $edition $version ($($windowsPowerShell.Source))"
+          if ($edition -ne "Desktop" -or $version -notmatch '^5\.1\.') {
+            throw "Expected Windows PowerShell Desktop 5.1, found: $edition $version"
+          }
+
+      - name: Run Python public mirror validator
+        shell: pwsh
+        run: python scripts\validate-public-mirror.py
+
+      - name: Run PowerShell public mirror validator
+        shell: pwsh
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mirror.ps1
+
+      - name: Run shared snapshot evaluator tests
+        shell: pwsh
+        run: python -m unittest discover -s tests -p test_public_mirror_common.py
+
+      - name: Run validator entry-point tests with Windows PowerShell
+        shell: pwsh
+        env:
+          CLW_POWERSHELL: powershell.exe
+          CLW_REQUIRE_POWERSHELL: "1"
+        run: python -m unittest discover -s tests -p test_public_mirror_entrypoints.py
