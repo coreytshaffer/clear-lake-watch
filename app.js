@@ -18,6 +18,7 @@ const summaryElement = document.querySelector("#summary");
 const liveSummaryElement = document.querySelector("#live-summary");
 const liveStatsElement = document.querySelector("#live-stats");
 const trendGridElement = document.querySelector("#trend-grid");
+const hydrologyObservationDatesElement = document.querySelector("#hydrology-observation-dates");
 const armSummaryElement = document.querySelector("#arm-summary");
 const lakeMapElement = document.querySelector("#lake-map");
 const mapDetailElement = document.querySelector("#map-detail");
@@ -2037,6 +2038,42 @@ const renderStats = (data) => {
   });
 };
 
+const renderHydrologyObservationDates = (hydrologySeries) => {
+  if (!hydrologyObservationDatesElement) {
+    return;
+  }
+
+  let firstDate = null;
+  let lastDate = null;
+
+  for (const series of hydrologySeries ?? []) {
+    for (const point of series?.points ?? []) {
+      const date = point?.date;
+      if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+          parseInstant(`${date}T00:00:00Z`) === null) {
+        continue;
+      }
+      if (firstDate === null || date < firstDate) {
+        firstDate = date;
+      }
+      if (lastDate === null || date > lastDate) {
+        lastDate = date;
+      }
+    }
+  }
+
+  let caption = "Observation dates unavailable.";
+  if (firstDate !== null) {
+    caption = formatDate(firstDate);
+    if (firstDate !== lastDate) {
+      caption += ` to ${formatDate(lastDate)}`;
+    }
+  }
+
+  hydrologyObservationDatesElement.textContent = caption;
+  hydrologyObservationDatesElement.hidden = false;
+};
+
 const renderLiveSnapshot = (liveData, shorelineData = null, siteReviewData = null) => {
   if (!liveStatsElement && !trendGridElement && !armSummaryElement && !lakeMapElement) {
     return;
@@ -2047,6 +2084,7 @@ const renderLiveSnapshot = (liveData, shorelineData = null, siteReviewData = nul
   armSummaryElement?.replaceChildren();
   recentLocationsElement?.replaceChildren();
   advisoryMixElement?.replaceChildren();
+  renderHydrologyObservationDates(liveData?.hydrologySeries);
 
   if (!liveData) {
     renderFreshnessBadge(null, { unavailable: true });

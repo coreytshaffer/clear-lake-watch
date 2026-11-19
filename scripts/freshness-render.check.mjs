@@ -2,7 +2,7 @@
 //
 // Serves this checkout on an ephemeral loopback port, loads the real
 // index.html/app.js in Chromium with a frozen page clock, substitutes only the
-// manifest and weather-context fixture paths, and asserts the rendered DOM.
+// fixture paths, and asserts the rendered DOM.
 // A separate context with the service worker enabled checks that the shipped
 // static cache includes the freshness module.
 //
@@ -243,6 +243,45 @@ const weatherAgeCase = (name, asOf, timezoneId, expectStale) => ({
   },
 });
 
+const hydrologyCases = () => {
+  const live = readJson(path.join(ROOT, "data", "live.json"));
+  const withPointDates = (pointDates) => ({
+    ...live,
+    hydrologySeries: live.hydrologySeries.map((series, index) => ({
+      ...series,
+      points: pointDates[index].map((date, pointIndex) => ({ date, value: pointIndex + 1 })),
+    })),
+  });
+
+  return [
+    ["Shipped hydrology dates", {}, "April 5, 2026 to May 3, 2026"],
+    ["Changed and unordered hydrology dates", {
+      live: withPointDates([["2026-06-06", "2026-06-02"], ["2026-06-09", "2026-06-05"]]),
+    }, "June 2, 2026 to June 9, 2026"],
+    ["Single valid hydrology date", {
+      live: withPointDates([["2026-02-30", "2026-03-04"], ["2026-03-04", "2026-03-13T00:00:00Z"]]),
+    }, "March 4, 2026"],
+    ["Hydrology dates absent", { live: withPointDates([[], []]) }, "Observation dates unavailable."],
+    ["Snapshot unavailable", { live: { status: 404 } }, "Observation dates unavailable."],
+  ].map(([name, substitutions, expectedCaption]) => ({
+    name,
+    asOf: T,
+    timezoneId: "America/Los_Angeles",
+    substitutions,
+    async verify({ hydrology }, check) {
+      check.ok(
+        hydrology.heading === "Hydrology Snapshot",
+        'hydrology heading: expected "Hydrology Snapshot", saw ' + JSON.stringify(hydrology.heading),
+      );
+      check.ok(
+        hydrology.visible && hydrology.caption === expectedCaption,
+        "hydrology caption: expected visible " + JSON.stringify(expectedCaption) +
+          ", saw " + JSON.stringify(hydrology),
+      );
+    },
+  }));
+};
+
 const buildCases = () => [
   weatherAgeCase("F01 one second before limit", ONE_SECOND_BEFORE_LIMIT, "Asia/Tokyo", false),
   weatherAgeCase("F01 exactly at limit", AT_LIMIT, "Asia/Tokyo", false),
@@ -456,6 +495,7 @@ const buildCases = () => [
       check.excludes(strip, "May 6, 2026", "snapshot strip");
     },
   },
+  ...hydrologyCases(),
 ];
 
 // ---------------------------------------------------------------------------
@@ -485,6 +525,7 @@ const substitute = async (context, origin, substitutions) => {
   const routes = {
     manifest: `${origin}/data/manifest.json`,
     weather: `${origin}/data/weather-context.json`,
+    live: `${origin}/data/live.json`,
   };
 
   for (const [key, body] of Object.entries(substitutions)) {
@@ -531,6 +572,16 @@ const runCase = async (browser, origin, testCase) => {
 
     const evidence = {
       pageClock: await page.evaluate(() => new Date().toISOString()),
+      hydrology: await page.evaluate(() => {
+        const heading = document.querySelector("#trend-grid")?.previousElementSibling?.querySelector("h2");
+        const caption = document.querySelector("#hydrology-observation-dates");
+
+        return {
+          heading: heading?.textContent.trim() ?? null,
+          caption: caption?.textContent.trim() ?? null,
+          visible: Boolean(caption?.getClientRects().length),
+        };
+      }),
       weatherCards: await cardsIn(page, "#weather-context-grid"),
       sourceCards: await cardsIn(page, "#source-status-grid"),
       stripCards: await cardsIn(page, "#snapshot-status-grid"),
