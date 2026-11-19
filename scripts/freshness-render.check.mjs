@@ -126,7 +126,7 @@ const cardsIn = (page, gridSelector) =>
       // Snapshot strip cards: label and value as separate fields.
       label: element.querySelector(".stat-label")?.textContent.replace(/\s+/g, " ").trim() ?? null,
       value:
-        element.querySelector(".snapshot-status-value")?.textContent.replace(/\s+/g, " ").trim() ??
+        element.querySelector(".snapshot-status-value, .stat-value")?.textContent.replace(/\s+/g, " ").trim() ??
         null,
     })),
   );
@@ -277,6 +277,41 @@ const hydrologyCases = () => {
         hydrology.visible && hydrology.caption === expectedCaption,
         "hydrology caption: expected visible " + JSON.stringify(expectedCaption) +
           ", saw " + JSON.stringify(hydrology),
+      );
+    },
+  }));
+};
+
+const catalogCases = () => {
+  const catalog = readJson(path.join(ROOT, "data", "sources.json"));
+  const extendedCatalog = {
+    ...catalog,
+    sources: [...catalog.sources, { ...catalog.sources[0], name: "Fixture-only source family" }],
+  };
+
+  return [
+    ["Shipped source catalog", {}, "8"],
+    ["Extended source catalog", { sources: extendedCatalog }, "9"],
+  ].map(([name, substitutions, expectedCount]) => ({
+    name,
+    asOf: T,
+    timezoneId: "America/Los_Angeles",
+    substitutions,
+    pagePath: "/project.html",
+    async verify({ summaryCards }, check) {
+      const families = summaryCards.find(({ label }) => label === "Catalogued source families");
+      const automated = summaryCards.find(({ label }) => label === "Automated public feeds");
+
+      check.ok(Boolean(families?.visible), 'catalog card: expected visible "Catalogued source families"');
+      check.ok(
+        families?.value === expectedCount,
+        "catalog count: expected " + expectedCount + ", saw " + (families?.value ?? "no value"),
+      );
+      check.ok(automated?.visible && automated.value === "2", "automated feed count: expected visible 2");
+      check.includes(automated?.text ?? "", "USGS hydrology and FHABS reports", "automated feed note");
+      check.ok(
+        !summaryCards.some(({ label }) => label === "Verified public feeds"),
+        'catalog card: unexpected "Verified public feeds" label',
       );
     },
   }));
@@ -496,6 +531,7 @@ const buildCases = () => [
     },
   },
   ...hydrologyCases(),
+  ...catalogCases(),
 ];
 
 // ---------------------------------------------------------------------------
@@ -526,6 +562,7 @@ const substitute = async (context, origin, substitutions) => {
     manifest: `${origin}/data/manifest.json`,
     weather: `${origin}/data/weather-context.json`,
     live: `${origin}/data/live.json`,
+    sources: `${origin}/data/sources.json`,
   };
 
   for (const [key, body] of Object.entries(substitutions)) {
@@ -560,15 +597,19 @@ const runCase = async (browser, origin, testCase) => {
     const page = await context.newPage();
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.clock.setFixedTime(new Date(testCase.asOf));
-    await page.goto(`${origin}/index.html`);
-    await page.waitForFunction(
-      () =>
-        document.querySelector("#weather-context-grid")?.children.length > 0 &&
-        document.querySelector("#source-status-grid")?.children.length > 0 &&
-        document.querySelector("#snapshot-status-grid")?.children.length > 0,
-      null,
-      { timeout: 15_000 },
-    );
+    await page.goto(origin + (testCase.pagePath ?? "/index.html"));
+    if (testCase.pagePath === "/project.html") {
+      await page.locator("#summary .stat-card").first().waitFor({ timeout: 15_000 });
+    } else {
+      await page.waitForFunction(
+        () =>
+          document.querySelector("#weather-context-grid")?.children.length > 0 &&
+          document.querySelector("#source-status-grid")?.children.length > 0 &&
+          document.querySelector("#snapshot-status-grid")?.children.length > 0,
+        null,
+        { timeout: 15_000 },
+      );
+    }
 
     const evidence = {
       pageClock: await page.evaluate(() => new Date().toISOString()),
@@ -585,6 +626,7 @@ const runCase = async (browser, origin, testCase) => {
       weatherCards: await cardsIn(page, "#weather-context-grid"),
       sourceCards: await cardsIn(page, "#source-status-grid"),
       stripCards: await cardsIn(page, "#snapshot-status-grid"),
+      summaryCards: await cardsIn(page, "#summary"),
       freshnessBadge: await page
         .$eval("#freshness-row .freshness-badge", (badge) => ({
           text: badge.textContent.replace(/\s+/g, " ").trim(),

@@ -2003,9 +2003,9 @@ const renderStats = (data) => {
 
   const statCards = [
     {
-      label: "Verified public feeds",
+      label: "Catalogued source families",
       value: `${data.sources.length}`,
-      note: "Core source families relevant to an initial public release.",
+      note: "Source families listed for the project.",
       badges: [{ label: "Public source", kind: "context" }],
     },
     {
