@@ -24,6 +24,7 @@ const mapDetailElement = document.querySelector("#map-detail");
 const markerListElement = document.querySelector("#marker-list");
 const mapAttributionElement = document.querySelector("#map-attribution");
 const mapReviewFilterElement = document.querySelector("#map-review-filter");
+const mapFilterStatusElement = document.querySelector("#map-filter-status");
 const registrySummaryElement = document.querySelector("#registry-summary");
 const mapReviewStatusElement = document.querySelector("#map-review-status");
 const siteReviewGridElement = document.querySelector("#site-review-grid");
@@ -71,6 +72,7 @@ const mapSrSummaryElement = document.querySelector("#map-sr-summary");
 const dataProductsSrSummaryElement = document.querySelector("#data-products-sr-summary");
 const analyticsSrSummaryElement = document.querySelector("#analytics-sr-summary");
 const themeToggleElement = document.querySelector("#theme-toggle");
+const themeStatusElement = document.querySelector("#theme-status");
 const themeColorMetaElement = document.querySelector('meta[name="theme-color"]');
 const navSectionLinks = Array.from(document.querySelectorAll("[data-section-link]"));
 
@@ -1006,6 +1008,20 @@ const setSelectedMarker = (
 
   if (moveFocus) {
     mapDetailElement.focus({ preventScroll: true });
+    const headingBounds = title.getBoundingClientRect();
+    const topClearance = Number.parseFloat(
+      getComputedStyle(mapDetailElement).scrollMarginTop,
+    );
+    if (
+      headingBounds.top < topClearance ||
+      headingBounds.bottom > window.innerHeight
+    ) {
+      mapDetailElement.scrollIntoView({
+        block: "start",
+        inline: "nearest",
+        behavior: "instant",
+      });
+    }
   }
 };
 
@@ -1085,6 +1101,16 @@ const drawLakeBase = (shoreline = null) => {
     });
     text.textContent = arm.label;
     lakeMapElement.append(text);
+    const { x, y, width, height } = text.getBBox();
+    const background = createSvgElement("rect", {
+      class: "map-arm-label-background",
+      x: x - 6,
+      y: y - 3,
+      width: width + 12,
+      height: height + 6,
+      rx: 6,
+    });
+    lakeMapElement.insertBefore(background, text);
   });
 };
 
@@ -1145,6 +1171,7 @@ const renderMapMarkers = (markers = [], shoreline = null) => {
       cx: x.toFixed(1),
       cy: y.toFixed(1),
       r: 7,
+      role: "button",
       tabindex: 0,
       "aria-label": `${marker.landmark}, ${marker.advisory}, ${marker.date}${isClipped ? ", projected to map edge" : ""}`,
     });
@@ -1197,21 +1224,26 @@ const filterMapMarkers = (markers = [], filterValue = "all") => {
   return markers;
 };
 
-const renderFilteredMapMarkers = () => {
+const renderFilteredMapMarkers = ({ announce = false } = {}) => {
   const filterValue = mapReviewFilterElement?.value ?? "all";
   const filteredMarkers = filterMapMarkers(currentMapMarkers, filterValue);
+  const emptyResult = filterValue !== "all" && filteredMarkers.length === 0;
+  const emptyMessage = "No mapped reports for this filter";
 
   renderMapMarkers(filteredMarkers, currentMapShoreline);
 
-  if (filterValue !== "all" && !filteredMarkers.length && markerListElement) {
+  if (emptyResult && markerListElement) {
     markerListElement.replaceChildren(
       createListItem({
-        title: "No mapped reports for this filter",
+        title: emptyMessage,
         tag: "0",
         body: "No current mapped reports match the selected review-status filter.",
         badges: [{ label: "Review filter", kind: "review" }],
       }),
     );
+  }
+  if (mapFilterStatusElement) {
+    mapFilterStatusElement.textContent = announce && emptyResult ? `${emptyMessage}.` : "";
   }
 };
 
@@ -1220,7 +1252,7 @@ const setupMapReviewFilter = () => {
     return;
   }
 
-  mapReviewFilterElement.addEventListener("change", renderFilteredMapMarkers);
+  mapReviewFilterElement.addEventListener("change", () => renderFilteredMapMarkers({ announce: true }));
 };
 
 const renderSiteRegistrySummary = (registry) => {
@@ -2248,11 +2280,11 @@ const renderMlCards = (mlRoadmap) => {
 
 const setTheme = (theme) => {
   document.documentElement.dataset.theme = theme;
-  themeToggleElement?.setAttribute("aria-pressed", `${theme === "dark"}`);
+  themeToggleElement?.removeAttribute("aria-pressed");
   themeColorMetaElement?.setAttribute("content", themeColors[theme] ?? themeColors.light);
 
   if (themeToggleElement) {
-    themeToggleElement.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+    themeToggleElement.textContent = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
   }
 
   try {
@@ -2276,6 +2308,9 @@ const setupThemeToggle = () => {
 
   themeToggleElement?.addEventListener("click", () => {
     setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    if (themeStatusElement) {
+      themeStatusElement.textContent = themeToggleElement.textContent;
+    }
   });
 };
 

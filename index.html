@@ -29,10 +29,11 @@
           <a href="./project.html">Project</a>
           <a href="./methodology.html">Methodology</a>
           <a href="./docs/clear-lake-watch-v0.1-evidence-summary.md">Portfolio</a>
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
-            Dark Mode
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-controls="theme-status">
+            Switch to dark mode
           </button>
         </div>
+        <span id="theme-status" class="sr-only" role="status"></span>
       </nav>
 
       <header class="hero">
@@ -49,14 +50,14 @@
             <a href="#live" class="button button-primary">View Public Snapshot</a>
             <a href="./methodology.html" class="button button-secondary">Read Methodology</a>
           </div>
-          <div class="reviewer-fast-path" aria-labelledby="reviewer-fast-path-heading">
+          <nav class="reviewer-fast-path" aria-labelledby="reviewer-fast-path-heading">
             <p class="panel-label" id="reviewer-fast-path-heading">Internship Reviewer Path</p>
             <div class="reviewer-fast-links">
               <a href="#live">1. Dashboard snapshot</a>
               <a href="https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md">2. Evidence summary</a>
               <a href="https://github.com/coreytshaffer/clear-lake-watch/blob/main/docs/reviewer-demo-notes.md">3. Reviewer demo notes</a>
             </div>
-          </div>
+          </nav>
         </div>
         <aside class="hero-panel">
           <p class="panel-label">MVP Shape</p>
@@ -310,6 +311,7 @@
               Use this filter to separate locally reviewed markers from
               provisional FHABS registry matches.
             </p>
+            <p class="sr-only" id="map-filter-status" role="status"></p>
           </div>
           <div class="map-layout">
             <div class="map-card">
@@ -317,7 +319,7 @@
                 id="lake-map"
                 class="lake-map"
                 viewBox="0 0 680 520"
-                role="img"
+                role="group"
                 aria-label="Clear Lake schematic map with recent FHABS report markers"
               ></svg>
               <div class="map-legend">
@@ -329,7 +331,7 @@
                 Shoreline fallback schematic. Public source attribution appears here when loaded.
               </p>
             </div>
-            <aside class="map-detail" id="map-detail" tabindex="-1" aria-live="polite">
+            <aside class="map-detail" id="map-detail" tabindex="-1">
               <p class="eyebrow">Selected Marker</p>
               <h3>Choose a marker</h3>
               <p>Select a map point to inspect its source date, advisory label, and estimated arm grouping.</p>
@@ -419,7 +421,7 @@
               <div class="chart-heading">
                 <p class="eyebrow">FHABS Reporting Activity</p>
                 <h3>Annual Clear Lake Report Counts</h3>
-                <div class="signal-row" aria-label="Chart signal type">
+                <div class="signal-row" role="group" aria-label="Chart signal type">
                   <span class="signal-badge signal-derived">Derived</span>
                   <span class="signal-badge signal-review">Reporting pattern</span>
                 </div>
@@ -434,7 +436,7 @@
               <div class="chart-heading">
                 <p class="eyebrow">FHABS Advisory Labels</p>
                 <h3>Most Common Reported Categories</h3>
-                <div class="signal-row" aria-label="Chart signal type">
+                <div class="signal-row" role="group" aria-label="Chart signal type">
                   <span class="signal-badge signal-derived">Derived</span>
                   <span class="signal-badge signal-review">Reporting pattern</span>
                 </div>
@@ -450,7 +452,7 @@
             <div class="chart-heading">
               <p class="eyebrow">Observation Coverage</p>
               <h3>Current Normalized Observation Series</h3>
-              <div class="signal-row" aria-label="Chart signal type">
+              <div class="signal-row" role="group" aria-label="Chart signal type">
                 <span class="signal-badge signal-observed">Observed</span>
                 <span class="signal-badge signal-derived">Coverage summary</span>
               </div>
