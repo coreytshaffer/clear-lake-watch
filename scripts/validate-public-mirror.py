@@ -57,6 +57,20 @@ REQUIRED_FILES = [
     Path("docs/scheduled-public-refresh-design.md"),
 ]
 
+REVIEWED_FIELD_OBSERVATIONS = Path("data/reviewed-field-observations.json")
+NATIVE_JSON_FILES = (
+    Path("data/sources.json"),
+    Path("data/sites.json"),
+    Path("data/site-review-summary.json"),
+    Path("data/lake-shoreline.json"),
+    Path("data/forecast-output.example.json"),
+    Path("data/field-microscopy-intake.example.json"),
+    REVIEWED_FIELD_OBSERVATIONS,
+    Path("data/weather-context.json"),
+    Path("data/weather-context.example.json"),
+    Path("manifest.webmanifest"),
+)
+
 EXCLUDED_TRACKED_PATHS = [
     "docs/private",
     "docs/review-screenshots",
@@ -96,26 +110,33 @@ def project_path(relative_path: Path) -> Path:
     return PROJECT_ROOT / relative_path
 
 
-def read_text(relative_path: Path, state: ValidationState) -> str:
-    path = project_path(relative_path)
+def read_json(relative_path: Path, state: ValidationState) -> dict | None:
+    relative = relative_path.as_posix()
     try:
-        return path.read_text(encoding="utf-8")
+        path = project_path(relative_path).resolve()
+    except (OSError, RuntimeError) as exc:
+        state.fail(f"Unable to resolve native path {relative}: {exc}")
+        return None
+    if not path.is_relative_to(PROJECT_ROOT):
+        state.fail(f"Unsafe native path {relative}: resolves outside the checkout.")
+        return None
+
+    try:
+        parsed = json.loads(path.read_text(encoding="utf-8-sig"))
     except FileNotFoundError:
-        state.fail(f"Missing required file: {relative_path.as_posix()}")
+        # The required-file check reports missing Python inputs. The Windows
+        # release gate also requires the native examples when absent.
+        return None
     except OSError as exc:
-        state.fail(f"Unable to read {relative_path.as_posix()}: {exc}")
-    return ""
-
-
-def read_json(relative_path: Path, state: ValidationState) -> object | None:
-    content = read_text(relative_path, state)
-    if not content:
+        state.fail(f"Unable to read {relative}: {exc}")
         return None
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError as exc:
-        state.fail(f"Invalid JSON in {relative_path.as_posix()}: {exc}")
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        state.fail(f"Invalid JSON in {relative}: {exc}")
         return None
+    if not isinstance(parsed, dict):
+        state.fail(f"{relative} must contain a JSON object.")
+        return None
+    return parsed
 
 
 def assert_required_files(state: ValidationState) -> None:
@@ -252,15 +273,18 @@ def assert_reviewed_field_observations(state: ValidationState, reviewed_data: di
         "latitude",
         "longitude",
     }
-    for record in records:
+    for index, record in enumerate(records):
+        if not isinstance(record, dict):
+            state.fail(f"Reviewed field observation records[{index}] must be a JSON object.")
+            continue
+        record_id = record.get("recordId", "unknown")
+        if record.get("qaStatus") != "approved-public":
+            state.fail(f"Reviewed public field observation {record_id} is not approved-public.")
+        if record.get("permissionToPublish") is not True:
+            state.fail(f"Reviewed public field observation {record_id} lacks permissionToPublish true.")
         serialized = json.dumps(record, sort_keys=True)
         for private_needle in private_needles:
             if private_needle in serialized:
-                record_id = (
-                    record.get("recordId", "unknown")
-                    if isinstance(record, dict)
-                    else "unknown"
-                )
                 state.fail(
                     "Reviewed public field observation "
                     f"{record_id} includes private or sensitive field: {private_needle}"
@@ -278,17 +302,13 @@ def validate(as_of: Optional[object]) -> ValidationState:
     apply_shared_findings(state, as_of)
 
     live_data = load_json_quietly(Path("data/live.json"))
-    reviewed_field_observations = read_json(
-        Path("data/reviewed-field-observations.json"), state
-    )
-
     if isinstance(live_data, dict):
         assert_live_data_shape(state, live_data)
 
-    if isinstance(reviewed_field_observations, dict):
-        assert_reviewed_field_observations(state, reviewed_field_observations)
-    else:
-        state.fail("Reviewed field observations JSON is missing required object structure.")
+    for relative_path in NATIVE_JSON_FILES:
+        document = read_json(relative_path, state)
+        if relative_path == REVIEWED_FIELD_OBSERVATIONS and document is not None:
+            assert_reviewed_field_observations(state, document)
 
     return state
 

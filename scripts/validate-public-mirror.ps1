@@ -28,6 +28,44 @@ function Resolve-ProjectPath {
   return Join-Path $projectRoot $RelativePath
 }
 
+function Resolve-NativeProjectPath {
+  param([string]$Path)
+
+  $separator = [System.IO.Path]::DirectorySeparatorChar
+  $rootPath = [System.IO.Path]::GetFullPath($projectRoot).TrimEnd(
+    $separator, [System.IO.Path]::AltDirectorySeparatorChar
+  )
+  $fullPath = [System.IO.Path]::GetFullPath($Path)
+  $comparison = if ($separator -eq '\') {
+    [System.StringComparison]::OrdinalIgnoreCase
+  } else {
+    [System.StringComparison]::Ordinal
+  }
+  $prefix = "$rootPath$separator"
+  if ($fullPath.Equals($rootPath, $comparison)) {
+    return $fullPath
+  }
+  if (-not $fullPath.StartsWith($prefix, $comparison)) {
+    throw "Unsafe native path $Path resolves outside the checkout."
+  }
+
+  # Inspect each component before walking into it. In Windows PowerShell 5.1
+  # GetFullPath normalizes the spelling but does not dereference junctions.
+  $current = $prefix
+  foreach ($part in ($fullPath.Substring($prefix.Length) -split '[\\/]+')) {
+    $current = Join-Path $current $part
+    try {
+      $item = Get-Item -LiteralPath $current -Force -ErrorAction Stop
+    } catch [System.Management.Automation.ItemNotFoundException] {
+      break
+    }
+    if ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+      throw "Unsafe native path $Path uses a link or reparse point inside the checkout."
+    }
+  }
+  return $fullPath
+}
+
 function Assert-FileExists {
   param([string]$RelativePath)
   if (-not (Test-Path -LiteralPath (Resolve-ProjectPath $RelativePath) -PathType Leaf)) {
@@ -94,7 +132,20 @@ function Read-JsonFile {
   param([string]$RelativePath)
 
   try {
-    return Get-Content -LiteralPath (Resolve-ProjectPath $RelativePath) -Raw | ConvertFrom-Json
+    $path = Resolve-NativeProjectPath (Resolve-ProjectPath $RelativePath)
+  } catch {
+    Add-Failure ("Unable to resolve {0}: {1}" -f $RelativePath, $_.Exception.Message)
+    return $null
+  }
+  try {
+    $content = Get-Content -LiteralPath $path -Raw -Encoding UTF8
+    # Windows PowerShell can unwrap an array when emitting its parsed value.
+    # Check the top-level token before conversion so arrays fail even with one object.
+    if ($content -notmatch '^\s*\{') {
+      Add-Failure "$RelativePath must contain a JSON object."
+      return $null
+    }
+    return ConvertFrom-Json -InputObject $content
   } catch {
     Add-Failure "Invalid JSON in $RelativePath`: $($_.Exception.Message)"
     return $null
@@ -431,11 +482,22 @@ function Test-ReviewedFieldObservations {
   Assert-TextContains -Text $qualityNotes -Needle "Private collector identity details" -Message "Reviewed field observations must preserve private collector exclusion."
   Assert-TextContains -Text $qualityNotes -Needle "separate source family" -Message "Reviewed field observations must remain separate from other source families."
 
-  foreach ($record in @($ReviewedFieldObservations.records)) {
-    if ($record.qaStatus -ne "approved-public") {
+  $records = $ReviewedFieldObservations.records
+  if ($records -isnot [System.Array]) {
+    Add-Failure "Reviewed field observations must expose a records list."
+    return
+  }
+
+  for ($index = 0; $index -lt $records.Count; $index++) {
+    $record = $records[$index]
+    if ($record -isnot [pscustomobject]) {
+      Add-Failure "Reviewed field observation records[$index] must be a JSON object."
+      continue
+    }
+    if ($record.qaStatus -isnot [string] -or $record.qaStatus -cne "approved-public") {
       Add-Failure "Reviewed public field observation $($record.recordId) is not approved-public."
     }
-    if ($record.permissionToPublish -ne $true) {
+    if ($record.permissionToPublish -isnot [bool] -or -not $record.permissionToPublish) {
       Add-Failure "Reviewed public field observation $($record.recordId) lacks permissionToPublish true."
     }
 
@@ -626,11 +688,12 @@ try {
     "manifest.webmanifest"
   )
 
+  $nativeJson = @{}
   foreach ($jsonFile in $jsonFiles) {
-    [void](Read-JsonFile $jsonFile)
+    $nativeJson[$jsonFile] = Read-JsonFile $jsonFile
   }
 
-  $manifest = Read-JsonFile "data\manifest.json"
+  $manifest = $nativeJson["data\manifest.json"]
   if ($manifest -and $manifest.interpretationNotes) {
     $joinedNotes = ($manifest.interpretationNotes -join " ")
     Assert-TextContains -Text $joinedNotes -Needle "not official public-health guidance" -Message "Manifest must preserve public-health boundary."
@@ -647,13 +710,13 @@ try {
     Assert-TextContains -Text $manifestNotesText -Needle "Observation dates may be older than the dashboard generation time" -Message "Manifest must preserve dashboard-refresh versus source-observation distinction."
   }
 
-  $weatherContext = Read-JsonFile "data\weather-context.json"
+  $weatherContext = $nativeJson["data\weather-context.json"]
   Test-WeatherContext -WeatherContext $weatherContext
 
-  $reviewedFieldObservations = Read-JsonFile "data\reviewed-field-observations.json"
+  $reviewedFieldObservations = $nativeJson["data\reviewed-field-observations.json"]
   Test-ReviewedFieldObservations -ReviewedFieldObservations $reviewedFieldObservations
 
-  $siteReviewSummary = Read-JsonFile "data\site-review-summary.json"
+  $siteReviewSummary = $nativeJson["data\site-review-summary.json"]
   if ($siteReviewSummary -and $siteReviewSummary.summary) {
     if ($siteReviewSummary.summary.needsLocalReview -gt 0) {
       Add-Warning "Some map markers still need local review; public map trust cues should remain conservative."
