@@ -1,25 +1,24 @@
 """Shared snapshot evaluator for the Clear Lake Watch public-mirror validators.
 
 Both public-mirror commands use this module for snapshot age, source
-observation age, and manifest integrity:
+observation age, manifest integrity, and file-backed text guards:
 
-- ``scripts/validate-public-mirror.py`` imports :func:`check_snapshot`.
+- ``scripts/validate-public-mirror.py`` imports the snapshot and text checks.
 - ``scripts/validate-public-mirror.ps1`` runs this file as an internal command
   and imports the JSON report it prints.
 
 Internal command::
 
-    python scripts/public_mirror_common.py [--as-of UTC_INSTANT]
+    python scripts/public_mirror_common.py [--as-of UTC_INSTANT] [--powershell-text-guards]
 
 It prints one JSON object, ``{"schema_version": 1, "findings": [...]}``, on
 stdout and exits 0 when no finding is a failure, 1 when at least one finding
 is a failure, and 2 for invalid arguments (reported on stderr). Without
 ``--as-of`` the evaluation clock is sampled once from the system UTC clock.
 
-Evaluation is offline and read-only. It reads only ``data/manifest.json``,
-``data/live.json``, and manifest outputs whose paths pass the safety check.
-Every read must resolve to a file directly inside the checkout's own
-``data/`` directory, so symlinks cannot redirect it outside the checkout. Calendar ages use Pacific calendar days
+Evaluation is offline and read-only. Snapshot reads resolve directly inside
+the checkout's own ``data/`` directory. File-backed text checks read the
+shared catalog and its selected files within the checkout. Ages use Pacific calendar days
 from the pinned ``tzdata`` package, never host time-zone data. A reviewed
 public mirror may be old: snapshot and source age produce warnings, while
 structural problems produce failures. See docs/source-freshness-validation.md
@@ -53,6 +52,7 @@ PACIFIC_ZONE_KEY = "America/Los_Angeles"
 PACIFIC_ZONE_RESOURCE = ("zoneinfo", "America", "Los_Angeles")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+TEXT_GUARD_CATALOG = "scripts/public-mirror-text-guards.json"
 MANIFEST_PATH = "data/manifest.json"
 LIVE_PATH = "data/live.json"
 AGE_LIMIT_FIELD = "sourceFreshnessMaxAgeDays"
@@ -113,6 +113,85 @@ class Finding:
     code: str
     subject: str
     message: str
+
+
+def _unique_catalog_fields(pairs: list[tuple[str, Any]]) -> dict:
+    fields = dict(pairs)
+    if len(fields) != len(pairs):
+        raise ValueError("Duplicate JSON field in the text guard catalog.")
+    return fields
+
+
+def _read_guard_text(root: Path, relative: str) -> str:
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root):
+        raise ValueError("Path resolves outside the checkout.")
+    return path.read_text(encoding="utf-8-sig")
+
+
+def _load_text_guards(root: Path, profile: str) -> dict[str, list[tuple[str, str]]]:
+    catalog = json.loads(
+        _read_guard_text(root, TEXT_GUARD_CATALOG), object_pairs_hook=_unique_catalog_fields
+    )
+    if not isinstance(catalog, dict) or not catalog:
+        raise ValueError("Expected a nonempty file-to-rules object.")
+
+    selected = {}
+    for relative, rules in catalog.items():
+        if not re.fullmatch(r"[A-Za-z0-9._/-]+", relative) or any(
+            part in {"", ".", ".."} for part in relative.split("/")
+        ):
+            raise ValueError(f"Invalid guard file path: {relative!r}.")
+        if not isinstance(rules, list) or not rules:
+            raise ValueError(f"{relative}: expected a nonempty list of rules.")
+
+        seen = set()
+        for rule in rules:
+            if not isinstance(rule, dict) or rule.keys() - {"text", "python", "powershell"}:
+                raise ValueError(f"{relative}: invalid text guard fields.")
+            literal = rule.get("text")
+            if not isinstance(literal, str) or not literal.strip() or literal in seen:
+                raise ValueError(f"{relative}: missing or duplicated required text.")
+            seen.add(literal)
+
+            powershell = rule.get("powershell")
+            if "python" in rule and rule["python"] is not True:
+                raise ValueError(f"{relative}: python must be true when supplied.")
+            if "powershell" in rule and (not isinstance(powershell, str) or not powershell.strip()):
+                raise ValueError(f"{relative}: powershell must contain a failure message.")
+            if "python" not in rule and "powershell" not in rule:
+                raise ValueError(f"{relative}: text guard must apply to at least one validator.")
+
+            if profile in rule:
+                message = powershell if profile == "powershell" else (
+                    f"{relative} is missing required text: {literal}"
+                )
+                selected.setdefault(relative, []).append((literal, message))
+
+    if not selected:
+        raise ValueError(f"No required-text guards for {profile}.")
+    return selected
+
+
+def check_text_guards(root: Path, profile: str) -> list[Finding]:
+    """Apply the exact file-backed text rules for one validator."""
+    root = root.resolve()
+    try:
+        selected = _load_text_guards(root, profile)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return [Finding(FAILURE, "guard_catalog_invalid", TEXT_GUARD_CATALOG, str(exc))]
+
+    findings = []
+    for relative, rules in selected.items():
+        try:
+            text = _read_guard_text(root, relative)
+        except (OSError, ValueError, RuntimeError) as exc:
+            findings.append(Finding(FAILURE, "guard_file_unreadable", relative, f"Unable to read: {exc}"))
+            continue
+        for literal, message in rules:
+            if literal not in text:
+                findings.append(Finding(FAILURE, "required_text_missing", relative, message))
+    return findings
 
 
 @dataclass(frozen=True)
@@ -725,9 +804,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         metavar="UTC_INSTANT",
         help="Evaluation clock, for example 2026-11-17T12:00:00Z. Defaults to one sample of the system UTC clock.",
     )
+    parser.add_argument("--powershell-text-guards", action="store_true")
     args = parser.parse_args(argv)
     as_of = args.as_of if args.as_of is not None else utc_now()
     findings = check_snapshot(PROJECT_ROOT, as_of)
+    if args.powershell_text_guards:
+        findings = check_text_guards(PROJECT_ROOT, "powershell") + findings
     sys.stdout.write(json.dumps(findings_report(findings), ensure_ascii=True, separators=(",", ":")) + "\n")
     return 1 if has_failure(findings) else 0
 

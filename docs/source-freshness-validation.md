@@ -93,7 +93,15 @@ The validator warns when the dashboard snapshot or a source observation date is 
 
 ## Scope Of Parity
 
-For the same checkout and clock, both commands report the same shared findings, compared by severity, code, and subject, and the same exit status from those findings. Each command still runs its own native checks, so either may report more. The PowerShell validator remains the stronger Windows release gate: it adds internal-link checks, weather-context structure and wording, reviewed-record approval and permission, the manifest note guard, and the storage smoke check. The required-text guards remain separate in each command for now.
+For the same checkout and clock, both commands report the same snapshot and manifest findings, compared by severity, code, and subject. Each command also runs its assigned text guards and native checks. The PowerShell validator remains the stronger Windows release gate: it adds internal-link checks, weather-context structure and wording, reviewed-record approval and permission, the manifest note guard, and the storage smoke check.
+
+The shared catalog lives at [`scripts/public-mirror-text-guards.json`](../scripts/public-mirror-text-guards.json).
+Each file lists exact, case-sensitive text. The `python` flag applies a rule
+to the Python command, and a `powershell` message applies it to the PowerShell
+command. A rule can carry both fields. Both commands fail when the catalog is
+missing or invalid, when a selected file cannot be read within the checkout,
+or when selected text is absent. The native PowerShell text checks on parsed
+JSON fields still run at their existing call sites.
 
 `tests/test_public_mirror_common.py` covers the evaluator, and `tests/test_public_mirror_entrypoints.py` compares both commands in scratch checkouts. CI runs both suites on Linux, and on Windows with Windows PowerShell 5.1. The historical replay cases use a pinned copy of the May 5, 2026 snapshot in `tests/fixtures/public-mirror-2026-05-05/`, so a reviewed refresh of `data/` needs no test edits.
 
