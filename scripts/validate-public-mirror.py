@@ -57,41 +57,6 @@ REQUIRED_FILES = [
     Path("docs/scheduled-public-refresh-design.md"),
 ]
 
-TEXT_GUARDS = {
-    Path("README.md"): [
-        "late-prototype / early-MVP",
-        "not official public-health guidance",
-        "static reviewed snapshot generated on May 5, 2026",
-        "not live lake conditions",
-        "docs/public-snapshot-release-note-2026-05-13.md",
-    ],
-    Path("index.html"): [
-        "late prototype / early MVP",
-        "Public Data Snapshot, Not Advisory Guidance",
-        "What The Public Snapshot Files Are Showing",
-    ],
-    Path("project.html"): [
-        "late prototype / early MVP",
-        "not official public-health guidance",
-    ],
-    Path("methodology.html"): [
-        "not official public-health direction",
-    ],
-    Path("docs/public-snapshot-release-note-2026-05-13.md"): [
-        "Snapshot generated: May 5, 2026",
-        "not official public-health guidance",
-        "Static Snapshot Age Cue",
-    ],
-    Path("docs/reviewer-demo-notes.md"): [
-        "static portfolio evidence, not current conditions",
-        "not official public-health guidance",
-    ],
-    Path("docs/scheduled-public-refresh-design.md"): [
-        "No unattended publication workflow is enabled",
-        "The scheduled workflow must never publish",
-    ],
-}
-
 EXCLUDED_TRACKED_PATHS = [
     "docs/private",
     "docs/review-screenshots",
@@ -159,16 +124,6 @@ def assert_required_files(state: ValidationState) -> None:
             state.fail(f"Missing required file: {relative_path.as_posix()}")
 
 
-def assert_text_guards(state: ValidationState) -> None:
-    for relative_path, needles in TEXT_GUARDS.items():
-        text = read_text(relative_path, state)
-        for needle in needles:
-            if needle not in text:
-                state.fail(
-                    f"{relative_path.as_posix()} is missing required text: {needle}"
-                )
-
-
 def load_tracked_files(state: ValidationState) -> set[str]:
     try:
         result = subprocess.run(
@@ -218,10 +173,10 @@ SHARED_SEVERITIES = {"warning", "failure"}
 
 
 def apply_shared_findings(state: ValidationState, as_of: Optional[object]) -> None:
-    """Run the shared snapshot evaluator and render its findings.
+    """Run the shared snapshot and required-text checks.
 
-    Each finding is rendered as ``[code] subject: message`` in the existing
-    warning or failure section. An unavailable or malformed evaluator fails.
+    Keep the original wording of missing-text failures. An unavailable
+    or malformed evaluator fails the gate.
     """
 
     if public_mirror_common is None:
@@ -231,14 +186,15 @@ def apply_shared_findings(state: ValidationState, as_of: Optional[object]) -> No
         )
         return
     check_snapshot = getattr(public_mirror_common, "check_snapshot", None)
-    if not callable(check_snapshot) or as_of is None:
+    check_text_guards = getattr(public_mirror_common, "check_text_guards", None)
+    if not callable(check_snapshot) or not callable(check_text_guards) or as_of is None:
         state.fail(
             "Shared snapshot evaluator is incomplete: scripts/public_mirror_common.py must "
-            "provide parse_as_of(), utc_now(), and check_snapshot()."
+            "provide parse_as_of(), utc_now(), check_snapshot(), and check_text_guards()."
         )
         return
     try:
-        findings = list(check_snapshot(PROJECT_ROOT, as_of))
+        findings = [*check_text_guards(PROJECT_ROOT, "python"), *check_snapshot(PROJECT_ROOT, as_of)]
     except Exception as exc:  # Fail closed on any evaluator error.
         state.fail(f"Shared snapshot evaluator raised {type(exc).__name__}: {exc}")
         return
@@ -252,7 +208,7 @@ def apply_shared_findings(state: ValidationState, as_of: Optional[object]) -> No
         rendered.append(values)
 
     for severity, code, subject, message in rendered:
-        line = f"[{code}] {subject}: {message}"
+        line = message if code == "required_text_missing" else f"[{code}] {subject}: {message}"
         if severity == "failure":
             state.fail(line)
         else:
@@ -314,7 +270,6 @@ def assert_reviewed_field_observations(state: ValidationState, reviewed_data: di
 def validate(as_of: Optional[object]) -> ValidationState:
     state = ValidationState()
     assert_required_files(state)
-    assert_text_guards(state)
 
     tracked_files = load_tracked_files(state)
     assert_tracked_boundaries(state, tracked_files)

@@ -126,6 +126,117 @@ def setUpModule() -> None:
     fixtures.verify_fixture()
 
 
+class TextGuardTests(unittest.TestCase):
+    def setUp(self) -> None:
+        temp = tempfile.TemporaryDirectory(prefix="clw-text-guards-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name) / "checkout"
+        self.catalog = self.root / pmc.TEXT_GUARD_CATALOG
+        self.catalog.parent.mkdir(parents=True)
+        self.git("init", "--quiet")
+
+    def git(self, *args: str) -> None:
+        subprocess.run(["git", "-c", "core.autocrlf=false", *args], cwd=self.root, check=True)
+
+    def write_catalog(self, rules: dict) -> None:
+        self.catalog.write_text(json.dumps(rules), encoding="utf-8")
+        self.git("add", "--", pmc.TEXT_GUARD_CATALOG)
+
+    def test_text_rules_are_literal_case_sensitive_and_keep_validator_profiles(self) -> None:
+        self.write_catalog(
+            {"README.md": [
+                {"text": "Exact [phrase]", "python": True, "powershell": "Keep the exact phrase."},
+                {"text": "Python only", "python": True},
+                {"text": "PowerShell only", "powershell": "Keep PowerShell-only text."},
+            ]}
+        )
+        doc = self.root / "README.md"
+        doc.write_text("Exact [phrase]\nPython only\nPowerShell only", encoding="utf-8-sig")
+        self.git("add", "--", "README.md")
+        self.assertEqual(pmc.check_text_guards(self.root, "python"), [])
+        self.assertEqual(pmc.check_text_guards(self.root, "powershell"), [])
+
+        doc.write_text("exact [phrase]\nPowerShell only", encoding="utf-8")
+        python = pmc.check_text_guards(self.root, "python")
+        powershell = pmc.check_text_guards(self.root, "powershell")
+        self.assertEqual(codes(python), ["required_text_missing", "required_text_missing"])
+        self.assertEqual(
+            [finding.message for finding in python],
+            ["README.md is missing required text: Exact [phrase]", "README.md is missing required text: Python only"],
+        )
+        self.assertEqual(
+            powershell,
+            [pmc.Finding("failure", "required_text_missing", "README.md", "Keep the exact phrase.")],
+        )
+
+    def test_missing_guarded_file_yields_one_failure(self) -> None:
+        self.write_catalog(
+            {"README.md": [{"text": "one", "python": True}, {"text": "two", "python": True}]}
+        )
+        doc = self.root / "README.md"
+        doc.write_text("one\ntwo", encoding="utf-8")
+        self.git("add", "--", "README.md")
+        doc.unlink()
+        self.assertEqual(
+            keys(pmc.check_text_guards(self.root, "python")),
+            [("failure", "guard_file_unreadable", "README.md")],
+        )
+
+    def test_missing_or_invalid_catalog_fails(self) -> None:
+        expected = [("failure", "guard_catalog_invalid", pmc.TEXT_GUARD_CATALOG)]
+        self.assertEqual(keys(pmc.check_text_guards(self.root, "python")), expected)
+        self.write_catalog({"README.md": [{"text": "one", "python": True}]})
+        for catalog in (
+            "{broken",
+            "{}",
+            '{"../README.md":[{"text":"one","python":true}]}',
+            '{"README.md":[{"text":"one","python":true},{"text":"one","powershell":"message"}]}',
+            '{"README.md":[{"text":"one","python":true,"python":true}]}',
+            '{"README.md":[{"text":"one","python":true,"powershell":null}]}',
+            '{"README.md":[{"text":"one","powershell":"message"}]}',
+        ):
+            with self.subTest(catalog=catalog):
+                self.catalog.write_text(catalog, encoding="utf-8")
+                self.assertEqual(keys(pmc.check_text_guards(self.root, "python")), expected)
+
+    def test_tracked_private_guard_file_is_not_opened(self) -> None:
+        relative = "docs/private/test-only.md"
+        self.write_catalog({relative: [{"text": "one", "python": True}]})
+        private_doc = self.root / relative
+        private_doc.parent.mkdir(parents=True)
+        private_doc.write_text("one", encoding="utf-8")
+        self.git("add", "--", relative)
+        self.assert_guard_rejected_before_read(relative, private_doc)
+
+    def test_guarded_file_outside_checkout_is_not_opened(self) -> None:
+        self.assert_guard_link_rejected(self.root.parent / "outside.md")
+
+    def test_guard_link_to_untracked_checkout_file_is_not_opened(self) -> None:
+        self.assert_guard_link_rejected(self.root / "untracked.md")
+
+    def assert_guard_link_rejected(self, target: Path) -> None:
+        self.write_catalog({"README.md": [{"text": "one", "python": True}]})
+        guard = self.root / "README.md"
+        guard.write_text("one", encoding="utf-8")
+        self.git("add", "--", "README.md")
+        guard.unlink()
+        target.write_text("one", encoding="utf-8")
+        try:
+            guard.symlink_to(target)
+        except OSError as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+        self.assert_guard_rejected_before_read("README.md", target)
+
+    def assert_guard_rejected_before_read(self, relative: str, target: Path) -> None:
+        _AUDIT.update(recording=True, opened=[])
+        try:
+            findings = pmc.check_text_guards(self.root, "python")
+        finally:
+            _AUDIT["recording"] = False
+        self.assertEqual(keys(findings), [("failure", "guard_file_unreadable", relative)])
+        self.assertNotIn(os.path.realpath(target), _AUDIT["opened"])
+
+
 class ReviewedHistoryTests(unittest.TestCase):
     def test_reviewed_history_warns_without_failing(self) -> None:
         with SnapshotFixture() as fx:

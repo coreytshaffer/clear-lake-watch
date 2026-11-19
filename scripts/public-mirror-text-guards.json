@@ -1,0 +1,333 @@
+{
+  "README.md": [
+    {"text": "Weather context is a reviewed public-source snapshot and remains separate from lake-health interpretation.", "powershell": "README must describe weather context as reviewed public-source context."},
+    {"text": "docs/official-method-source-spine.md", "powershell": "README must link the official method source spine."},
+    {"text": "docs/public-backlog.md", "powershell": "README must link the public backlog."},
+    {"text": "docs/public-snapshot-release-note-2026-05-13.md", "python": true, "powershell": "README must link the public snapshot release note."},
+    {"text": "docs/reviewer-demo-notes.md", "powershell": "README must link the reviewer demo notes."},
+    {"text": "docs/secchi-depth-clarity-mentor-review-protocol.md", "powershell": "README must link the Secchi mentor-review protocol."},
+    {"text": "docs/secchi-mentor-review-handoff.md", "powershell": "README must link the Secchi mentor-review handoff."},
+    {"text": "docs/site-registry-trust-review-pass-001.md", "powershell": "README must link the site-registry review pass."},
+    {"text": "late-prototype / early-MVP", "python": true, "powershell": "README must preserve maturity language."},
+    {"text": "not live lake conditions", "python": true},
+    {"text": "not official public-health guidance", "python": true, "powershell": "README must preserve public-health boundary."},
+    {"text": "not part of this public mirror branch", "powershell": "README must explain that private review materials are excluded."},
+    {"text": "static reviewed snapshot generated on May 5, 2026", "python": true}
+  ],
+  "app.js": [
+    {"text": "./scripts/dashboard-utils.js", "powershell": "App must import shared dashboard utilities."},
+    {"text": "Latest Clear Lake FHABS report", "powershell": "App must expose FHABS report freshness in the status strip."},
+    {"text": "Latest FHABS lab-linked sample", "powershell": "App must expose FHABS lab-result freshness in the status strip."},
+    {"text": "before site or arm assignments should be treated as authoritative", "powershell": "App must preserve map-review caution language."},
+    {"text": "renderSnapshotStatusStrip", "powershell": "App must render the snapshot status strip."},
+    {"text": "site-review-summary.json", "powershell": "App must consume public site-review summary."}
+  ],
+  "docs/accessibility-review.md": [
+    {"text": "Accessibility Review", "powershell": "Accessibility review must include its title."},
+    {"text": "Screenshot descriptions", "powershell": "Accessibility review must discuss screenshot descriptions."},
+    {"text": "browser-accessibility-interaction-pass-2026-05-28.md", "powershell": "Accessibility review must link the browser interaction pass."},
+    {"text": "data-table equivalents", "powershell": "Accessibility review must preserve chart and map nonvisual follow-up."},
+    {"text": "descriptive link text", "powershell": "Accessibility review must discuss descriptive link text."},
+    {"text": "not official public-health guidance", "powershell": "Accessibility review must preserve public-health boundary."},
+    {"text": "reviewer-readiness pass", "powershell": "Accessibility review must preserve narrow pass status."}
+  ],
+  "docs/browser-accessibility-interaction-pass-2026-05-28.md": [
+    {"text": "Browser Accessibility Interaction Pass - 2026-05-28", "powershell": "Browser accessibility pass must include its title."},
+    {"text": "Data QA notices", "powershell": "Browser accessibility pass must record notification-control coverage."},
+    {"text": "Skip to dashboard content", "powershell": "Browser accessibility pass must record skip-link coverage."},
+    {"text": "data-table equivalents", "powershell": "Browser accessibility pass must preserve chart and map nonvisual follow-up."},
+    {"text": "map trust filter", "powershell": "Browser accessibility pass must record map interaction coverage."},
+    {"text": "not official public-health guidance", "powershell": "Browser accessibility pass must preserve public-health boundary."},
+    {"text": "reviewer-readiness browser interaction pass", "powershell": "Browser accessibility pass must preserve narrow pass status."}
+  ],
+  "docs/career-services-handoff-packet.md": [
+    {"text": "Career Services Handoff Packet", "powershell": "Career Services handoff packet must include its title."},
+    {"text": "Dashboard anatomy review guide", "powershell": "Career Services handoff packet must point to the dashboard anatomy guide."},
+    {"text": "Resume Placement", "powershell": "Career Services handoff packet must include resume placement guidance."},
+    {"text": "Short Email Before An Appointment", "powershell": "Career Services handoff packet must include pre-appointment email language."},
+    {"text": "not official public-health guidance", "powershell": "Career Services handoff packet must preserve public-health boundary."},
+    {"text": "project-delivery-ehs.md", "powershell": "Career Services handoff packet must point to the project delivery and EHS positioning aid."}
+  ],
+  "docs/county-gis-public-use-check.md": [
+    {"text": "OpenStreetMap-derived", "powershell": "County GIS public-use check must keep OSM as current public geometry."},
+    {"text": "Terms allow redistribution of derived coordinate JSON", "powershell": "County GIS public-use check must require derived-JSON reuse verification."},
+    {"text": "data/private/county-gis/", "powershell": "County GIS public-use check must keep local review files outside the public mirror."},
+    {"text": "keep county-derived candidate JSON out of the public mirror", "powershell": "County GIS public-use check must name the fallback if terms cannot be verified."},
+    {"text": "needs verification before public promotion", "powershell": "County GIS public-use check must block promotion until terms are verified."}
+  ],
+  "docs/dashboard-anatomy-review-guide.md": [
+    {"text": "Dashboard Anatomy Review Guide", "powershell": "Dashboard anatomy guide must include its title."},
+    {"text": "Open-App Data QA Notices", "powershell": "Dashboard anatomy guide must explain data QA notices."},
+    {"text": "What This Project Demonstrates", "powershell": "Dashboard anatomy guide must explain the portfolio demonstration section."},
+    {"text": "not official public-health guidance", "powershell": "Dashboard anatomy guide must preserve public-health boundary."}
+  ],
+  "docs/field-microscopy-intake-contract.md": [
+    {"text": "Only `approved-public` records with `permissionToPublish: true`", "powershell": "Field microscopy contract must preserve public export permission rule."},
+    {"text": "field-microscopy-review-workflow.md", "powershell": "Field microscopy contract must link the review workflow."}
+  ],
+  "docs/field-microscopy-review-workflow.md": [
+    {"text": "It is not public-health guidance", "powershell": "Field microscopy workflow must preserve public-health boundary."},
+    {"text": "It must not include", "powershell": "Field microscopy workflow must define public export exclusions."},
+    {"text": "No public submission form is enabled", "powershell": "Field microscopy workflow must preserve no-public-form boundary."},
+    {"text": "Only `approved-public` records with `permissionToPublish: true`", "powershell": "Field microscopy workflow must preserve approved-public export gate."},
+    {"text": "The current public export is `not-connected`", "powershell": "Field microscopy workflow must preserve current public export state."},
+    {"text": "collector name or contact details", "powershell": "Field microscopy workflow must identify private collector details."}
+  ],
+  "docs/field-validation-plan.md": [
+    {"text": "Calibration And QA/QC Questions", "powershell": "Field validation plan must document calibration and QA/QC questions."},
+    {"text": "Field Validation Plan", "powershell": "Field validation plan must include its title."},
+    {"text": "Keep the Secchi depth / clarity protocol mentor-review-only for now.", "powershell": "Field validation plan must preserve the mentor-review-only Secchi decision."},
+    {"text": "Public Export Gate", "powershell": "Field validation plan must define a public export gate."},
+    {"text": "Which Lake County QAPP, EPA, SWAMP/CEDEN, or lab method should govern the written protocol?", "powershell": "Field validation plan must ask source-anchor mentor review question."},
+    {"text": "field-microscopy-review-workflow.md", "powershell": "Field validation plan must link the field/microscopy review workflow."},
+    {"text": "not official public-health guidance", "powershell": "Field validation plan must preserve public-health boundary."},
+    {"text": "official-method-source-spine.md", "powershell": "Field validation plan must link the official method source spine."},
+    {"text": "secchi-depth-clarity-mentor-review-protocol.md", "powershell": "Field validation plan must link the Secchi mentor-review protocol."},
+    {"text": "weather-context-contract.md", "powershell": "Field validation plan must link the weather context contract."}
+  ],
+  "docs/internship-review-start-here.md": [
+    {"text": "Copy-Paste Internship Outreach Blurb", "powershell": "Internship review start-here doc must include outreach language."},
+    {"text": "Internship Review Start Here", "powershell": "Internship review start-here doc must include its title."},
+    {"text": "Open These 3 Links First", "powershell": "Internship review start-here doc must include the three-link path."},
+    {"text": "not official public-health guidance", "powershell": "Internship review start-here doc must preserve public-health boundary."},
+    {"text": "water quality, GIS, watershed planning, environmental monitoring, climate resilience, or environmental data systems", "powershell": "Internship review start-here doc must state target internship areas."}
+  ],
+  "docs/maintenance-file-split-2026-05-28.md": [
+    {"text": "Maintenance File Split - 2026-05-28", "powershell": "Maintenance split note must include its title."},
+    {"text": "not official public-health guidance", "powershell": "Maintenance split note must preserve public-health boundary."},
+    {"text": "refresh-live-data.ps1 -DryRun", "powershell": "Maintenance split note must record refresh dry-run verification."},
+    {"text": "scripts/dashboard-utils.js", "powershell": "Maintenance split note must record dashboard utility extraction."},
+    {"text": "scripts/public-mirror-link-validation.ps1", "powershell": "Maintenance split note must record validator helper extraction."},
+    {"text": "scripts/refresh-live-data.utilities.ps1", "powershell": "Maintenance split note must record refresh helper extraction."}
+  ],
+  "docs/manual-refresh-dry-run-2026-05-28.md": [
+    {"text": "Manual Refresh Dry Run - 2026-05-28", "powershell": "Manual refresh dry-run note must include its title."},
+    {"text": "completed local dry-run rehearsal", "powershell": "Manual refresh dry-run note must record completion status."},
+    {"text": "not publish a new snapshot", "powershell": "Manual refresh dry-run note must preserve publication boundary."},
+    {"text": "the files above were not written", "powershell": "Manual refresh dry-run note must state that public JSON files were not written."}
+  ],
+  "docs/mobile-reviewer-path-review.md": [
+    {"text": "390px, 360px, and 320px", "powershell": "Mobile reviewer path review must record checked viewport widths."},
+    {"text": "Mobile Reviewer Path Review", "powershell": "Mobile reviewer path review must include its title."},
+    {"text": "No mobile navigation redesign is needed", "powershell": "Mobile reviewer path review must record the disclosure-menu decision."},
+    {"text": "not official public-health guidance", "powershell": "Mobile reviewer path review must preserve public-health boundary."},
+    {"text": "sticky primary navigation", "powershell": "Mobile reviewer path review must discuss sticky navigation."}
+  ],
+  "docs/official-method-source-spine.md": [
+    {"text": "EPA lake and volunteer monitoring methods", "powershell": "Official method source spine must include EPA lake/volunteer method anchor."},
+    {"text": "EPA quality assurance guidance", "powershell": "Official method source spine must include EPA QA anchor."},
+    {"text": "Lake County Clear Lake QAPP", "powershell": "Official method source spine must include Lake County QAPP anchor."},
+    {"text": "Official Method Source Spine", "powershell": "Official method source spine must include its title."},
+    {"text": "Secchi depth / clarity", "powershell": "Official method source spine must identify the first Secchi protocol candidate."},
+    {"text": "keep the Secchi protocol mentor-review-only for now", "powershell": "Official method source spine must preserve the mentor-review-only Secchi decision."},
+    {"text": "not official public-health guidance", "powershell": "Official method source spine must preserve public-health boundary."},
+    {"text": "secchi-depth-clarity-mentor-review-protocol.md", "powershell": "Official method source spine must link the Secchi mentor-review protocol."}
+  ],
+  "docs/portfolio-evidence-index.md": [
+    {"text": "Career Services handoff packet", "powershell": "Portfolio evidence index must link the Career Services handoff packet."},
+    {"text": "Dashboard anatomy review guide", "powershell": "Portfolio evidence index must link the dashboard anatomy guide."},
+    {"text": "Internship review start here", "powershell": "Portfolio evidence index must link the internship start-here path."},
+    {"text": "Official method source spine", "powershell": "Portfolio evidence index must link the official method source spine."},
+    {"text": "Project Delivery, EHS, and Environmental Systems Governance", "powershell": "Portfolio evidence index must link the project delivery and EHS positioning aid."},
+    {"text": "Secchi depth / clarity mentor-review protocol", "powershell": "Portfolio evidence index must link the Secchi mentor-review protocol."},
+    {"text": "Secchi mentor-review handoff", "powershell": "Portfolio evidence index must link the Secchi mentor-review handoff."}
+  ],
+  "docs/portfolio-outreach-summary-2026-05-17.md": [
+    {"text": "Avoid:", "powershell": "Portfolio outreach summary must include avoid-language boundaries."},
+    {"text": "Clear Lake Watch Portfolio Outreach Summary", "powershell": "Portfolio outreach summary must include its title."},
+    {"text": "Current Review Ask", "powershell": "Portfolio outreach summary must include the current review ask."},
+    {"text": "Strongest Current Claim", "powershell": "Portfolio outreach summary must include the strongest current claim."},
+    {"text": "late-prototype / early-MVP", "powershell": "Portfolio outreach summary must preserve maturity language."},
+    {"text": "not official public-health guidance", "powershell": "Portfolio outreach summary must preserve public-health boundary."},
+    {"text": "official-method planning", "powershell": "Portfolio outreach summary must include official-method planning language."}
+  ],
+  "docs/project-delivery-ehs.md": [
+    {"text": "Avoid:", "powershell": "Project delivery and EHS doc must include avoid-language boundaries."},
+    {"text": "Environmental systems analysis + field data workflows + project delivery + safety/risk governance", "powershell": "Project delivery and EHS doc must include the core frame."},
+    {"text": "I am building applied competency", "powershell": "Project delivery and EHS doc must preserve early-career positioning."},
+    {"text": "Project Delivery, EHS, And Environmental Systems Governance", "powershell": "Project delivery and EHS doc must include its title."},
+    {"text": "not official public-health guidance", "powershell": "Project delivery and EHS doc must preserve public-health boundary."}
+  ],
+  "docs/public-backlog.md": [
+    {"text": "Browser accessibility interaction pass", "powershell": "Public backlog must include browser accessibility interaction-pass status."},
+    {"text": "Completed Maintenance / Trust Issues", "powershell": "Public backlog must define completed maintenance/trust issues."},
+    {"text": "Completed Public Trust-Hardening Issues", "powershell": "Public backlog must reflect completed trust-hardening pass."},
+    {"text": "County GIS geometry publication boundary", "powershell": "Public backlog must include county GIS publication-boundary candidate."},
+    {"text": "Decision recorded: keep the Secchi protocol mentor-review-only for now.", "powershell": "Public backlog must record the mentor-review-only Secchi decision."},
+    {"text": "Freshness and publication-safety alignment follow-ups", "powershell": "Public backlog must track the freshness and publication-safety alignment follow-ups."},
+    {"text": "Internal link validation", "powershell": "Public backlog must include internal link validation candidate."},
+    {"text": "Maintenance file split", "powershell": "Public backlog must include maintenance file split status."},
+    {"text": "Manual-only refresh dry-run support", "powershell": "Public backlog must include manual refresh dry-run support status."},
+    {"text": "Next Optional Candidates", "powershell": "Public backlog must define next optional candidates."},
+    {"text": "Open Maintenance / Trust Issues", "powershell": "Public backlog must define implementation-facing maintenance candidates."},
+    {"text": "Open Reviewer-Readiness Issues", "powershell": "Public backlog must define the current reviewer-readiness issue set."},
+    {"text": "Public Backlog", "powershell": "Public backlog must define the roadmap index."},
+    {"text": "Secchi mentor-review handoff packet", "powershell": "Public backlog must record the Secchi mentor-review handoff packet."},
+    {"text": "Site-registry local review pass", "powershell": "Public backlog must include site-registry local review pass status."},
+    {"text": "Static snapshot age cue", "powershell": "Public backlog must include static snapshot age cue status."},
+    {"text": "This is a review-path improvement only.", "powershell": "Public backlog must keep reviewer-path stabilization boundary language."},
+    {"text": "This is a source-selection improvement only.", "powershell": "Public backlog must preserve source-spine boundary language."},
+    {"text": "above-the-fold internship reviewer path", "powershell": "Public backlog must record the homepage reviewer-path stabilization."},
+    {"text": "issues/11", "powershell": "Public backlog must link the reviewer screenshot issue."},
+    {"text": "issues/21", "powershell": "Public backlog must link the accessibility reviewer-readiness issue."},
+    {"text": "issues/24", "powershell": "Public backlog must link the Career Services handoff issue."},
+    {"text": "issues/5", "powershell": "Public backlog must link the screenshot/release-note issue."},
+    {"text": "late prototype / early MVP", "powershell": "Public backlog must preserve maturity language."},
+    {"text": "not official public-health guidance", "powershell": "Public backlog must preserve public-health boundary."},
+    {"text": "official method source spine", "powershell": "Public backlog must record the official method source spine."},
+    {"text": "print-friendly public review output", "powershell": "Public backlog must record the print-friendly reviewer output."}
+  ],
+  "docs/public-snapshot-release-note-2026-05-13.md": [
+    {"text": "January 11, 2024", "powershell": "Release note must include FHABS lab-linked sample freshness date."},
+    {"text": "Public Snapshot Release Note - 2026-05-13", "powershell": "Release note must include its title."},
+    {"text": "September 7, 2025", "powershell": "Release note must include FHABS report freshness date."},
+    {"text": "Snapshot generated: May 5, 2026", "python": true, "powershell": "Release note must include snapshot generation date."},
+    {"text": "Static Snapshot Age Cue", "python": true, "powershell": "Release note must include a static snapshot age cue."},
+    {"text": "USGS observations through: May 3, 2026", "powershell": "Release note must include USGS freshness date."},
+    {"text": "before site or arm assignments should be treated as authoritative", "powershell": "Release note must preserve map-review caution language."},
+    {"text": "clear-lake-watch-homepage-desktop-2026-05-13.png", "powershell": "Release note must link the desktop screenshot."},
+    {"text": "clear-lake-watch-homepage-mobile-2026-05-13.png", "powershell": "Release note must link the mobile-width screenshot."},
+    {"text": "late prototype / early MVP", "powershell": "Release note must preserve maturity language."},
+    {"text": "not current bloom observations", "powershell": "Release note must preserve stale FHABS warning framing."},
+    {"text": "not official public-health guidance", "python": true, "powershell": "Release note must preserve public-health boundary."},
+    {"text": "snapshot-age badge", "powershell": "Release note must point to the dashboard's dynamic snapshot-age badge instead of a hardcoded day count."}
+  ],
+  "docs/reviewer-demo-notes.md": [
+    {"text": "Dashboard overview", "powershell": "Reviewer demo notes must caption the dashboard screenshot."},
+    {"text": "Homepage desktop", "powershell": "Reviewer demo notes must caption the refreshed desktop homepage screenshot."},
+    {"text": "Homepage mobile", "powershell": "Reviewer demo notes must caption the refreshed mobile homepage screenshot."},
+    {"text": "Map QA", "powershell": "Reviewer demo notes must caption the map QA screenshot."},
+    {"text": "Methodology page", "powershell": "Reviewer demo notes must caption the methodology screenshot."},
+    {"text": "Open-App Data QA Notices", "powershell": "Reviewer demo notes must caption the data QA notices screenshot."},
+    {"text": "Portfolio signal", "powershell": "Reviewer demo notes must caption the portfolio signal screenshot."},
+    {"text": "Project page", "powershell": "Reviewer demo notes must caption the project-page screenshot."},
+    {"text": "Reviewer Demo Notes", "powershell": "Reviewer demo notes must include their title."},
+    {"text": "Snapshot status strip", "powershell": "Reviewer demo notes must caption the snapshot-status screenshot."},
+    {"text": "Suggested Review Path", "powershell": "Reviewer demo notes must include a review path."},
+    {"text": "dashboard-anatomy-review-guide.md", "powershell": "Reviewer demo notes must link the dashboard anatomy guide."},
+    {"text": "not official public-health guidance", "python": true, "powershell": "Reviewer demo notes must preserve public-health boundary."},
+    {"text": "snapshot-age badge", "powershell": "Reviewer demo notes must point to the dashboard's dynamic snapshot-age badge instead of a hardcoded day count."},
+    {"text": "static portfolio evidence, not current conditions", "python": true}
+  ],
+  "docs/scheduled-public-refresh-design.md": [
+    {"text": "Do not let a scheduled run commit directly to `main`", "powershell": "Scheduled refresh design must require review before main updates."},
+    {"text": "Fail closed if validation fails", "powershell": "Scheduled refresh design must define fail-closed behavior."},
+    {"text": "No unattended publication workflow is enabled", "python": true, "powershell": "Scheduled refresh design must preserve design-only status."},
+    {"text": "Scheduled Public Refresh Design", "powershell": "Scheduled refresh design doc must include its title."},
+    {"text": "The scheduled workflow must never publish", "python": true, "powershell": "Scheduled refresh design must protect private/local files."},
+    {"text": "manual-refresh-dry-run-2026-05-28.md", "powershell": "Scheduled refresh design must link the latest manual dry-run proof note."},
+    {"text": "not live monitoring", "powershell": "Scheduled refresh design must preserve non-operational boundary."},
+    {"text": "refresh-live-data.ps1 -DryRun", "powershell": "Scheduled refresh design must document the manual dry-run command."},
+    {"text": "skips all public JSON writes", "powershell": "Scheduled refresh design must explain that dry runs do not mutate public JSON."},
+    {"text": "write-weather-context-public-source.ps1", "powershell": "Scheduled refresh design must reference the reviewed public-source weather writer."}
+  ],
+  "docs/secchi-depth-clarity-mentor-review-protocol.md": [
+    {"text": "Do not use a Secchi reading by itself", "powershell": "Secchi protocol must prevent overinterpretation."},
+    {"text": "Private-To-Public Gate", "powershell": "Secchi protocol must define a private-to-public gate."},
+    {"text": "Secchi Depth / Clarity Mentor-Review Protocol", "powershell": "Secchi protocol must include its title."},
+    {"text": "What Not To Infer", "powershell": "Secchi protocol must define interpretation limits."},
+    {"text": "mentor-review-needed", "powershell": "Secchi protocol must preserve mentor-review-needed status."},
+    {"text": "mentor-review-only for now", "powershell": "Secchi protocol must preserve the mentor-review-only decision."},
+    {"text": "not an approved field protocol", "powershell": "Secchi protocol must preserve non-approved boundary."},
+    {"text": "not official public-health guidance", "powershell": "Secchi protocol must preserve public-health boundary."},
+    {"text": "secchi-mentor-review-handoff.md", "powershell": "Secchi protocol must link the mentor-review handoff."}
+  ],
+  "docs/secchi-mentor-review-handoff.md": [
+    {"text": "Do not convert this handoff directly into a field protocol or public export.", "powershell": "Secchi mentor-review handoff must preserve the no-direct-pilot gate."},
+    {"text": "Feedback Capture Template", "powershell": "Secchi mentor-review handoff must include a feedback capture template."},
+    {"text": "Keep the Secchi protocol mentor-review-only for now.", "powershell": "Secchi mentor-review handoff must preserve the current decision."},
+    {"text": "Secchi Mentor-Review Handoff", "powershell": "Secchi mentor-review handoff must include its title."},
+    {"text": "What Feedback Is Needed", "powershell": "Secchi mentor-review handoff must define needed feedback."},
+    {"text": "not official public-health guidance", "powershell": "Secchi mentor-review handoff must preserve public-health boundary."}
+  ],
+  "docs/site-registry-decision-workflow.md": [
+    {"text": "Keep private reviewer notes", "powershell": "Site decision workflow must preserve private-review boundary."},
+    {"text": "Site Registry Decision Workflow", "powershell": "Site decision workflow must include its title."},
+    {"text": "not an official source of public-health", "powershell": "Site decision workflow must preserve public-health boundary."},
+    {"text": "site-registry-trust-review-pass-001.md", "powershell": "Site decision workflow must link the current review pass."},
+    {"text": "site-registry-unresolved-decision.md", "powershell": "Site decision workflow must link the unresolved medium-priority decision note."}
+  ],
+  "docs/site-registry-trust-review-pass-001.md": [
+    {"text": "Clear Lake Keys near Ketch Court", "powershell": "Site review pass must identify the Clear Lake Keys medium-priority check."},
+    {"text": "Jago Bay", "powershell": "Site review pass must identify the Jago Bay medium-priority check."},
+    {"text": "Keep `needs-local-review`", "powershell": "Site review pass must preserve unresolved assignment status."},
+    {"text": "Site Registry Trust Review Pass 001", "powershell": "Site review pass must include its title."},
+    {"text": "Soda Bay", "powershell": "Site review pass must identify the Soda Bay medium-priority check."},
+    {"text": "no current FHABS marker is promoted", "powershell": "Site review pass must record the no-promotion decision."},
+    {"text": "not public-health, recreation, emergency, regulatory, or forecasting guidance", "powershell": "Site review pass must preserve guidance boundary."},
+    {"text": "site-registry-unresolved-decision.md", "powershell": "Site review pass must link the unresolved medium-priority decision note."}
+  ],
+  "docs/site-registry-unresolved-decision.md": [
+    {"text": "Clear Lake Keys near Ketch Court", "powershell": "Site unresolved decision note must include the Clear Lake Keys medium-priority case."},
+    {"text": "Jago Bay", "powershell": "Site unresolved decision note must include the Jago Bay medium-priority case."},
+    {"text": "Keep `needs-local-review`", "powershell": "Site unresolved decision note must preserve unresolved assignment status."},
+    {"text": "Site Registry Unresolved Decision", "powershell": "Site unresolved decision note must include its title."},
+    {"text": "Soda Bay", "powershell": "Site unresolved decision note must include the Soda Bay medium-priority case."},
+    {"text": "not public-health guidance", "powershell": "Site unresolved decision note must preserve public-health boundary."}
+  ],
+  "docs/source-freshness-validation.md": [
+    {"text": "Source Freshness Validation", "powershell": "Source freshness validation doc must include its title."},
+    {"text": "Warning Versus Failure", "powershell": "Source freshness validation doc must explain warning versus failure behavior."},
+    {"text": "dashboard refresh time and source observation dates", "powershell": "Source freshness validation doc must preserve freshness distinction."},
+    {"text": "not live monitoring", "powershell": "Source freshness validation doc must preserve non-operational boundary."}
+  ],
+  "docs/variable-register.md": [
+    {"text": "Variable Register", "powershell": "Variable register must include its title."},
+    {"text": "do-not-use-as-label", "powershell": "Variable register must define variables that should not become public labels."},
+    {"text": "future-field-validation", "powershell": "Variable register must distinguish future field-validation variables."},
+    {"text": "future-lab-or-microscopy", "powershell": "Variable register must distinguish future lab or microscopy variables."},
+    {"text": "future-sensor-or-backbone", "powershell": "Variable register must distinguish future sensor or backbone variables."},
+    {"text": "not official public-health guidance", "powershell": "Variable register must preserve public-health boundary."},
+    {"text": "official-method-source-spine.md", "powershell": "Variable register must link the official method source spine."}
+  ],
+  "docs/weather-context-contract.md": [
+    {"text": "Use `partial` for a reviewed public-source snapshot", "powershell": "Weather context contract must explain partial public-source status."},
+    {"text": "not live telemetry", "powershell": "Weather context contract must preserve non-live boundary."},
+    {"text": "write-weather-context-public-source.ps1", "powershell": "Weather context contract must document the public-source writer."}
+  ],
+  "index.html": [
+    {"text": "Dashboard snapshot", "powershell": "Homepage reviewer path must start with the dashboard snapshot."},
+    {"text": "Deeper Review Links", "powershell": "Homepage must include secondary reviewer entry points."},
+    {"text": "Internship Reviewer Path", "powershell": "Homepage must include an above-the-fold reviewer path."},
+    {"text": "Internship portfolio prototype showing Clear Lake environmental data integration, GIS/spatial QA, source-freshness validation, static deployment, and responsible public communication.", "powershell": "Homepage meta description must describe the internship portfolio signal."},
+    {"text": "Public Data Snapshot, Not Advisory Guidance", "python": true, "powershell": "Homepage must include the public snapshot status strip."},
+    {"text": "What The Public Snapshot Files Are Showing", "python": true, "powershell": "Homepage must avoid overclaiming current-feed wording."},
+    {"text": "What This Project Demonstrates", "powershell": "Homepage must include a portfolio demonstration section."},
+    {"text": "github.com/coreytshaffer/clear-lake-watch/blob/main/docs/clear-lake-watch-v0.1-evidence-summary.md", "powershell": "Homepage reviewer path must link the GitHub evidence summary."},
+    {"text": "github.com/coreytshaffer/clear-lake-watch/blob/main/docs/reviewer-demo-notes.md", "powershell": "Homepage reviewer path must link GitHub reviewer demo notes."},
+    {"text": "late prototype / early MVP", "python": true, "powershell": "Homepage must preserve maturity language."},
+    {"text": "local browser notices only, not background emergency or official public-health notifications", "powershell": "Dashboard must preserve data-QA notice boundary."},
+    {"text": "map-review-status", "powershell": "Homepage must include the map review status callout."}
+  ],
+  "methodology.html": [
+    {"text": "not official public-health direction", "python": true, "powershell": "Methodology page must preserve public-health boundary."}
+  ],
+  "project.html": [
+    {"text": "Unresolved markers remain in local review", "powershell": "Project page must preserve site-review caution language."},
+    {"text": "docs/forecast-boundary.md", "powershell": "Project page must link forecast boundary."},
+    {"text": "late prototype / early MVP", "python": true, "powershell": "Project page must preserve maturity language."},
+    {"text": "not official public-health guidance", "python": true, "powershell": "Project page must preserve public-health boundary."}
+  ],
+  "scripts/dashboard-utils.js": [
+    {"text": "export const formatDate", "powershell": "Dashboard utilities must export date formatting."},
+    {"text": "export const getStoredJson", "powershell": "Dashboard utilities must export localStorage JSON helper."}
+  ],
+  "scripts/refresh-live-data.ps1": [
+    {"text": "Dry run: would write", "powershell": "Refresh script must report skipped writes during dry runs."},
+    {"text": "[System.IO.File]::WriteAllText", "powershell": "Refresh script must retain the real write path for intentional refreshes."},
+    {"text": "[switch]$DryRun", "powershell": "Refresh script must expose a DryRun switch."},
+    {"text": "refresh-live-data.utilities.ps1", "powershell": "Refresh script must import shared refresh utilities."}
+  ],
+  "scripts/refresh-live-data.utilities.ps1": [
+    {"text": "function Get-RecordField", "powershell": "Refresh utility helper must include field lookup."},
+    {"text": "function Parse-Number", "powershell": "Refresh utility helper must include number parsing."}
+  ],
+  "styles.css": [
+    {"text": ".site-nav", "powershell": "Print stylesheet must account for navigation."},
+    {"text": "@media print", "powershell": "Stylesheet must include print-friendly output rules."},
+    {"text": "a[href]::after", "powershell": "Print stylesheet must expose link targets."}
+  ],
+  "sw.js": [
+    {"text": "./scripts/dashboard-utils.js", "powershell": "Service worker must cache the shared dashboard utilities."}
+  ]
+}

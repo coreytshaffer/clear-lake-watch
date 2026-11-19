@@ -395,6 +395,8 @@ class EvaluatorFailureTests(EntryPointTestCase):
                 "    return datetime(2026, 11, 17, 12, tzinfo=timezone.utc)\n"
                 "def utc_now():\n"
                 "    return datetime(2026, 11, 17, 12, tzinfo=timezone.utc)\n"
+                "def check_text_guards(root, profile):\n"
+                "    return []\n"
                 "def check_snapshot(root, as_of):\n"
                 "    return [F()]\n"
             ),
@@ -404,6 +406,8 @@ class EvaluatorFailureTests(EntryPointTestCase):
                 "    return datetime(2026, 11, 17, 12, tzinfo=timezone.utc)\n"
                 "def utc_now():\n"
                 "    return datetime(2026, 11, 17, 12, tzinfo=timezone.utc)\n"
+                "def check_text_guards(root, profile):\n"
+                "    return []\n"
                 "def check_snapshot(root, as_of):\n"
                 "    raise RuntimeError('synthetic evaluator error')\n"
             ),
@@ -509,6 +513,59 @@ class WindowsGateTests(EntryPointTestCase):
         self.assert_powershell_only_failure(
             checkout, "Source freshness validation doc must explain warning versus failure behavior."
         )
+
+
+class TextGuardEntryPointTests(EntryPointTestCase):
+    def test_common_text_guard_preserves_legacy_messages(self) -> None:
+        checkout = self.scratch.new()
+        doc = checkout / "index.html"
+        literal = "Public Data Snapshot, Not Advisory Guidance"
+        original = doc.read_text(encoding="utf-8")
+        self.assertIn(literal, original)
+        doc.write_text(original.replace(literal, literal.lower()), encoding="utf-8")
+
+        python, powershell = self.assert_parity(checkout, 1, HISTORY)
+        self.assertIn(f"index.html is missing required text: {literal}", python.stdout)
+        if powershell is not None:
+            self.assertIn("Homepage must include the public snapshot status strip.", powershell.stdout)
+
+    def test_python_only_text_guard_preserves_profile(self) -> None:
+        checkout = self.scratch.new()
+        doc = checkout / "README.md"
+        literal = "static reviewed snapshot generated on May 5, 2026"
+        original = doc.read_text(encoding="utf-8")
+        self.assertIn(literal, original)
+        doc.write_text(original.replace(literal, "archived snapshot"), encoding="utf-8")
+
+        python = self.run_python(checkout)
+        self.assertEqual(python.returncode, 1, python.stdout + python.stderr)
+        self.assertIn(f"README.md is missing required text: {literal}", python.stdout)
+        if POWERSHELL:
+            powershell = self.run_powershell(checkout)
+            self.assertEqual(powershell.returncode, 0, powershell.stdout + powershell.stderr)
+
+    def test_missing_text_guard_catalog_fails_both_commands(self) -> None:
+        checkout = self.scratch.new()
+        catalog = "scripts/public-mirror-text-guards.json"
+        (checkout / catalog).unlink()
+        self.assert_parity(checkout, 1, HISTORY + [("failure", "guard_catalog_invalid", catalog)])
+
+    def test_text_guard_rejects_ignored_private_file_in_both_commands(self) -> None:
+        checkout = self.scratch.new()
+        relative = "docs/private/test-only.md"
+        private_doc = checkout / relative
+        private_doc.parent.mkdir()
+        private_doc.write_text("Synthetic private text", encoding="utf-8")
+        _git(checkout, "check-ignore", "--quiet", "--", relative)
+
+        catalog_path = checkout / "scripts/public-mirror-text-guards.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        catalog[relative] = [
+            {"text": "Synthetic private text", "python": True, "powershell": "Missing fixture text."}
+        ]
+        catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+
+        self.assert_parity(checkout, 1, HISTORY + [("failure", "guard_file_unreadable", relative)])
 
 
 if __name__ == "__main__":
