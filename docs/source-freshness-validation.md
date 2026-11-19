@@ -93,7 +93,7 @@ The validator warns when the dashboard snapshot or a source observation date is 
 
 ## Scope Of Parity
 
-For the same checkout and clock, both commands report the same snapshot and manifest findings, compared by severity, code, and subject. Each command also runs its assigned text guards and native checks. The PowerShell validator remains the stronger Windows release gate: it adds internal-link checks, weather-context structure and wording, reviewed-record approval and permission, the manifest note guard, and the storage smoke check.
+For the same checkout and clock, both commands report the same snapshot and manifest findings, compared by severity, code, and subject. Each command also runs its assigned text guards and native checks. The PowerShell validator remains the stronger Windows release gate. It adds internal-link checks, weather-context structure and wording, reviewed-observation quality-note checks, the manifest note guard, and the storage smoke check.
 
 The shared catalog lives at [`scripts/public-mirror-text-guards.json`](../scripts/public-mirror-text-guards.json).
 Each file lists exact, case-sensitive text. The `python` flag applies a rule
@@ -103,6 +103,13 @@ selected files, and their resolved paths to be tracked public files inside
 the checkout. They fail when a file is missing or unreadable, the catalog is
 invalid, or selected text is absent. The native PowerShell text checks on
 parsed JSON fields still run at their existing call sites.
+
+Both validators require native JSON documents to contain an object and require
+reviewed field observations to hold an array of record objects. Each record
+must have qaStatus approved-public and a JSON boolean permissionToPublish true.
+Python checks that each native JSON file resolves within the checkout before
+reading it. PowerShell checks native JSON and internal-link paths before use
+and rejects links or other reparse points beneath the checkout root.
 
 `tests/test_public_mirror_common.py` covers the evaluator, and `tests/test_public_mirror_entrypoints.py` compares both commands in scratch checkouts. CI runs both suites on Linux, and on Windows with Windows PowerShell 5.1. The historical replay cases use a pinned copy of the May 5, 2026 snapshot in `tests/fixtures/public-mirror-2026-05-05/`, so a reviewed refresh of `data/` needs no test edits.
 

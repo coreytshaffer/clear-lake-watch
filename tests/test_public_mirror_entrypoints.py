@@ -108,7 +108,6 @@ def _load(checkout: Path, relative: str) -> dict:
 
 
 def _save(checkout: Path, relative: str, data: object) -> None:
-    # ASCII-only JSON reads the same under Windows PowerShell 5.1's default encoding.
     (checkout / relative).write_text(json.dumps(data, indent=2, ensure_ascii=True), encoding="utf-8")
 
 
@@ -487,9 +486,11 @@ class WindowsGateTests(EntryPointTestCase):
                 }
             ),
         )
-        self.assert_powershell_only_failure(
-            checkout, "Reviewed public field observation synthetic-test-record lacks permissionToPublish true."
-        )
+        python, powershell = self.assert_parity(checkout, 1, HISTORY)
+        message = "Reviewed public field observation synthetic-test-record lacks permissionToPublish true."
+        self.assertIn(message, python.stdout)
+        if powershell is not None:
+            self.assertIn(message, powershell.stdout)
 
     def test_manifest_observation_note_guard_still_fails(self) -> None:
         checkout = self.scratch.new()
@@ -513,6 +514,131 @@ class WindowsGateTests(EntryPointTestCase):
         self.assert_powershell_only_failure(
             checkout, "Source freshness validation doc must explain warning versus failure behavior."
         )
+
+
+class NativeJsonEntryPointTests(EntryPointTestCase):
+    def test_native_json_inputs_reject_top_level_null(self) -> None:
+        checkout = self.scratch.new()
+        for relative in (
+            "data/sources.json",
+            "data/sites.json",
+            "data/site-review-summary.json",
+            "data/lake-shoreline.json",
+            "data/forecast-output.example.json",
+            "data/field-microscopy-intake.example.json",
+            "data/reviewed-field-observations.json",
+            "data/weather-context.json",
+            "data/weather-context.example.json",
+            "manifest.webmanifest",
+        ):
+            with self.subTest(file=relative):
+                target = checkout / relative
+                original = target.read_bytes()
+                try:
+                    _save(checkout, relative, None)
+                    python, powershell = self.assert_parity(checkout, 1, HISTORY)
+                    for result in (python, powershell):
+                        if result is not None:
+                            self.assertIn("must contain a JSON object", result.stdout)
+                finally:
+                    target.write_bytes(original)
+
+    def test_reviewed_field_records_require_array_of_objects(self) -> None:
+        checkout = self.scratch.new()
+        relative = "data/reviewed-field-observations.json"
+        original = _load(checkout, relative)
+        valid_record = {
+            "recordId": "synthetic-test-record",
+            "qaStatus": "approved-public",
+            "permissionToPublish": True,
+        }
+        for records, message in (
+            (valid_record, "must expose a records list"),
+            (None, "must expose a records list"),
+            ([None], "must be a JSON object"),
+        ):
+            with self.subTest(records=records):
+                _save(checkout, relative, {**original, "records": records})
+                python, powershell = self.assert_parity(checkout, 1, HISTORY)
+                for result in (python, powershell):
+                    if result is not None:
+                        self.assertIn(message, result.stdout)
+                        self.assertFalse(result.stderr)
+
+    def test_publish_permission_requires_boolean_true(self) -> None:
+        checkout = self.scratch.new()
+        relative = "data/reviewed-field-observations.json"
+        original = _load(checkout, relative)
+        for permission, expected in ((True, 0), ("true", 1), (1, 1), (None, 1)):
+            with self.subTest(permission=permission):
+                record = {
+                    "recordId": "synthetic-test-record",
+                    "qaStatus": "approved-public",
+                    "permissionToPublish": permission,
+                }
+                _save(checkout, relative, {**original, "records": [record]})
+                python, powershell = self.assert_parity(checkout, expected, HISTORY)
+                if expected:
+                    for result in (python, powershell):
+                        if result is not None:
+                            self.assertIn("lacks permissionToPublish true", result.stdout)
+
+
+class NativeContainmentEntryPointTests(EntryPointTestCase):
+    def redirect_directory(self, link: Path, target: Path) -> None:
+        if os.name == "nt":
+            powershell = self.require_powershell()
+            result = subprocess.run(
+                [powershell, "-NoProfile", "-Command",
+                 "New-Item -ItemType Junction -Path $env:CLW_TEST_LINK "
+                 "-Target $env:CLW_TEST_TARGET -ErrorAction Stop | Out-Null"],
+                env={**_command_env(), "CLW_TEST_LINK": str(link), "CLW_TEST_TARGET": str(target)},
+                capture_output=True, text=True, timeout=COMMAND_TIMEOUT_SECONDS,
+            )
+            if result.returncode != 0:
+                self.skipTest(f"Windows junctions unavailable: {result.stderr.strip()}")
+            self.addCleanup(link.rmdir)
+        else:
+            try:
+                link.symlink_to(target, target_is_directory=True)
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"directory symlinks unavailable: {exc}")
+            self.addCleanup(link.unlink)
+
+    def test_native_json_rejects_redirected_data_before_parsing(self) -> None:
+        checkout = self.scratch.new()
+        data_dir = checkout / "data"
+        outside = checkout.parent / f"{checkout.name}-native-data"
+        data_dir.rename(outside)
+        self.redirect_directory(data_dir, outside)
+        reviewed = outside / "reviewed-field-observations.json"
+        reviewed.write_text("not valid JSON", encoding="utf-8")
+
+        python, powershell = self.assert_parity(
+            checkout, 1, [("failure", "unsafe_snapshot_path", "data/manifest.json")]
+        )
+        for result in (python, powershell):
+            if result is not None:
+                self.assertIn("Unsafe native path", result.stdout)
+                self.assertNotIn("Invalid JSON", result.stdout)
+
+    def test_link_scanner_rejects_redirected_source_before_reading(self) -> None:
+        checkout = self.scratch.new()
+        directory = checkout / "link-fixture"
+        relative = "link-fixture/test.md"
+        directory.mkdir()
+        (checkout / relative).write_text("Synthetic document\n", encoding="utf-8")
+        _git(checkout, "add", "--", relative)
+        outside = checkout.parent / f"{checkout.name}-native-links"
+        directory.rename(outside)
+        (outside / "test.md").write_text("[Sentinel](never-read-fixture.md)\n", encoding="utf-8")
+        self.redirect_directory(directory, outside)
+
+        powershell = self.run_powershell(checkout)
+        self.assertEqual(powershell.returncode, 1, powershell.stdout + powershell.stderr)
+        self.assertIn("Unsafe native path", powershell.stdout)
+        self.assertIn(relative, powershell.stdout)
+        self.assertNotIn("never-read-fixture.md", powershell.stdout)
 
 
 class TextGuardEntryPointTests(EntryPointTestCase):

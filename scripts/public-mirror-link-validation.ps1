@@ -11,12 +11,16 @@ function Test-InternalLinks {
   )
 
   foreach ($relativeFile in $RelativeFiles) {
-    $sourcePath = Resolve-ProjectPath ($relativeFile -replace '/', '\')
-    if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+    try {
+      $sourcePath = Resolve-NativeProjectPath (Resolve-ProjectPath $relativeFile)
+      if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+        continue
+      }
+      $text = Get-Content -LiteralPath $sourcePath -Raw
+    } catch {
+      Add-Failure ("Unable to read internal link source {0}: {1}" -f $relativeFile, $_.Exception.Message)
       continue
     }
-
-    $text = Get-Content -LiteralPath $sourcePath -Raw
     $targets = New-Object System.Collections.Generic.List[string]
 
     foreach ($pattern in $linkPatterns) {
@@ -59,22 +63,10 @@ function Test-InternalLinks {
       }
 
       try {
-        $fullCandidatePath = [System.IO.Path]::GetFullPath($candidatePath)
-        $fullProjectRoot = [System.IO.Path]::GetFullPath($projectRoot).TrimEnd(
-          [System.IO.Path]::DirectorySeparatorChar,
-          [System.IO.Path]::AltDirectorySeparatorChar
-        )
+        $fullCandidatePath = Resolve-NativeProjectPath $candidatePath
       } catch {
-        Add-Failure "Internal link in $relativeFile could not be resolved: $cleanTarget"
-        continue
-      }
-
-      $projectRootWithSeparator = "$fullProjectRoot$directorySeparatorText"
-      if (
-        -not $fullCandidatePath.Equals($fullProjectRoot, [System.StringComparison]::OrdinalIgnoreCase) -and
-        -not $fullCandidatePath.StartsWith($projectRootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)
-      ) {
-        Add-Failure "Internal link in $relativeFile points outside the project: $cleanTarget"
+        Add-Failure ("Internal link in {0} could not be resolved: {1} ({2})" -f
+          $relativeFile, $cleanTarget, $_.Exception.Message)
         continue
       }
 
