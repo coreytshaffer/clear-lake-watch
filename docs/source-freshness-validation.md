@@ -98,10 +98,11 @@ For the same checkout and clock, both commands report the same snapshot and mani
 The shared catalog lives at [`scripts/public-mirror-text-guards.json`](../scripts/public-mirror-text-guards.json).
 Each file lists exact, case-sensitive text. The `python` flag applies a rule
 to the Python command, and a `powershell` message applies it to the PowerShell
-command. A rule can carry both fields. Both commands fail when the catalog is
-missing or invalid, when a selected file cannot be read within the checkout,
-or when selected text is absent. The native PowerShell text checks on parsed
-JSON fields still run at their existing call sites.
+command. A rule can carry both fields. Both commands require the catalog,
+selected files, and their resolved paths to be tracked public files inside
+the checkout. They fail when a file is missing or unreadable, the catalog is
+invalid, or selected text is absent. The native PowerShell text checks on
+parsed JSON fields still run at their existing call sites.
 
 `tests/test_public_mirror_common.py` covers the evaluator, and `tests/test_public_mirror_entrypoints.py` compares both commands in scratch checkouts. CI runs both suites on Linux, and on Windows with Windows PowerShell 5.1. The historical replay cases use a pinned copy of the May 5, 2026 snapshot in `tests/fixtures/public-mirror-2026-05-05/`, so a reviewed refresh of `data/` needs no test edits.
 

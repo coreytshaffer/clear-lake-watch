@@ -550,6 +550,23 @@ class TextGuardEntryPointTests(EntryPointTestCase):
         (checkout / catalog).unlink()
         self.assert_parity(checkout, 1, HISTORY + [("failure", "guard_catalog_invalid", catalog)])
 
+    def test_text_guard_rejects_ignored_private_file_in_both_commands(self) -> None:
+        checkout = self.scratch.new()
+        relative = "docs/private/test-only.md"
+        private_doc = checkout / relative
+        private_doc.parent.mkdir()
+        private_doc.write_text("Synthetic private text", encoding="utf-8")
+        _git(checkout, "check-ignore", "--quiet", "--", relative)
+
+        catalog_path = checkout / "scripts/public-mirror-text-guards.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        catalog[relative] = [
+            {"text": "Synthetic private text", "python": True, "powershell": "Missing fixture text."}
+        ]
+        catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+
+        self.assert_parity(checkout, 1, HISTORY + [("failure", "guard_file_unreadable", relative)])
+
 
 if __name__ == "__main__":
     unittest.main()

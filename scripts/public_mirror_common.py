@@ -18,7 +18,7 @@ is a failure, and 2 for invalid arguments (reported on stderr). Without
 
 Evaluation is offline and read-only. Snapshot reads resolve directly inside
 the checkout's own ``data/`` directory. File-backed text checks read the
-shared catalog and its selected files within the checkout. Ages use Pacific calendar days
+shared catalog and selected tracked public files. Ages use Pacific calendar days
 from the pinned ``tzdata`` package, never host time-zone data. A reviewed
 public mirror may be old: snapshot and source age produce warnings, while
 structural problems produce failures. See docs/source-freshness-validation.md
@@ -35,6 +35,7 @@ import json
 import math
 import os
 import re
+import subprocess
 import sys
 from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
@@ -53,6 +54,30 @@ PACIFIC_ZONE_RESOURCE = ("zoneinfo", "America", "Los_Angeles")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEXT_GUARD_CATALOG = "scripts/public-mirror-text-guards.json"
+# Mirror the native validators' public/private and working-path exclusions
+# here so a guard cannot read these files even if they enter the Git index.
+TEXT_GUARD_EXCLUDED_PATHS = (
+    "data/lake-shoreline-county-candidate.json",
+    "data/lake-shoreline-county-simplified-25ft.json",
+    "data/lake-shoreline-county-simplified-50ft.json",
+    "data/private",
+    "data/site-review.json",
+    "docs/communications-log.md",
+    "docs/conversation-log.md",
+    "docs/private",
+    "docs/public-mirror-file-set-2026-05-08.md",
+    "docs/public-mirror-review-2026-05-08.md",
+    "docs/review-screenshots",
+    "docs/screenshot-only-portfolio-packet.md",
+    "docs/trusted-review-feedback-log.md",
+    "docs/trusted-review-request.md",
+    "geometry-preview.html",
+    "portfolio-materials.html",
+    "server.err.log",
+    "server.out.log",
+    "server.pid",
+    "shortcuts",
+)
 MANIFEST_PATH = "data/manifest.json"
 LIVE_PATH = "data/live.json"
 AGE_LIMIT_FIELD = "sourceFreshnessMaxAgeDays"
@@ -122,16 +147,51 @@ def _unique_catalog_fields(pairs: list[tuple[str, Any]]) -> dict:
     return fields
 
 
-def _read_guard_text(root: Path, relative: str) -> str:
+def _indexed_paths(root: Path, *options: str) -> set[str]:
+    result = subprocess.run(
+        ["git", "ls-files", "--cached", "-z", *options],
+        cwd=root,
+        capture_output=True,
+        check=True,
+    )
+    return set(os.fsdecode(result.stdout).split("\0")) - {""}
+
+
+def _public_guard_paths(root: Path) -> set[str]:
+    tracked = _indexed_paths(root)
+    ignored = _indexed_paths(root, "--ignored", "--exclude-per-directory=.gitignore")
+    paths = set()
+    for path in tracked - ignored:
+        normalized = path.lower()
+        if any(
+            normalized == excluded or normalized.startswith(f"{excluded}/")
+            for excluded in TEXT_GUARD_EXCLUDED_PATHS
+        ):
+            continue
+        if normalized.endswith(".local.sqlite") or (
+            normalized.startswith("data/") and normalized.endswith(".local.json")
+        ):
+            continue
+        paths.add(path)
+    return paths
+
+
+def _read_guard_text(root: Path, relative: str, public_paths: set[str]) -> str:
+    if relative not in public_paths:
+        raise ValueError("Expected a tracked public file.")
     path = (root / relative).resolve()
     if not path.is_relative_to(root):
         raise ValueError("Path resolves outside the checkout.")
+    if path.relative_to(root).as_posix() not in public_paths:
+        raise ValueError("Path must resolve to a tracked public file.")
     return path.read_text(encoding="utf-8-sig")
 
 
-def _load_text_guards(root: Path, profile: str) -> dict[str, list[tuple[str, str]]]:
+def _load_text_guards(
+    root: Path, profile: str, public_paths: set[str]
+) -> dict[str, list[tuple[str, str]]]:
     catalog = json.loads(
-        _read_guard_text(root, TEXT_GUARD_CATALOG), object_pairs_hook=_unique_catalog_fields
+        _read_guard_text(root, TEXT_GUARD_CATALOG, public_paths), object_pairs_hook=_unique_catalog_fields
     )
     if not isinstance(catalog, dict) or not catalog:
         raise ValueError("Expected a nonempty file-to-rules object.")
@@ -177,14 +237,20 @@ def check_text_guards(root: Path, profile: str) -> list[Finding]:
     """Apply the exact file-backed text rules for one validator."""
     root = root.resolve()
     try:
-        selected = _load_text_guards(root, profile)
+        public_paths = _public_guard_paths(root)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        return [
+            Finding(FAILURE, "guard_catalog_invalid", TEXT_GUARD_CATALOG, f"Unable to inspect Git index: {exc}")
+        ]
+    try:
+        selected = _load_text_guards(root, profile, public_paths)
     except (OSError, ValueError, RuntimeError) as exc:
         return [Finding(FAILURE, "guard_catalog_invalid", TEXT_GUARD_CATALOG, str(exc))]
 
     findings = []
     for relative, rules in selected.items():
         try:
-            text = _read_guard_text(root, relative)
+            text = _read_guard_text(root, relative, public_paths)
         except (OSError, ValueError, RuntimeError) as exc:
             findings.append(Finding(FAILURE, "guard_file_unreadable", relative, f"Unable to read: {exc}"))
             continue
