@@ -1,7 +1,6 @@
 # Accessibility remediation for contrast, theme controls, and navigation
 
-Date: November 16, 2026. Base: `f608ffc97b1d50f4a13081697dfb85f8ba9ac6cd`.
-Status: local proposed patch, not published, merged, or deployed. This is not a WCAG conformance audit.
+Review began November 16, 2026 against `f608ffc97b1d50f4a13081697dfb85f8ba9ac6cd`. The remediation and follow-ups were merged into `main` through `bef53a2`. This record covers sampled reviewer-readiness checks. [Initial remediation](https://github.com/coreytshaffer/clear-lake-watch/pull/45) · [Latest follow-up](https://github.com/coreytshaffer/clear-lake-watch/pull/48)
 
 ## Scope and changes
 
@@ -90,9 +89,9 @@ NVDA 2026.3.1 used its silence synthesizer while logging its generated speech fo
 - NVDA announced `Switch to light mode` after Enter and `Switch to dark mode` after Space on both pages. Each announcement occurred while focus stayed on the toggle, before any refocus.
 - NVDA announced the sampled SVG marker and HTML marker as named buttons. Enter on the SVG marker and Space on the HTML marker focused the updated detail panel and produced one detail announcement each.
 
-## CHE-16 verification on the current main tree
+## CHE-16 verification before merge
 
-The local checkout is based on `c1ec40b`. The v5 patch focused the marker detail
+The local review used `c1ec40b` as its base. The v5 patch focused the marker detail
 panel but left its heading clipped or off-screen in 42 of 50 tested cases. A
 follow-up scrolls the panel into view when its heading is outside the visible
 area. All 50 cases passed in Chrome across both themes, including widths of
@@ -122,9 +121,11 @@ violations and zero ARIA label flags. Muted NVDA passed 25 speech assertions
 including the reviewer landmark and temporary focus probes for all three
 chart groups.
 
-## Required next verification before publication
+## Merged follow-ups and verification
 
-1. Repeat the viewport and keyboard checks in another browser.
-2. Preserve nonvisual table-equivalent work as a separate follow-up.
+- The accessibility remediation merged as `c74554d`. The PR records the final Chrome keyboard, rendered contrast, axe, and NVDA checks for the homepage and project page. [PR #45](https://github.com/coreytshaffer/clear-lake-watch/pull/45) · [Post-merge CI #33](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44477178554)
+- The snapshot wording changes merged as `dbe496e`. The browser checks covered hydrology date ranges and the catalogued source-family count. [PR #46](https://github.com/coreytshaffer/clear-lake-watch/pull/46) · [Post-merge CI #35](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44482707123)
+- The Firefox marker focus fix merged as `6e926db`. Firefox 153.0 at native 400% zoom (320 × 235 CSS px) passed in both themes. Tab and Shift+Tab kept the HTML marker focus outline visible. After activating a sampled marker, the next Tab reached the visible first source link. [PR #47](https://github.com/coreytshaffer/clear-lake-watch/pull/47) · [Post-merge CI #37](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44490172290)
+- The accessible hydrology tables merged as `bef53a2`. The browser checks covered date and value parity for all 29 observations per series, with Lake level in `ft` and Cole Creek discharge in `ft3/s`. Both disclosures were keyboard-operable in Firefox at native 400% in both themes. NVDA announced both controls and their states, both captions, the headers and units, and sampled date and value cells during table navigation. [PR #48](https://github.com/coreytshaffer/clear-lake-watch/pull/48) · [Post-merge CI #39](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44654174361)
 
-Rollback: discard this isolated patch or revert the four application-file changes. No data migration, backend change or remote rollback is needed.
+The linked CI runs cover Linux and Windows PowerShell 5.1 mirror validation. The PR descriptions record the manual browser and screen-reader evidence for the tested paths.
