@@ -3,7 +3,7 @@
 **Status:** reviewer-readiness pass
 **Audience:** Career Services, internship reviewers, scholarship reviewers, faculty mentors, and technical reviewers
 **Prepared:** 2026-05-14
-**Updated:** 2026-05-28 browser interaction pass
+**Updated through:** `bef53a2`
 
 This note records a narrow accessibility pass for the public reviewer packet. It focuses on whether reviewers can follow the main links, understand screenshot captions, and inspect the project without depending on visual layout alone.
 
@@ -11,7 +11,7 @@ Clear Lake Watch is a late prototype / early MVP. It is not official public-heal
 
 ## Scope
 
-Reviewed:
+The May 2026 pass reviewed the public packet and the rendered dashboard.
 
 - homepage skip link, primary navigation labels, reviewer links, and public snapshot status wording;
 - reviewer-facing documentation links in the README, evidence summary, evidence index, dashboard anatomy guide, and demo notes;
@@ -20,24 +20,17 @@ Reviewed:
 - one local rendered-dashboard browser interaction pass for skip-link behavior, notification controls, generated links, map keyboard interaction, chart rendering, and local request errors;
 - conservative boundary language around public-health, recreation, emergency, forecasting, and official-advisory claims.
 
-Not reviewed:
-
-- a full WCAG conformance audit;
-- manual screen-reader testing;
-- keyboard testing in every browser;
-- browser notification permission-prompt testing across browser vendors;
-- color contrast measurement across every state;
-- formal mobile navigation review, which is tracked separately in issue #23.
+The [merged follow-up record](accessibility-remediation-2026-11-16.md#merged-follow-ups-and-verification) covers Chrome, Firefox, sampled NVDA use, and rendered contrast checks. The [mobile reviewer path review](mobile-reviewer-path-review.md) records the separate narrow-screen navigation pass. WCAG conformance, additional browser and assistive-technology combinations, and cross-browser notification permission prompts remain outside this evidence.
 
 ## Current Accessibility Signals
 
 | Area | Current support | Remaining risk |
 | --- | --- | --- |
-| Page structure | The dashboard uses a skip link, labeled navigation, section headings, and named regions for the main dashboard sections. A May 28 browser pass confirmed the skip link moves keyboard focus to the main content area. | Screen-reader behavior and browser-matrix keyboard behavior still need manual review before broader promotion. |
+| Page structure | The homepage and project page use skip links and labeled navigation. The follow-ups checked skip-link focus, Snapshot navigation, and theme controls with Chrome, Firefox, and sampled NVDA use. [PR #45](https://github.com/coreytshaffer/clear-lake-watch/pull/45) · [PR #47](https://github.com/coreytshaffer/clear-lake-watch/pull/47) | Other browser and assistive-technology combinations need their own checks. |
 | Reviewer links | Reviewer documents use descriptive link text such as "Dashboard anatomy review guide" and "Career Services handoff packet." Generated `Open JSON` links were checked in their named product-card context. | Compact generated link labels should be revisited if the data-product cards are redesigned or moved out of context. |
 | Screenshot descriptions | Reviewer demo notes include captions written as alt-text-style descriptions plus review cues, including refreshed homepage, portfolio signal, and Data QA notice captures from issue #22. | Captions should be refreshed whenever screenshot files are replaced or the visible reviewer path changes. |
-| Status and notices | Snapshot status and data QA notices use conservative language and avoid alert-like public-safety claims. A May 28 browser pass confirmed visible labels, keyboard-focusable controls, and a permission-needed status message for test notices. | Browser permission prompts and screen-reader announcement behavior still need deeper assistive-technology review. |
-| Charts and maps | Reviewer docs explain that maps and charts are portfolio evidence, source context, and QA surfaces rather than official condition labels. A May 28 browser pass confirmed map filter use, keyboard marker selection, focused marker details, chart rows, and coverage cards. | Nonvisual review still depends on surrounding text summaries; future chart/map work should expose more data-table equivalents. |
+| Status and notices | The May browser pass checked visible labels, keyboard focus, and the permission-needed message for local test notices. NVDA announced the empty map-filter status in the remediation pass. [PR #45](https://github.com/coreytshaffer/clear-lake-watch/pull/45) | Browser permission prompts and their announcements still need cross-browser review. |
+| Charts and maps | Both hydrology sparklines have keyboard-accessible date-and-value tables. Sampled keyboard paths on the map reached visible marker details and their first source link. [PR #47](https://github.com/coreytshaffer/clear-lake-watch/pull/47) · [PR #48](https://github.com/coreytshaffer/clear-lake-watch/pull/48) | Other chart and map summaries need separate review before making broader nonvisual-access claims. |
 | Boundary language | Reviewer docs repeatedly state what the project does and does not claim. | Older portfolio narrative files may still need copy refresh after the reviewer-readiness phase. |
 
 ## Reviewer Guidance
@@ -55,5 +48,5 @@ Use these documents first when checking accessibility and clarity:
 
 - Refresh screenshot captions whenever issue #22 screenshots are replaced by a newer public snapshot.
 - If the top navigation grows, repeat mobile keyboard and narrow-width review before broad promotion.
-- Add data-table equivalents for chart and map summaries before making stronger nonvisual-access claims.
+- Review changes to other chart and map summaries for data-table equivalents before extending nonvisual-access claims.
 - Keep accessibility claims narrow: describe this as a reviewer-readiness pass, not a formal accessibility certification.

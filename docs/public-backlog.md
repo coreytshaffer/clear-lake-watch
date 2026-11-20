@@ -6,6 +6,8 @@ Clear Lake Watch remains a late prototype / early MVP. It is not official public
 
 ## Current Checkpoint
 
+Last reconciled against `main` at `bef53a2`.
+
 The first public-backlog pass is complete. The project now has a public mirror, source freshness cues, map-review transparency, public-safe weather context, private field/microscopy review boundaries, reviewer demo notes, a portfolio evidence index, a Career Services evidence summary, a Career Services handoff packet, a dashboard anatomy review guide, an accessibility review note, a browser accessibility interaction pass, refreshed reviewer screenshots for the current homepage, a mobile reviewer path review, an above-the-fold internship reviewer path, print-friendly public review output, an official method source spine for future protocols, a Secchi depth / clarity mentor-review protocol draft, and a Secchi mentor-review handoff packet.
 
 The current follow-up posture is steady maintenance: keep the reviewer packet inspectable while avoiding unnecessary complexity and preserving the public-health, recreation, emergency, forecasting, and official-advisory boundaries.
@@ -66,9 +68,6 @@ The Secchi mentor-review handoff packet now gives reviewers a short review path,
 
 These remain candidates for later work:
 
-- Manual-only refresh workflow dry run, with no scheduled automation.
-- Public page refresh after the next reviewed data snapshot.
-- Site-registry local review for Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay.
 - Community visual observations: decide whether any community photo or camera intake is ever pursued. The [community observation boundary](community-observation-boundary.md) is a design position only and must be satisfied before any intake implementation; no submission form, camera ingestion, or social-media processing exists or is scheduled.
 
 ## Completed Maintenance / Trust Issues
@@ -83,22 +82,37 @@ These remain candidates for later work:
 | Browser accessibility interaction pass | Reviewer readiness | Recorded a May 28, 2026 local browser pass for skip-link focus, notification controls, generated links, map keyboard interaction, chart rendering, and local request errors. |
 | Maintenance file split | Maintainability | Split dashboard utilities, refresh parsing helpers, and validator link checks into small helper files without changing public behavior. |
 
+## Completed Freshness and Validator Follow-Ups
+
+Freshness and publication-safety alignment follow-ups are recorded below.
+
+| Follow-up | Result | Evidence |
+| --- | --- | --- |
+| Stale-data publication policy (CHE-20) | Reviewed historical snapshots retain visible dates and age warnings. New snapshot candidates require an explicit disposition for each stale source and a separate human publication decision. | [Warning versus failure](source-freshness-validation.md#warning-versus-failure) · [Refresh review criteria](formal-public-refresh-runbook.md#acceptance-criteria) |
+| Observation-age freshness (CHE-22) | The dashboard calculates weather observation age at page load and labels lake-source records as historical observations. | [PR #41](https://github.com/coreytshaffer/clear-lake-watch/pull/41) · [Post-merge CI #25](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44247140791) |
+| Shared snapshot evaluator (CHE-21) | The Python and PowerShell entry points share freshness and manifest-integrity findings. | [PR #42](https://github.com/coreytshaffer/clear-lake-watch/pull/42) · [Post-merge CI #27](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44447952557) |
+| Shared required-text guards (CHE-21) | Both validators use one catalog and require selected guard files to be tracked public files inside the checkout. | [PR #43](https://github.com/coreytshaffer/clear-lake-watch/pull/43) · [Post-merge CI #29](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44457666423) |
+| Native validator hardening (CHE-21 follow-up) | Native readers enforce JSON object shape, strict publication permission for reviewed records, and checkout containment. | [PR #44](https://github.com/coreytshaffer/clear-lake-watch/pull/44) · [Post-merge CI #31](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44468066769) |
+
+## Completed Reviewer Accessibility and Snapshot Follow-Ups
+
+| Follow-up | Result | Evidence |
+| --- | --- | --- |
+| Reviewer accessibility and map feedback | Improved contrast, keyboard navigation, theme feedback, and marker detail focus. Added an announcement when the map filter finds no results. | [PR #45](https://github.com/coreytshaffer/clear-lake-watch/pull/45) · [Post-merge CI #33](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44477178554) |
+| Snapshot wording | Show the hydrology observation date range and distinguish the eight catalogued source families from the two automated feeds used by the snapshot. | [PR #46](https://github.com/coreytshaffer/clear-lake-watch/pull/46) · [Post-merge CI #35](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44482707123) |
+| Firefox marker focus | Keep the focused HTML marker card and its outline in view at native 400% zoom. | [PR #47](https://github.com/coreytshaffer/clear-lake-watch/pull/47) · [Post-merge CI #37](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44490172290) |
+| Hydrology data tables | Expose the 29 Lake level and 29 Cole Creek discharge observations in keyboard-accessible date-and-value tables. | [PR #48](https://github.com/coreytshaffer/clear-lake-watch/pull/48) · [Post-merge CI #39](https://github.com/coreytshaffer/clear-lake-watch/actions/runs/44654174361) |
+
+The [accessibility remediation record](accessibility-remediation-2026-11-16.md#merged-follow-ups-and-verification) links the sampled Chrome, Firefox, axe, and NVDA checks.
+
 ## Open Maintenance / Trust Issues
 
-Freshness and publication-safety alignment follow-ups, opened after a claim-hygiene pass on how the public mirror describes stale-data behavior:
-
-| Follow-up | Focus | Intent |
-| --- | --- | --- |
-| Publication-time stale-snapshot gate | Publication safety | The refresh pipeline already fails closed on stale FHABS resources, but the public mirror validator only *warns* when the committed snapshot or source observations are past the freshness threshold. Decide whether to add an enforced publication-time gate (or reviewed override) so a stale snapshot cannot be published as fresh. |
-| Stale-source policy: fail vs warn | Publication safety | Make an explicit, documented decision on whether an over-threshold source observation should fail the mirror validator or remain a visible warning, and align the docs to that decision. |
-| Unify Python and PowerShell validators | Reproducibility | Reduce drift between `validate-public-mirror.py` and `validate-public-mirror.ps1` by sharing one source of truth for required-text guards and freshness logic. |
-| Compute source and weather stale status | Data trust | Derive `status` / `machineReadableStatus` from observation age at build or render time instead of trusting static fields that can misrepresent freshness. |
-
-These are documented as design/implementation follow-ups; none are enabled yet, and none change the current manual, reviewed publication posture.
+- Clear Lake Keys near Ketch Court, Jago Bay, and Soda Bay await named local review or stronger source confirmation. [Unresolved site-registry decision](site-registry-unresolved-decision.md)
+- A public-page refresh depends on the next reviewed data snapshot and a separate human publication decision. [Formal public refresh runbook](formal-public-refresh-runbook.md)
 
 ## Open Reviewer-Readiness Issues
 
-No reviewer-readiness issues are currently open in the public backlog snapshot.
+The tracked reviewer-readiness work above is complete. The [accessibility review](accessibility-review.md#follow-up-items) records what to check when the reviewer path or public materials change.
 
 ## Next Active Candidate
 
