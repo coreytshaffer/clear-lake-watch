@@ -38,7 +38,7 @@ jobs:
         run: python -m unittest discover -s tests -p test_public_mirror_entrypoints.py
 
       - name: Run JavaScript regression tests
-        run: node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs scripts/freshness-status.test.mjs
+        run: node --test scripts/dashboard-utils.test.js scripts/dashboard-date-format.test.mjs scripts/freshness-status.test.mjs scripts/accessibility-theme.test.mjs
 
       - name: Run dashboard storage smoke check
         run: node scripts/dashboard-utils.smoke.mjs
