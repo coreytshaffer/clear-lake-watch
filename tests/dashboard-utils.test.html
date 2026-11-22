@@ -119,7 +119,10 @@
     function resetMocks() {
       Storage.prototype.getItem = originalGetItem;
       console.warn = originalWarn;
-      localStorage.clear();
+    }
+
+    function mockStoredValue(expectedKey, value) {
+      Storage.prototype.getItem = (key) => key === expectedKey ? value : null;
     }
 
     // Setup tests
@@ -127,7 +130,7 @@
       // 1. Valid JSON returns the parsed value
       test('getStoredJson: valid JSON returns parsed value', () => {
         resetMocks();
-        localStorage.setItem('test-valid-json', JSON.stringify({ a: 1, b: 'test' }));
+        mockStoredValue('test-valid-json', JSON.stringify({ a: 1, b: 'test' }));
         const result = getStoredJson('test-valid-json', { fallback: true });
         assert.deepEqual(result, { a: 1, b: 'test' });
       });
@@ -135,6 +138,7 @@
       // 2. Missing key / null storage value returns the fallback
       test('getStoredJson: missing key returns fallback', () => {
         resetMocks();
+        mockStoredValue('test-missing-key', null);
         const result = getStoredJson('test-missing-key', { default: 'value' });
         assert.deepEqual(result, { default: 'value' });
       });
@@ -149,8 +153,8 @@
           // We can optionally verify it's a SyntaxError, but knowing it warned is the main goal
         };
 
-        // Inject invalid JSON
-        localStorage.setItem('test-invalid-json', '{ invalid: json ]');
+        // Inject invalid JSON without changing storage for the page's origin
+        mockStoredValue('test-invalid-json', '{ invalid: json ]');
 
         const result = getStoredJson('test-invalid-json', 'fallback-val');
 
