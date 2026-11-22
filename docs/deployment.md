@@ -1,6 +1,6 @@
 # Deployment Notes
 
-Clear Lake Watch is currently a static, no-build dashboard. A public deployment can serve the project folder directly as static files after the data refresh scripts have generated the JSON files under `data/`.
+Clear Lake Watch is currently a static, no-build dashboard. A public deployment must use a hosting-provider checkout of reviewed tracked files or an equivalent clean artifact created from that revision after the data refresh scripts have generated the reviewed JSON files under `data/`. Never serve or upload a developer working tree: ignored private stores remain on disk and Git ignore rules are not a publication boundary.
 
 ## Preflight Checklist
 
@@ -30,6 +30,8 @@ Do not treat a passing validator as permission to hide stale dates. If the snaps
 
 Use `docs/publication-review-checklist.md` before staging, committing, pushing, or promoting the dashboard. That checklist separates local review, private repository work, public mirror updates, and flagship portfolio promotion.
 
+A passing validator does not make the developer working tree a publishable artifact. Commit only reviewed public outputs, then let the hosting provider create a clean checkout of that reviewed revision before publishing.
+
 Current working posture as of May 5, 2026:
 
 - The public snapshot was refreshed locally on May 5, 2026.
@@ -43,7 +45,7 @@ The project includes `.nojekyll` so GitHub Pages will serve files exactly as wri
 
 Recommended first setup:
 
-- Put the contents of this project folder at the root of a GitHub repository.
+- Connect a GitHub repository containing the reviewed tracked files; do not upload a local developer working tree.
 - In repository settings, enable GitHub Pages from the main branch root.
 - Confirm that these paths work after deployment:
 
@@ -65,9 +67,12 @@ This project does not require a build command.
 
 Recommended settings:
 
+- Source: repository-backed clean checkout of the reviewed revision
 - Build command: leave blank
-- Publish directory: project root
+- Publish directory: project root of that clean checkout
 - Node version: not required
+
+Do not configure a local developer working tree as the served or uploaded directory.
 
 ## Local Windows Launcher
 

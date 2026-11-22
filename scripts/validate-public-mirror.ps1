@@ -111,6 +111,34 @@ function Assert-WorkingPathAbsent {
   }
 }
 
+function Assert-WorkingFilesAbsent {
+  param(
+    [string]$RelativeRoot,
+    [string]$Filter,
+    [string]$Reason,
+    [string[]]$AllowedRelativePaths = @()
+  )
+
+  $root = Resolve-ProjectPath $RelativeRoot
+  if (-not (Test-Path -LiteralPath $root -PathType Container)) {
+    return
+  }
+
+  $matches = @(
+    Get-ChildItem -LiteralPath $root -Recurse -Force -File -Filter $Filter
+  )
+  foreach ($match in $matches) {
+    $relativePath = $match.FullName.Substring($projectRoot.Length).TrimStart(
+      [System.IO.Path]::DirectorySeparatorChar,
+      [System.IO.Path]::AltDirectorySeparatorChar
+    )
+    $normalizedRelativePath = $relativePath -replace '\\', '/'
+    if ($AllowedRelativePaths -cnotcontains $normalizedRelativePath) {
+      Add-Failure "$Reason`: $relativePath"
+    }
+  }
+}
+
 function Assert-TextContains {
   param(
     [string]$Text,
@@ -636,6 +664,7 @@ try {
   $unexpectedLocalFiles = @(
     $trackedFiles |
       Where-Object {
+        ($_ -match '^data/site-review-decisions.*\.json$' -and $_ -cne 'data/site-review-decisions.example.json') -or
         $_ -match '^data/.*\.local\.json$' -or
         $_ -match '\.local\.sqlite$'
       }
@@ -657,6 +686,19 @@ try {
   foreach ($path in $publicUnsafeWorkingPaths) {
     Assert-WorkingPathAbsent -RelativePath $path -Reason "Public mirror must not expose unverified county GIS review artifact"
   }
+
+  $privateWorkingDirectories = @(
+    "docs\private",
+    "data\private"
+  )
+
+  foreach ($path in $privateWorkingDirectories) {
+    Assert-WorkingPathAbsent -RelativePath $path -Reason "Public mirror publish root must not contain private working artifact"
+  }
+
+  Assert-WorkingFilesAbsent -RelativeRoot "data" -Filter "site-review-decisions*.json" -Reason "Public mirror publish root must not contain local/private file" -AllowedRelativePaths @("data/site-review-decisions.example.json")
+  Assert-WorkingFilesAbsent -RelativeRoot "data" -Filter "*.local.json" -Reason "Public mirror publish root must not contain local/private file"
+  Assert-WorkingFilesAbsent -RelativeRoot "." -Filter "*.local.sqlite" -Reason "Public mirror publish root must not contain local/private file"
 
   $linkCheckFiles = @(
     $trackedFiles |

@@ -67,6 +67,8 @@ The current ignored local stores are:
 
 These files are local working records and should remain outside the public mirror.
 
+Git ignore rules keep these stores out of commits, but they do not keep files out of a web root. Public hosting must use a clean checkout of reviewed tracked files or an equivalent clean artifact, never the developer working tree that contains these stores.
+
 ## Before Public Publishing
 
 Use `docs/publication-review-checklist.md` for the full publication decision gate.
@@ -75,6 +77,7 @@ Before any broad public publish:
 
 1. Refresh public data or intentionally document a static snapshot.
 2. Run `scripts/validate-public-mirror.ps1` and `python scripts/validate-public-mirror.py`.
-3. Confirm `.gitignore` still excludes private local records and SQLite stores.
-4. Confirm the public app does not fetch `data/private/`, `*.local.json`, or detailed private review artifacts.
-5. Capture a current screenshot if the publish is meant for portfolio promotion.
+3. Confirm the proposed publish source is a clean checkout of reviewed tracked files or an equivalent clean artifact, not a developer working tree.
+4. Confirm `.gitignore` still excludes private local records and SQLite stores.
+5. Confirm the public app does not fetch `data/private/`, `*.local.json`, or detailed private review artifacts.
+6. Capture a current screenshot if the publish is meant for portfolio promotion.

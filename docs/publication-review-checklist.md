@@ -72,6 +72,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public-mi
 python .\scripts\validate-public-mirror.py
 ```
 
+Publish only from a hosting-provider clean checkout of the reviewed tracked revision or an equivalent clean artifact. Never serve or upload the developer working tree; ignored private files remain present there even when both validation commands pass at another point in time.
+
 ## Claim-Review Gate
 
 Before broad promotion, check public wording against the flagship boundary:

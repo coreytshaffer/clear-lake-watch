@@ -93,6 +93,21 @@ DISALLOWED_WORKING_PATHS = [
     Path("data/lake-shoreline-county-simplified-50ft.json"),
 ]
 
+PRIVATE_WORKING_DIRECTORIES = [
+    Path("docs/private"),
+    Path("data/private"),
+]
+
+PRIVATE_WORKING_FILE_PATTERNS = [
+    (Path("data"), "site-review-decisions*.json"),
+    (Path("data"), "*.local.json"),
+    (Path("."), "*.local.sqlite"),
+]
+
+PUBLIC_WORKING_FILE_EXCEPTIONS = {
+    Path("data/site-review-decisions.example.json"),
+}
+
 
 @dataclass
 class ValidationState:
@@ -175,7 +190,14 @@ def assert_tracked_boundaries(state: ValidationState, tracked_files: set[str]) -
                 break
 
     for tracked_path in tracked_files:
-        if tracked_path.startswith("data/") and tracked_path.endswith(".local.json"):
+        is_private_site_review_store = (
+            tracked_path.startswith("data/site-review-decisions")
+            and tracked_path.endswith(".json")
+            and tracked_path != "data/site-review-decisions.example.json"
+        )
+        if is_private_site_review_store or (
+            tracked_path.startswith("data/") and tracked_path.endswith(".local.json")
+        ):
             state.fail(f"Public mirror must not track local/private file: {tracked_path}")
         if tracked_path.endswith(".local.sqlite"):
             state.fail(f"Public mirror must not track local/private file: {tracked_path}")
@@ -188,6 +210,24 @@ def assert_working_boundaries(state: ValidationState) -> None:
                 "Public mirror must not expose unverified county GIS review artifact: "
                 f"{relative_path.as_posix()}"
             )
+
+    for relative_path in PRIVATE_WORKING_DIRECTORIES:
+        if project_path(relative_path).exists():
+            state.fail(
+                "Public mirror publish root must not contain private working artifact: "
+                f"{relative_path.as_posix()}"
+            )
+
+    for relative_root, pattern in PRIVATE_WORKING_FILE_PATTERNS:
+        for private_path in project_path(relative_root).rglob(pattern):
+            relative_path = private_path.relative_to(PROJECT_ROOT)
+            if relative_path in PUBLIC_WORKING_FILE_EXCEPTIONS:
+                continue
+            if private_path.exists() or private_path.is_symlink():
+                state.fail(
+                    "Public mirror publish root must not contain local/private file: "
+                    f"{relative_path.as_posix()}"
+                )
 
 
 SHARED_SEVERITIES = {"warning", "failure"}

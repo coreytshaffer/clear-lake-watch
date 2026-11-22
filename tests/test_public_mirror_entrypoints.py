@@ -324,6 +324,27 @@ class SharedParityTests(EntryPointTestCase):
         if powershell is not None:
             self.assertIn("must not track excluded review/private/local artifact", powershell.stdout)
 
+    def test_ignored_private_working_artifacts_fail_in_both(self) -> None:
+        cases = (
+            ("docs/private/test-only.md", "must not contain private working artifact"),
+            ("data/private/test-only.json", "must not contain private working artifact"),
+            ("data/site-review-decisions.local.json", "must not contain local/private file"),
+            ("data/site-review-decisions.backup.json", "must not contain local/private file"),
+            ("review-cache.local.sqlite", "must not contain local/private file"),
+        )
+        for relative, expected_message in cases:
+            with self.subTest(path=relative):
+                checkout = self.scratch.new()
+                private_file = checkout / relative
+                private_file.parent.mkdir(parents=True, exist_ok=True)
+                private_file.write_text("Synthetic private test-only file\n", encoding="utf-8")
+                _git(checkout, "check-ignore", "--quiet", "--", relative)
+
+                python, powershell = self.assert_parity(checkout, 1, HISTORY)
+                for result in (python, powershell):
+                    if result is not None:
+                        self.assertIn(expected_message, result.stdout)
+
     def test_json_null_snapshot_files_fail_in_both(self) -> None:
         cases = {
             "data/manifest.json": [("failure", "invalid_manifest", "data/manifest.json")],
