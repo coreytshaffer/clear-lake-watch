@@ -33,6 +33,7 @@ if ($env:CLEAR_LAKE_FHABS_MAX_RESOURCE_AGE_DAYS) {
 }
 
 . (Join-Path $PSScriptRoot "refresh-live-data.utilities.ps1")
+. (Join-Path $PSScriptRoot "refresh-live-data.usgs.ps1")
 
 foreach ($helperName in @("Parse-Date", "Format-DateIso", "Get-RecordField", "Normalize-Text", "Parse-Number")) {
   if (-not (Get-Command $helperName -CommandType Function -ErrorAction SilentlyContinue)) {
@@ -245,39 +246,6 @@ function Resolve-RegisteredSite {
   }
 
   return $null
-}
-
-function Get-UsgsSeries {
-  param(
-    [string]$Site,
-    [string]$ParameterCd,
-    [string]$Period = "P30D"
-  )
-
-  $url = "https://waterservices.usgs.gov/nwis/dv/?format=json&sites=$Site&parameterCd=$ParameterCd&siteStatus=all&period=$Period"
-  $response = Invoke-RestMethod -Uri $url -Headers $headers
-  $series = $response.value.timeSeries | Where-Object {
-    $_.variable.variableCode[0].value -eq $ParameterCd -and $_.values[0].value.Count -gt 0
-  } | Select-Object -First 1
-
-  if (-not $series) {
-    throw "No USGS data returned for site $Site parameter $ParameterCd"
-  }
-
-  $values = $series.values[0].value | ForEach-Object {
-    [PSCustomObject]@{
-      value    = [double]$_.value
-      dateTime = [datetime]$_.dateTime
-    }
-  }
-
-  return [PSCustomObject]@{
-    siteName     = $series.sourceInfo.siteName
-    siteCode     = $series.sourceInfo.siteCode[0].value
-    variableName = $series.variable.variableName
-    unitCode     = $series.variable.unit.unitCode
-    values       = $values
-  }
 }
 
 function Get-ClearLakeRecords {
@@ -529,8 +497,22 @@ function Convert-FhabsResultObservation {
   }
 }
 
-$lakeLevel = Get-UsgsSeries -Site "11450000" -ParameterCd "00065"
-$coleCreek = Get-UsgsSeries -Site "11449820" -ParameterCd "00060"
+# Daily values are date-only. Use the latest 30 complete Pacific calendar days
+# for both stations, regardless of the host timezone or an upstream data gap.
+$pacificZoneId = if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+  "Pacific Standard Time"
+} else {
+  "America/Los_Angeles"
+}
+$pacificZone = [TimeZoneInfo]::FindSystemTimeZoneById($pacificZoneId)
+$usgsEnd = [TimeZoneInfo]::ConvertTimeFromUtc([datetime]::UtcNow, $pacificZone).Date.AddDays(-1)
+$usgsRequest = @{
+  StartDate = $usgsEnd.AddDays(-29)
+  EndDate = $usgsEnd
+  Headers = $headers
+}
+$lakeLevel = Get-UsgsSeries -Site "11450000" @usgsRequest
+$coleCreek = Get-UsgsSeries -Site "11449820" @usgsRequest
 
 $fhabsPackage = $null
 if (
