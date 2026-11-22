@@ -28,7 +28,7 @@ function New-Page {
     type = 'FeatureCollection'
     features = @((New-ColeFeature '2026-11-14' '0.00'), (New-ColeFeature '2026-11-11' '0.00'))
     numberReturned = 2
-    links = @([pscustomobject]@{ rel = 'self' })
+    links = @([pscustomobject]@{ rel = 'self'; href = 'https://api.waterdata.usgs.gov/ogcapi/v1/collections/daily/items' })
   }
 }
 function Invoke-RestMethod {
@@ -58,6 +58,7 @@ function Assert-Rejected {
 
 $networkFailure = $false
 $fixture = New-Page
+$fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue 2
 $fixture.features[0].properties.approval_status = 'Approved'
 $fixture.features[0].properties.qualifier = 'e'
 $series = Get-FixtureSeries
@@ -82,9 +83,26 @@ Assert-Equal $series.unitCode 'ft' 'Lakeport public unit'
 Assert-Equal $series.values[0].value 7.5 'Lakeport decimal'
 Assert-Equal $request 'https://api.waterdata.usgs.gov/ogcapi/v1/collections/daily/items?f=json&limit=100&monitoring_location_id=USGS-11450000&parameter_code=00065&statistic_id=00003&time_series_id=faffcc2acf7c47b295a49d7e295a8a34&datetime=2026-11-11%2F2026-11-14' 'Lakeport pinned request'
 
+$fixture = New-Page
+$fixture.features += (New-ColeFeature '2026-11-13' $null)
+$fixture.numberReturned = 3
+$fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue 3
+$series = Get-FixtureSeries
+Assert-Equal (($series.values | ForEach-Object { $_.dateTime.ToString('yyyy-MM-dd') }) -join ',') '2026-11-11,2026-11-14' 'Null observation leaves a date gap'
+Assert-Equal $series.values[0].value 0 'Observed zero remains in a page with a gap'
+
 Assert-Rejected { $script:fixture.features = @(); $script:fixture.numberReturned = 0 } 'nonempty'
-Assert-Rejected { $script:fixture.links += [pscustomobject]@{ rel = 'next' } } 'pagination'
+Assert-Rejected { $script:fixture.links += [pscustomobject]@{ rel = 'next'; href = '?offset=2' } } 'pagination'
+Assert-Rejected { $script:fixture.links += [pscustomobject]@{ rel = 'prev'; href = '?offset=0' } } 'pagination'
 Assert-Rejected { $script:fixture.numberReturned = 3 } 'numberReturned'
+Assert-Rejected { $script:fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue 3 } 'numberMatched'
+Assert-Rejected { $script:fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue 1 } 'numberMatched'
+Assert-Rejected { $script:fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue '2' } 'numberMatched'
+Assert-Rejected { $script:fixture | Add-Member -NotePropertyName numberMatched -NotePropertyValue $null } 'numberMatched'
+Assert-Rejected { $script:fixture.links = @() } 'links'
+Assert-Rejected { $script:fixture.links += [pscustomobject]@{ href = '?offset=2' } } 'link'
+Assert-Rejected { $script:fixture.links[0].href = $null } 'link'
+Assert-Rejected { $script:fixture.links[0].rel = 'collection' } 'self'
 Assert-Rejected { $script:fixture.features[0] = $null } 'properties'
 Assert-Rejected { $script:fixture.features[0].properties.monitoring_location_id = 'USGS-99999999' } 'identity'
 Assert-Rejected { $script:fixture.features[0].properties.monitoring_location_id = @('USGS-11449820') } 'identity'
@@ -97,7 +115,16 @@ Assert-Rejected { $script:fixture.features[0].properties.time = '2026-11-10' } '
 Assert-Rejected { $script:fixture.features[0].properties.time = '2026-11-31' } 'date'
 Assert-Rejected { $script:fixture.features[0].properties.time = '2026-11-14T00:00:00Z' } 'date'
 Assert-Rejected { $script:fixture.features[0].properties.time = '2026-11-11' } 'duplicate'
-Assert-Rejected { $script:fixture.features[0].properties.value = $null } 'non-numeric'
+Assert-Rejected {
+  $script:fixture.features[0].properties.time = '2026-11-11'
+  $script:fixture.features[1].properties.value = $null
+} 'duplicate'
+Assert-Rejected {
+  foreach ($feature in $script:fixture.features) {
+    $feature.properties.value = $null
+  }
+} 'no usable observations'
+Assert-Rejected { $script:fixture.features[0].properties.PSObject.Properties.Remove('value') } 'missing value'
 Assert-Rejected { $script:fixture.features[0].properties.value = 'NaN' } 'non-numeric'
 Assert-Rejected { $script:fixture.features[0].properties.value = '1e999' } 'non-numeric'
 Assert-Rejected { $script:fixture.features[0].properties.value = '1,23' } 'non-numeric'

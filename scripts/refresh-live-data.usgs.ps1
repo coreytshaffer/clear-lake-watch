@@ -44,12 +44,35 @@ function Get-UsgsSeries {
   if ($response.type -isnot [string] -or $response.type -cne 'FeatureCollection' -or $response.features -isnot [array] -or $response.features.Count -eq 0) {
     throw "USGS daily response for $Site must be a nonempty FeatureCollection."
   }
-  if ($response.links -isnot [array] -or @($response.links | Where-Object { $_.rel -eq 'next' }).Count -gt 0) {
-    throw "USGS daily response for $Site has missing links or unexpected pagination."
+  if ($response.links -isnot [array] -or $response.links.Count -eq 0) {
+    throw "USGS daily response for $Site has missing links."
+  }
+  $hasSelfLink = $false
+  foreach ($link in $response.links) {
+    if ($link.rel -isnot [string] -or [string]::IsNullOrWhiteSpace($link.rel) -or $link.rel -match '\s' -or
+        $link.href -isnot [string] -or [string]::IsNullOrWhiteSpace($link.href)) {
+      throw "USGS daily response for $Site has a malformed link."
+    }
+    if ($link.rel -in @('next', 'prev')) {
+      throw "USGS daily response for $Site has unexpected pagination."
+    }
+    if ($link.rel -eq 'self') {
+      $hasSelfLink = $true
+    }
+  }
+  if (-not $hasSelfLink) {
+    throw "USGS daily response for $Site has no self link."
   }
   if (($response.numberReturned -isnot [int] -and $response.numberReturned -isnot [long]) -or
       $response.numberReturned -ne $response.features.Count) {
     throw "USGS daily response for $Site has mismatched numberReturned."
+  }
+  $numberMatched = $response.PSObject.Properties['numberMatched']
+  if ($null -ne $numberMatched) {
+    $matched = $numberMatched.Value
+    if (($matched -isnot [int] -and $matched -isnot [long]) -or $matched -ne $response.numberReturned) {
+      throw "USGS daily response for $Site has invalid or mismatched numberMatched."
+    }
   }
 
   $seen = @{}
@@ -79,12 +102,21 @@ function Get-UsgsSeries {
     }
     $seen[$p.time] = $true
 
+    $valueProperty = $p.PSObject.Properties['value']
+    if ($null -eq $valueProperty) {
+      throw "USGS daily response for $Site has a missing value field on $($p.time)."
+    }
+    # USGS uses JSON null for a missing reading. Leave that date out of the series.
+    $rawValue = $valueProperty.Value
+    if ($null -eq $rawValue) {
+      continue
+    }
+
     $value = [double]0
-    # The v1 schema uses a decimal string. Reject null, separators, and nonfinite values.
-    if ($p.value -isnot [string] -or $p.value -cnotmatch '^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$' -or
-        -not [double]::TryParse($p.value, [Globalization.NumberStyles]::Float, $culture, [ref]$value) -or
+    if ($rawValue -isnot [string] -or $rawValue -cnotmatch '^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$' -or
+        -not [double]::TryParse($rawValue, [Globalization.NumberStyles]::Float, $culture, [ref]$value) -or
         [double]::IsNaN($value) -or [double]::IsInfinity($value)) {
-      throw "USGS daily response for $Site has a non-numeric or missing value on $($p.time)."
+      throw "USGS daily response for $Site has a non-numeric value on $($p.time)."
     }
     [pscustomobject]@{
       value = $value
@@ -92,6 +124,9 @@ function Get-UsgsSeries {
       approvalStatus = $p.approval_status
       qualifier = $p.qualifier
     }
+  }
+  if ($null -eq $values) {
+    throw "USGS daily response for $Site has no usable observations."
   }
 
   [pscustomobject]@{
